@@ -36,7 +36,7 @@
 - src/test/java/com/eomcs/pms/AppTest.java 변경
   - App 클래스 변경에 맞춰 테스트 코드를 제거한다.
 
-### 실습2 - 한 개의 프로젝트 정보를 출력한다.
+### 실습2 - 한 개의 프로젝트 정보를 출력한다
 
 ```console
 [프로젝트]
