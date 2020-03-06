@@ -17,8 +17,8 @@ public class App3 {
     System.out.print("내용? ");
     String content = keyboardScan.nextLine();
 
-    System.out.print("완료일? ");
-    Date endDate = Date.valueOf(keyboardScan.nextLine());
+    System.out.print("마감일? ");
+    Date deadline = Date.valueOf(keyboardScan.nextLine());
 
     System.out.print("프로젝트 번호? ");
     int projectNo = Integer.parseInt(keyboardScan.nextLine());
@@ -28,7 +28,7 @@ public class App3 {
     System.out.println("1: 진행중");
     System.out.println("2: 완료");
     System.out.print("> ");
-    int state = Integer.valueOf(keyboardScan.nextLine());
+    int status = Integer.valueOf(keyboardScan.nextLine());
 
     keyboardScan.close();
 
@@ -36,10 +36,10 @@ public class App3 {
 
     System.out.printf("번호: %d\n", no);
     System.out.printf("내용: %s\n", content);
-    System.out.printf("완료일: %s\n", endDate);
+    System.out.printf("마감일: %s\n", deadline);
     System.out.printf("프로젝트 번호: %d\n", projectNo);
 
-    switch (state) {
+    switch (status) {
       case 1:
         System.out.println("상태: 진행중");
         break;
