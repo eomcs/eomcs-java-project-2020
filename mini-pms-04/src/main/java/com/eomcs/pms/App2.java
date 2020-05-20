@@ -1,25 +1,65 @@
 package com.eomcs.pms;
 
+import java.sql.Date;
+import java.util.Scanner;
+
 public class App2 {
 
   public static void main(String[] args) {
-    System.out.print("[");
-    System.out.print("프로젝트");
-    System.out.println("]");
+    System.out.println("[프로젝트]");
 
-    System.out.print("번호: ");
-    System.out.println(1201);
+    Scanner keyboardScan = new Scanner(System.in);
 
-    System.out.print("프로젝트명: ");
-    System.out.println("미니 프로젝트 관리 시스템 개발");
+    // 최대 100개의 프로젝트 정보를 저장할 메모리 준비
+    // => 배열의 크기를 미리 변수에 저장하여 사용한다.
+    // => 나중에 배열의 크기를 바꾸기 쉽다.
+    int length = 100;
+    int[] no = new int[length];
+    String[] title = new String[length];
+    String[] content = new String[length];
+    Date[] startDate = new Date[length];
+    Date[] endDate = new Date[length];
+    int[] ownerNo = new int[length];
 
-    System.out.print("내용: ");
-    System.out.println("소규모 팀을 위한 프로젝트 관리 시스템을 개발한다.");
+    int size = 0;
+    for (int i = 0; i < 100; i++) {
+      System.out.print("번호? ");
+      no[i] = Integer.valueOf(keyboardScan.nextLine());
 
-    System.out.println("시작일: " + "2020-01-01");
+      System.out.print("프로젝트명? ");
+      title[i] = keyboardScan.nextLine();
 
-    System.out.println("종료일: " + "2020-12-31");
+      System.out.print("내용? ");
+      content[i] = keyboardScan.nextLine();
 
-    System.out.println("생성자 번호: " + 101);
+      System.out.print("시작일? ");
+      startDate[i] = Date.valueOf(keyboardScan.nextLine());
+
+      System.out.print("종료일? ");
+      endDate[i] = Date.valueOf(keyboardScan.nextLine());
+
+      System.out.print("생성자 번호? ");
+      ownerNo[i] = Integer.valueOf(keyboardScan.nextLine());
+
+      size++;
+      System.out.println(); // 빈 줄 출력
+
+      System.out.print("계속 입력하시겠습니까?(y/N) ");
+      String str = keyboardScan.nextLine();
+      if (!str.equalsIgnoreCase("y")) {
+        break;
+      }
+      System.out.println(); // 빈 줄 출력
+    }
+
+    keyboardScan.close();
+
+    System.out.println("--------------------------------");
+
+    for (int i = 0; i < size; i++) {
+      // 번호, 프로젝트명, 시작일, 종료일, 생성자 번호
+      System.out.printf("%d, %s, %s, %s, %d\n", // 출력 형식 지정
+          no[i], title[i], startDate[i], endDate[i], ownerNo[i]);
+    }
   }
 }

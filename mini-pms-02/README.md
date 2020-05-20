@@ -1,46 +1,64 @@
-# 02 - 프로젝트를 `이클립스 IDE`로 임포트하기
+# 04 - 리터럴과 콘솔 출력 다루기
 
 ## 훈련 목표
 
-- `그레이들`을 이용하여 `이클립스` IDE 용 프로젝트로 전환하는 방법을 배운다.
-- `이클립스` 워크스페이스로 프로젝트를 가져오는 것을 배운다.
-- `이클립스`에서 프로젝트를 빌드하고 실행하는 방법을 배운다.
+- 다양한 유형의 값을 콘솔로 출력하는 방법을 배운다.
 
-## 훈련 내용
+## 훈련내용
 
-- `그레이들`을 사용하여 이클립스 IDE 프로젝트에 필요한 파일을 생성한다.
-- 이클립스 IDE로 프로젝트를 가져온다.
-- 이클립스 IDE에서 애플리케이션을 실행한다.
+- 한 명의 회원 정보를 콘솔로 출력한다.
+- 한 개의 프로젝트 정보를 콘솔로 출력한다.
+- 한 개의 작업 정보를 콜솔로 출력한다.
+  
+## 구현 결과 및 소스 파일
+
+- src/main/java/com/eomcs/pms/App.java 변경
+- src/main/java/com/eomcs/pms/App2.java 추가
+- src/main/java/com/eomcs/pms/App3.java 추가
+- src/test/java/com/eomcs/pms/AppTest.java 삭제
 
 ## 실습
 
-### 1단계 - 그레이들 빌드 스크립트에 이클립스 플러그인 추가
-
-Gradle에서 이클립스 관련 명령을 다룰 수 있도록 플러그인을 추가한다.
-
-build.gradle 파일에 'eclispe' 플러그인 설정을 추가한다.
-```groovy
-plugins {
-    id 'java'
-    id 'application'
-    id 'eclipse'
-}
-```
-
-### 실습2 - 이클립스 IDE 용 설정 파일을 생성한다
+### 1단계 - 한 명의 회원 정보를 출력
 
 ```console
-[~/git/java-study/java-project]$ gradle eclipse
+[회원]
+번호: 101
+이름: 홍길동
+이메일: hong@test.com
+암호: 1111
+사진: hong.png
+전화: 1111-2222
+가입일: 2020-01-01
 ```
 
-### 실습3 - 이클립스 IDE의 워크스페이스로 프로젝트를 가져온다
+- com.eomcs.pms.App  클래스 변경
+- src/test/java/com/eomcs/pms/AppTest.java 변경
+  - App 클래스 변경에 맞춰 테스트 코드를 제거한다.
 
-- Eclise IDE 메뉴 > `File > Import...` 클릭
-- Import 대화창 > `General 노드 > Existing Projects into Workspace 선택` > Next 클릭
-- `java-project` 프로젝트 폴더 선택 > Finish 클릭
+### 2단계 - 한 개의 프로젝트 정보를 출력
 
-### 실습4 - 이클립스 IDE에서 프로젝트를 실행한다
+```console
+[프로젝트]
+번호: 1201
+프로젝트명: 미니 프로젝트 관리 시스템 개발
+내용: 소규모 팀을 위한 프로젝트 관리 시스템을 개발한다.
+시작일: 2020-01-01
+종료일: 2020-12-31
+생성자 번호: 101
+```
 
-- `src/main/java/com/eomcs/pms/App.java` 소스 파일을 열기
-- Eclipse IDE 메뉴 > `Run > Run` 클릭
-- `Console 뷰`에 출력된 결과 확인
+- com.eomcs.pms.App2  클래스 추가
+  
+### 3단계 - 한 개의 작업 정보를 출력
+
+```console
+[작업]
+번호: 1
+내용: 요구사항 수집
+완료일: 2020-01-20
+프로젝트 번호: 1201
+상태: 진행중
+```
+
+- com.eomcs.pms.App3  클래스 추가

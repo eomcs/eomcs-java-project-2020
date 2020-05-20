@@ -6,39 +6,75 @@ import java.util.Scanner;
 public class App2 {
 
   public static void main(String[] args) {
+
+    // 프로젝트 정보를 담을 메모리의 설계도를 만든다.
+    class Project {
+      int no;
+      String title;
+      String content;
+      Date startDate;
+      Date endDate;
+      int ownerNo;
+    }
+
     System.out.println("[프로젝트]");
 
-    // 키보드에서 사용자가 입력한 값을 읽어 문자열이나 정수, 부동소수점 등으로 리턴하는 역할
     Scanner keyboardScan = new Scanner(System.in);
 
-    System.out.print("번호? ");
-    int no = keyboardScan.nextInt();
-    keyboardScan.nextLine(); // 번호 뒤에 남아 있는 줄바꿈 코드를 제거한다.
+    // 최대 100개의 Project 인스턴스의 주소를 저장할 레퍼런스 배열 준비
+    final int LENGTH = 100;
+    Project[] projects = new Project[LENGTH];
 
-    System.out.print("프로젝트명? ");
-    String title = keyboardScan.nextLine();
+    int size = 0;
+    for (int i = 0; i < 100; i++) {
 
-    System.out.print("내용? ");
-    String content = keyboardScan.nextLine();
+      // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
+      Project project = new Project();
 
-    System.out.print("시작일? ");
-    Date startDate = Date.valueOf(keyboardScan.nextLine());
+      System.out.print("번호? ");
+      project.no = Integer.valueOf(keyboardScan.nextLine());
 
-    System.out.print("종료일? ");
-    Date endDate = Date.valueOf(keyboardScan.nextLine());
+      System.out.print("프로젝트명? ");
+      project.title = keyboardScan.nextLine();
 
-    System.out.print("생성자 번호? ");
-    int ownerNo = keyboardScan.nextInt();
+      System.out.print("내용? ");
+      project.content = keyboardScan.nextLine();
+
+      System.out.print("시작일? ");
+      project.startDate = Date.valueOf(keyboardScan.nextLine());
+
+      System.out.print("종료일? ");
+      project.endDate = Date.valueOf(keyboardScan.nextLine());
+
+      System.out.print("생성자 번호? ");
+      project.ownerNo = Integer.valueOf(keyboardScan.nextLine());
+
+      // Project 인스턴스 주소를 배열에 저장
+      projects[size++] = project;
+
+      System.out.println(); // 빈 줄 출력
+
+      System.out.print("계속 입력하시겠습니까?(y/N) ");
+      String str = keyboardScan.nextLine();
+      if (!str.equalsIgnoreCase("y")) {
+        break;
+      }
+      System.out.println(); // 빈 줄 출력
+    }
 
     keyboardScan.close();
 
     System.out.println("--------------------------------");
 
-    System.out.printf("번호: %d\n", no);
-    System.out.printf("프로젝트명: %s\n", title);
-    System.out.printf("내용: %s\n", content);
-    System.out.printf("시작일: %s\n", startDate);
-    System.out.printf("종료일: %s\n", endDate);
-    System.out.printf("생성자 번호: %d\n", ownerNo);
+    for (int i = 0; i < size; i++) {
+      // 번호, 프로젝트명, 시작일, 종료일, 생성자 번호
+      System.out.printf("%d, %s, %s, %s, %d\n", // 출력 형식 지정
+          projects[i].no, // 프로젝트 번호
+          projects[i].title, // 프로젝트명
+          projects[i].startDate, // 시작일
+          projects[i].endDate, // 종료일
+          projects[i].ownerNo // 프로젝트 생성자
+      );
+    }
   }
 }
