@@ -1,25 +1,22 @@
 # 04 - 리터럴과 콘솔 출력 다루기
 
+이번 훈련은 자바에서 제공하는 클래스를 사용하여 표준 출력 장치(모니터)로 값을 출력하는 것을 연습한다. 자바 프로그램을 터미널(terminal)에서 실행한다면 출력은 터미널 창에 나온다. 보통 터미널을 콘솔(console) 이라고도 부른다.
+
 ## 훈련 목표
 
 - 다양한 유형의 값을 콘솔로 출력하는 방법을 배운다.
 
-## 훈련내용
+## 훈련내용 
 
 - 한 명의 회원 정보를 콘솔로 출력한다.
 - 한 개의 프로젝트 정보를 콘솔로 출력한다.
 - 한 개의 작업 정보를 콜솔로 출력한다.
-  
-## 구현 결과 및 소스 파일
-
-- src/main/java/com/eomcs/pms/App.java 변경
-- src/main/java/com/eomcs/pms/App2.java 추가
-- src/main/java/com/eomcs/pms/App3.java 추가
-- src/test/java/com/eomcs/pms/AppTest.java 삭제
 
 ## 실습
 
-### 1단계 - 한 명의 회원 정보를 출력
+### 1단계 - 한 명의 회원 정보를 출력한다
+
+Mini-PMS를 이용하는 회원 정보를 출력한다. 일단 한 명의 정보만 출력한다.
 
 ```console
 [회원]
@@ -32,11 +29,15 @@
 가입일: 2020-01-01
 ```
 
-- com.eomcs.pms.App  클래스 변경
-- src/test/java/com/eomcs/pms/AppTest.java 변경
-  - App 클래스 변경에 맞춰 테스트 코드를 제거한다.
+#### 작업 파일 
 
-### 2단계 - 한 개의 프로젝트 정보를 출력
+- com.eomcs.pms.App  클래스 변경
+- src/test/java/com/eomcs/pms/AppTest.java 삭제
+  - 당장 JUnit 관련 코딩은 하지 않기 때문에 제거한다.
+
+### 2단계 - 한 개의 프로젝트 정보를 출력한다
+
+회원이 진행할 프로젝트 정보를 출력한다. 일단 한 개의 프로젝트 정보만 출력한다.
 
 ```console
 [프로젝트]
@@ -45,12 +46,16 @@
 내용: 소규모 팀을 위한 프로젝트 관리 시스템을 개발한다.
 시작일: 2020-01-01
 종료일: 2020-12-31
-생성자 번호: 101
+팀원: 홍길동,김구,유관순,안중근,윤봉길
 ```
+
+#### 작업 파일
 
 - com.eomcs.pms.App2  클래스 추가
   
-### 3단계 - 한 개의 작업 정보를 출력
+### 3단계 - 한 개의 작업 정보를 출력한다
+
+프로젝트에서 수행할 작업 정보를 출력한다. 일단 한 개의 작업 정보만 출력한다.
 
 ```console
 [작업]
@@ -59,6 +64,17 @@
 완료일: 2020-01-20
 프로젝트 번호: 1201
 상태: 진행중
+담당자: 홍길동
 ```
 
+#### 작업 파일 
+
 - com.eomcs.pms.App3  클래스 추가
+
+
+## 실습 결과
+
+- src/main/java/com/eomcs/pms/App.java 변경
+- src/main/java/com/eomcs/pms/App2.java 추가
+- src/main/java/com/eomcs/pms/App3.java 추가
+- src/test/java/com/eomcs/pms/AppTest.java 삭제

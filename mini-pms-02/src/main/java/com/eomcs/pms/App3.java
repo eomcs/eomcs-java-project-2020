@@ -9,5 +9,6 @@ public class App3 {
     System.out.printf("완료일: %s\n", "2020-01-20");
     System.out.printf("프로젝트 번호: %d\n", 1201);
     System.out.printf("상태: %s\n", "진행중");
+    System.out.printf("담당자: %s\n", "홍길동");
   }
 }

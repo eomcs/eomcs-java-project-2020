@@ -20,6 +20,11 @@ public class App2 {
 
     System.out.println("종료일: " + "2020-12-31");
 
-    System.out.println("생성자 번호: " + 101);
+    System.out.println("팀원: "
+        + "홍길동" + ","
+        + "김구" + ","
+        + "유관순" + ","
+        + "안중근" + ","
+        + "윤봉길");
   }
 }
