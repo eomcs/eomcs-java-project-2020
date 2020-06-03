@@ -18,8 +18,12 @@ public class App3 {
     int[] no = new int[LENGTH];
     String[] content = new String[LENGTH];
     Date[] deadline = new Date[LENGTH];
-    int[] projectNo = new int[LENGTH];
+    String[] owner = new String[LENGTH];
     int[] status = new int[LENGTH];
+
+    System.out.print("프로젝트? ");
+    String project = keyboardScan.nextLine();
+    System.out.println();
 
     int size = 0;
     for (int i = 0; i < 100; i++) {
@@ -32,15 +36,15 @@ public class App3 {
       System.out.print("마감일? ");
       deadline[i] = Date.valueOf(keyboardScan.nextLine());
 
-      System.out.print("프로젝트 번호? ");
-      projectNo[i] = Integer.parseInt(keyboardScan.nextLine());
-
       System.out.println("상태?");
       System.out.println("0: 신규");
       System.out.println("1: 진행중");
       System.out.println("2: 완료");
       System.out.print("> ");
       status[i] = Integer.valueOf(keyboardScan.nextLine());
+
+      System.out.print("담당자? ");
+      owner[i] = keyboardScan.nextLine();
 
       size++;
       System.out.println(); // 빈 줄 출력
@@ -57,6 +61,8 @@ public class App3 {
 
     System.out.println("--------------------------------");
 
+    System.out.printf("[%s]\n", project);
+
     for (int i = 0; i < size; i++) {
       String stateLabel = null;
       switch (status[i]) {
@@ -69,9 +75,9 @@ public class App3 {
         default:
           stateLabel = "신규";
       }
-      // 번호, 작업명, 마감일, 프로젝트 번호, 상태
-      System.out.printf("%d, %s, %s, %d, %s\n", // 출력 형식 지정
-          no[i], content[i], deadline[i], projectNo[i], stateLabel);
+      // 번호, 작업명, 마감일, 프로젝트, 상태, 담당자
+      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
+          no[i], content[i], deadline[i], stateLabel, owner[i]);
     }
   }
 }

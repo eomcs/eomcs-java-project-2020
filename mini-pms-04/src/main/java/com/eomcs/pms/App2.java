@@ -19,7 +19,8 @@ public class App2 {
     String[] content = new String[length];
     Date[] startDate = new Date[length];
     Date[] endDate = new Date[length];
-    int[] ownerNo = new int[length];
+    String[] owner = new String[length];
+    String[] members = new String[length];
 
     int size = 0;
     for (int i = 0; i < 100; i++) {
@@ -38,8 +39,11 @@ public class App2 {
       System.out.print("종료일? ");
       endDate[i] = Date.valueOf(keyboardScan.nextLine());
 
-      System.out.print("생성자 번호? ");
-      ownerNo[i] = Integer.valueOf(keyboardScan.nextLine());
+      System.out.print("만든이? ");
+      owner[i] = keyboardScan.nextLine();
+
+      System.out.print("팀원? ");
+      members[i] = keyboardScan.nextLine();
 
       size++;
       System.out.println(); // 빈 줄 출력
@@ -56,10 +60,11 @@ public class App2 {
 
     System.out.println("--------------------------------");
 
+
     for (int i = 0; i < size; i++) {
-      // 번호, 프로젝트명, 시작일, 종료일, 생성자 번호
-      System.out.printf("%d, %s, %s, %s, %d\n", // 출력 형식 지정
-          no[i], title[i], startDate[i], endDate[i], ownerNo[i]);
+      // 번호, 프로젝트명, 시작일, 종료일, 만든이
+      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
+          no[i], title[i], startDate[i], endDate[i], owner[i]);
     }
   }
 }

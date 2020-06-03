@@ -20,6 +20,8 @@ public class App2 {
 
     System.out.println("종료일: " + "2020-12-31");
 
+    System.out.println("만든이: " + "홍길동");
+    
     System.out.println("팀원: "
         + "홍길동" + ","
         + "김구" + ","
