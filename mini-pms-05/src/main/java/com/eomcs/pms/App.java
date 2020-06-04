@@ -85,7 +85,7 @@ public class App {
           members[i].email, // 이메일
           members[i].tel, // 전화
           members[i].registeredDate // 가입일
-      );
+          );
     }
   }
 }

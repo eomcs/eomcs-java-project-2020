@@ -6,7 +6,6 @@ import java.util.Scanner;
 public class App2 {
 
   public static void main(String[] args) {
-
     // 프로젝트 정보를 담을 메모리의 설계도를 만든다.
     class Project {
       int no;
@@ -14,7 +13,8 @@ public class App2 {
       String content;
       Date startDate;
       Date endDate;
-      int ownerNo;
+      String owner;
+      String members;
     }
 
     System.out.println("[프로젝트]");
@@ -46,8 +46,11 @@ public class App2 {
       System.out.print("종료일? ");
       project.endDate = Date.valueOf(keyboardScan.nextLine());
 
-      System.out.print("생성자 번호? ");
-      project.ownerNo = Integer.valueOf(keyboardScan.nextLine());
+      System.out.print("만든이? ");
+      project.owner = keyboardScan.nextLine();
+
+      System.out.print("팀원? ");
+      project.members = keyboardScan.nextLine();
 
       // Project 인스턴스 주소를 배열에 저장
       projects[size++] = project;
@@ -66,15 +69,16 @@ public class App2 {
 
     System.out.println("--------------------------------");
 
+
     for (int i = 0; i < size; i++) {
-      // 번호, 프로젝트명, 시작일, 종료일, 생성자 번호
-      System.out.printf("%d, %s, %s, %s, %d\n", // 출력 형식 지정
+      // 번호, 프로젝트명, 시작일, 종료일, 만든이
+      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
           projects[i].no, // 프로젝트 번호
           projects[i].title, // 프로젝트명
           projects[i].startDate, // 시작일
           projects[i].endDate, // 종료일
-          projects[i].ownerNo // 프로젝트 생성자
-      );
+          projects[i].owner // 프로젝트 생성자
+          );
     }
   }
 }
