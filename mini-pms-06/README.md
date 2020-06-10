@@ -13,47 +13,47 @@
 
 ### 1단계 - 사용자에게 입력을 안내하는 명령 프롬프트를 출력한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - 백업: App.java.01
 
 ### 2단계 - 사용자로부터 명령어를 입력 받아 출력한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - 백업: App.java.02
 
 ### 3단계 - 사용자로부터 반복해서 명령어를 입력 받는다.
 
 사용자가로부터 반복적으로 명령어를 입력 받게 한다. 명령어가 'exit'나 'quit'이면 입력을 종료한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - 백업: App.java.03
 
 ### 4단계 - `/member/add`, `/member/list` 명령을 구분한다.
 
 회원 등록 명령('/member/add') 이나 회원 목록 조회 명령('/member/list')를 구분한다. 그 외 명령은 오류 메시지를 띄운다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - 백업: App.java.04
 
 ### 5단계 - `/member/add` 명령을 처리한다.
 
 '회원 등록' 명령을 처리한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - 백업: App.java.05
 
 ### 6단계 - `/member/list` 명령을 처리한다.
 
 '회원 목록 조회' 명령을 처리한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - 백업: App.java.06
 
 ### 7단계 - `/project/add` 명령을 처리한다.
 
 '프로젝트 등록' 명령을 처리한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - App2.java 에서 프로젝트 등록과 관련된 코드를 가져온다.
   - 백업: App.java.07
 
@@ -61,7 +61,7 @@
 
 '프로젝트 목록 조회' 명령을 처리한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - App2.java 에서 프로젝트 목록 조회와 관련된 코드를 가져온다.
   - 백업: App.java.08
 
@@ -69,7 +69,7 @@
 
 '작업 등록' 명령을 처리한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - App3.java 에서 작업 등록과 관련된 코드를 가져온다.
   - 백업: App.java.09
 
@@ -77,7 +77,7 @@
 
 '작업 목록 조회' 명령을 처리한다.
 
-- com.eomcs.pms.App  클래스 변경
+- com.eomcs.pms.App 클래스 변경
   - App3.java 에서 작업 목록 조회와 관련된 코드를 가져온다.
   - 백업: App.java.10
 
