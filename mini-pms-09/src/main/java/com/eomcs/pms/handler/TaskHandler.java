@@ -1,6 +1,7 @@
-package com.eomcs.pms;
+package com.eomcs.pms.handler;
 
 import java.sql.Date;
+import com.eomcs.util.Prompt;
 
 public class TaskHandler {
 
@@ -16,7 +17,7 @@ public class TaskHandler {
   static Task[] list = new Task[LENGTH];
   static int size = 0;
 
-  static void add() {
+  public static void add() {
     System.out.println("작업 등록!");
 
     Task task = new Task();
@@ -29,7 +30,7 @@ public class TaskHandler {
     list[size++] = task;
   }
 
-  static void list() {
+  public static void list() {
     System.out.println("작업 목록!");
 
     for (int i = 0; i < size; i++) {
