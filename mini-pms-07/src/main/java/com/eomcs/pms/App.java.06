@@ -49,9 +49,11 @@ public class App {
 
   public static void main(String[] args) {
 
+    // 사용자로부터 명령어 입력을 반복해서 받는다.
     loop:
       while (true) {
-        String command = promptString("명령> ");
+        System.out.print("명령> ");
+        String command = keyboardScan.nextLine();
 
         switch (command) {
           case "/member/add": addMember(); break;
@@ -76,15 +78,31 @@ public class App {
   static void addMember() {
     System.out.println("회원 등록!");
 
+    // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
     Member member = new Member();
-    member.no = promptInt("번호? ");
-    member.name = promptString("이름? ");
-    member.email = promptString("이메일? ");
-    member.password = promptString("암호? ");
-    member.photo = promptString("사진? ");
-    member.tel = promptString("전화? ");
+
+    // 메모리에 회원 정보를 저장한다.
+    System.out.print("번호? ");
+    member.no = Integer.parseInt(keyboardScan.nextLine());
+
+    System.out.print("이름? ");
+    member.name = keyboardScan.nextLine();
+
+    System.out.print("이메일? ");
+    member.email = keyboardScan.nextLine();
+
+    System.out.print("암호? ");
+    member.password = keyboardScan.nextLine();
+
+    System.out.print("사진? ");
+    member.photo = keyboardScan.nextLine();
+
+    System.out.print("전화? ");
+    member.tel = keyboardScan.nextLine();
+
     member.registeredDate = new java.sql.Date(System.currentTimeMillis());
 
+    // 회원 정보를 담은 인스턴스의 주소를 배열에 저장한다.
     members[memberSize++] = member;
   }
 
@@ -106,15 +124,31 @@ public class App {
   static void addProject() {
     System.out.println("프로젝트 등록!");
 
+    // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
     Project project = new Project();
-    project.no = promptInt("번호? ");
-    project.title = promptString("프로젝트명? ");
-    project.content = promptString("내용? ");
-    project.startDate = promptDate("시작일? ");
-    project.endDate = promptDate("종료일? ");
-    project.owner = promptString("만든이? ");
-    project.members = promptString("팀원? ");
 
+    System.out.print("번호? ");
+    project.no = Integer.valueOf(keyboardScan.nextLine());
+
+    System.out.print("프로젝트명? ");
+    project.title = keyboardScan.nextLine();
+
+    System.out.print("내용? ");
+    project.content = keyboardScan.nextLine();
+
+    System.out.print("시작일? ");
+    project.startDate = Date.valueOf(keyboardScan.nextLine());
+
+    System.out.print("종료일? ");
+    project.endDate = Date.valueOf(keyboardScan.nextLine());
+
+    System.out.print("만든이? ");
+    project.owner = keyboardScan.nextLine();
+
+    System.out.print("팀원? ");
+    project.members = keyboardScan.nextLine();
+
+    // Project 인스턴스 주소를 배열에 저장
     projects[projectSize++] = project;
   }
 
@@ -136,13 +170,29 @@ public class App {
   static void addTask() {
     System.out.println("작업 등록!");
 
+    // 작업 정보를 저장할 Task 인스턴스를 생성한다.
     Task task = new Task();
-    task.no = promptInt("번호? ");
-    task.content = promptString("내용? ");
-    task.deadline = promptDate("마감일? ");
-    task.status = promptInt("상태?\n0: 신규\n1: 진행중\n2: 완료\n> ");
-    task.owner = promptString("담당자? ");
 
+    System.out.print("번호? ");
+    task.no = Integer.parseInt(keyboardScan.nextLine());
+
+    System.out.print("내용? ");
+    task.content = keyboardScan.nextLine();
+
+    System.out.print("마감일? ");
+    task.deadline = Date.valueOf(keyboardScan.nextLine());
+
+    System.out.println("상태?");
+    System.out.println("0: 신규");
+    System.out.println("1: 진행중");
+    System.out.println("2: 완료");
+    System.out.print("> ");
+    task.status = Integer.valueOf(keyboardScan.nextLine());
+
+    System.out.print("담당자? ");
+    task.owner = keyboardScan.nextLine();
+
+    // 작업 정보를 담은 Task 인스턴스 주소를 배열에 저장한다.
     tasks[taskSize++] = task;
   }
 
@@ -170,20 +220,5 @@ public class App {
           stateLabel // 작업상태
           );
     }
-  }
-
-  static String promptString(String title) {
-    System.out.print(title);
-    return keyboardScan.nextLine();
-  }
-
-  static int promptInt(String title) {
-    System.out.print(title);
-    return Integer.parseInt(keyboardScan.nextLine());
-  }
-
-  static Date promptDate(String title) {
-    System.out.print(title);
-    return Date.valueOf(keyboardScan.nextLine());
   }
 }
