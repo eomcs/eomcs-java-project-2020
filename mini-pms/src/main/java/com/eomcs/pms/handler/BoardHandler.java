@@ -10,8 +10,8 @@ public class BoardHandler {
     String title;
     String content;
     String writer;
-    Date createdDate; // 2단계에서 추가
-    int viewCount; // 2단계에서 추가
+    Date createdDate;
+    int viewCount;
   }
 
   static final int LENGTH = 100;
@@ -26,12 +26,11 @@ public class BoardHandler {
     board.title = Prompt.inputString("제목? ");
     board.content = Prompt.inputString("내용? ");
     board.writer = Prompt.inputString("작성자? ");
-    board.createdDate = new Date(System.currentTimeMillis()); // 2단계에서 추가
+    board.createdDate = new Date(System.currentTimeMillis());
 
     list[size++] = board;
   }
 
-  // 2단계에서 추가
   public static void list() {
     System.out.println("[게시글 목록]");
 
