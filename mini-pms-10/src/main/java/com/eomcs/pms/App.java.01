@@ -22,7 +22,6 @@ public class App {
           case "/task/add": TaskHandler.add(); break;
           case "/task/list": TaskHandler.list(); break;
           case "/board/add": BoardHandler.add(); break;
-          case "/board/list": BoardHandler.list(); break;
           case "quit":
           case "exit":
             System.out.println("안녕!");
