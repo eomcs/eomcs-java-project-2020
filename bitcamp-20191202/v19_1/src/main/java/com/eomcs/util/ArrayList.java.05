@@ -1,0 +1,20 @@
+package com.eomcs.util;
+
+public class ArrayList {
+  
+  Object[] elementData;
+  int size;
+  
+  public ArrayList() {
+    this.elementData = new Object[100];
+  }
+  
+  public ArrayList(int initialCapacity) {
+    this.elementData = new Object[initialCapacity];
+  }
+}
+
+
+
+
+

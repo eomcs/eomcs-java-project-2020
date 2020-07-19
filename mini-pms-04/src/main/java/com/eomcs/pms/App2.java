@@ -14,6 +14,7 @@ public class App2 {
     // => 배열의 크기를 미리 변수에 저장하여 사용한다.
     // => 나중에 배열의 크기를 바꾸기 쉽다.
     int length = 100;
+    
     int[] no = new int[length];
     String[] title = new String[length];
     String[] content = new String[length];

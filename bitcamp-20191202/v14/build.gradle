@@ -1,0 +1,35 @@
+plugins {
+    id 'java'
+    id 'application'
+
+    // 이클립스 그레이들 플러그인
+    // - 이클립스 IDE 관련 작업을 수행할 수 있는 명령이 들어있다.
+    id 'eclipse'
+
+}
+
+tasks.withType(JavaCompile) {
+    // 프로젝트의 소스 파일 인코딩을 gradle에게 알려준다.
+    options.encoding = 'UTF-8' 
+
+    // 소스 파일을 작성할 때 사용할 자바 버전
+    sourceCompatibility = '1.8'
+
+    // 자바 클래스를 실행시킬 JVM의 최소 버전
+    targetCompatibility = '1.8'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:28.0-jre'
+    testImplementation 'junit:junit:4.12'
+}
+
+
+application {
+    mainClassName = 'com.eomcs.lms.App'
+}
+

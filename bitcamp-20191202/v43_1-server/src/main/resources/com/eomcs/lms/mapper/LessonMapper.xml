@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="LessonMapper">
+
+  <resultMap type="Lesson" id="LessonMap">
+    <id column="lesson_id"   property="no"/>
+    <result column="titl"  property="title"/>
+    <result column="conts"  property="description"/>
+    <result column="sdt"    property="startDate"/>
+    <result column="edt"    property="endDate"/>
+    <result column="tot_hr" property="totalHours"/>
+    <result column="day_hr" property="dayHours"/>
+  </resultMap>
+    
+  <insert id="insertLesson" parameterType="Lesson">
+    insert into lms_lesson(
+      sdt, 
+      edt, 
+      tot_hr, 
+      day_hr, 
+      titl, 
+      conts)
+    values(
+      #{startDate}, 
+      #{endDate}, 
+      #{totalHours}, 
+      #{dayHours}, 
+      #{title}, 
+      #{description})
+  </insert>
+  
+  <select id="selectLesson" resultMap="LessonMap">
+    select 
+      lesson_id, 
+      titl, 
+      sdt, 
+      edt, 
+      tot_hr
+    from lms_lesson
+  </select>
+
+  
+  <select id="selectDetail" resultMap="LessonMap" parameterType="int">
+    select 
+      lesson_id, 
+      titl, 
+      conts, 
+      sdt, 
+      edt, 
+      tot_hr, 
+      day_hr
+    from 
+      lms_lesson
+    where 
+      lesson_id=#{no}
+  </select>
+  
+  <update id="updateLesson" parameterType="Lesson">
+    update lms_lesson set
+      titl=#{title}, 
+      conts=#{description}, 
+      sdt=#{startDate}, 
+      edt=#{endDate}, 
+      tot_hr=#{totalHours}, 
+      day_hr=#{dayHours}
+    where lesson_id=#{no}
+  </update>
+  
+  <delete id="deleteLesson" parameterType="int">
+    delete from lms_lesson
+    where lesson_id=#{no}
+  </delete>
+</mapper>
+
+
+
+
+
+
+

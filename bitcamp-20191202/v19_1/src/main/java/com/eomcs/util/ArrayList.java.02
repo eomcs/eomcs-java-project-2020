@@ -1,0 +1,8 @@
+package com.eomcs.util;
+
+public class ArrayList {
+  
+  Object[] elementData = new Object[100];
+  int size;
+  
+}

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.eomcs.lms.dao.MemberDao">
+
+  <resultMap type="Member" id="MemberMap">
+    <id column="member_id"  property="no"/>
+    <result column="name"       property="name"/>
+    <result column="email"  property="email"/>
+    <result column="pwd"    property="password"/>
+    <result column="photo"    property="photo"/>
+    <result column="tel" property="tel"/>
+    <result column="cdt" property="registeredDate"/>
+  </resultMap>
+  
+  <sql id="select1">
+      member_id, 
+      name, 
+      email, 
+      tel,
+  </sql>
+  
+  <insert id="insert" parameterType="Member">
+    insert into lms_member(
+      name, 
+      email, 
+      pwd, 
+      tel, 
+      photo
+    ) values(
+      #{name},
+      #{email},
+      password(#{password}),
+      #{tel},
+      #{photo}
+    )
+  </insert>
+  
+  <select id="findAll" resultMap="MemberMap">
+    select 
+      <include refid="select1"/>
+      cdt
+    from 
+      lms_member
+  </select>
+
+  
+  <select id="findByNo" resultMap="MemberMap" parameterType="int">
+    select 
+      <include refid="select1"/>
+      pwd, 
+      photo
+    from 
+      lms_member
+    where 
+      member_id=#{no}
+  </select>
+  
+  <update id="update" parameterType="Member">
+    update lms_member
+    <set>
+      <if test="name != null and name != ''">name=#{name},</if>
+      <if test="email != null and email != ''">email=#{email},</if> 
+      <if test="password != null and password != ''">pwd=password(#{password}),</if>
+      <if test="tel != null and tel != ''">tel=#{tel},</if>
+      <if test="photo != null and photo != ''">photo=#{photo}</if>
+    </set>
+    where 
+      member_id=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from lms_member
+    where member_id=#{no}
+  </delete>
+  
+  <select id="findByKeyword" 
+    resultMap="MemberMap" 
+    parameterType="string">
+    <bind name="keywordPattern" value="'%' + _parameter + '%'"/>
+    select 
+      <include refid="select1"/>
+      cdt
+    from 
+      lms_member
+    where 
+      name like #{keywordPattern}
+      or email like #{keywordPattern}
+      or tel like #{keywordPattern}
+  </select>
+  
+  <select id="findByEmailAndPassword" 
+    resultMap="MemberMap" 
+    parameterType="map">
+    select 
+      <include refid="select1"/>
+      pwd, 
+      photo
+    from lms_member
+    where 
+      email=#{email} 
+      and pwd=password(#{password})
+  </select>
+</mapper>
+
+
+
+
+
+
+

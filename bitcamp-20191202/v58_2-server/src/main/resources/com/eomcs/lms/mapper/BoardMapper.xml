@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.eomcs.lms.dao.BoardDao">
+
+  <resultMap type="Board" id="BoardMap">
+    <id column="board_id"   property="no"/>
+    <result column="conts"  property="title"/>
+    <result column="cdt"    property="date"/>
+    <result column="vw_cnt" property="viewCount"/>
+  </resultMap>
+  
+  <sql id="select1">
+    select 
+      board_id, 
+      conts, 
+      cdt, 
+      vw_cnt
+    from 
+      lms_board
+  </sql>
+  
+  <select id="findAll" resultMap="BoardMap">
+    <include refid="select1"/>
+    order by 
+      board_id desc
+  </select>
+  
+  <insert id="insert" parameterType="Board">
+    insert into lms_board(conts) 
+    values(#{title})
+  </insert>
+  
+  <select id="findByNo" resultMap="BoardMap" parameterType="int">
+    <include refid="select1"/>
+    where 
+      board_id=#{no}
+  </select>
+  
+  <update id="update" parameterType="Board">
+    update lms_board set
+      conts=#{title}
+    where board_id=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from lms_board
+    where board_id=#{no}
+  </delete>
+</mapper>
+
+
+
+
+
+
+

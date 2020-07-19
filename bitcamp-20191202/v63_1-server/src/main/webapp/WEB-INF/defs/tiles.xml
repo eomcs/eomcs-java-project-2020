@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+  <!-- 여러 템플릿에서 공통으로 사용할 레이아웃을 정의한다. -->
+  <definition name="base" template="/WEB-INF/tiles/app/template2.jsp">
+    <!-- template.jsp 안에서 사용할 JSP 파일의 이름을 설정한다. -->
+    <put-attribute name="header" value="/WEB-INF/tiles/app/header.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/tiles/app/footer.jsp" />
+  </definition>
+  
+  <!-- request handler가 리턴한 JSP의 경로가 'board/*' 일 경우
+       TilesView 템플릿 엔진이 사용할 레이아웃을 정의한다.  -->
+  <definition name="*/*.app" extends="base">
+    <put-attribute name="side" value="/WEB-INF/views/app/{1}/side.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/app/{1}/{2}.jsp" />
+    <put-attribute name="css.page" value="../../css/{1}.css" />
+    <put-attribute name="css.page2" value="../../css/{1}/{2}.css" />
+    <put-attribute name="css.common" value="../../css/common.css" />
+  </definition>
+  
+  <definition name="test/exam01.app" extends="base" template="/WEB-INF/tiles/test/exam01_template.jsp">
+    <put-attribute name="header" value="/WEB-INF/tiles/test/exam01_header.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/tiles/test/exam01_footer.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/test/exam01.jsp" />
+  </definition>
+  
+  <definition name="test/exam02.app" extends="base" template="/WEB-INF/tiles/test/exam02_template.jsp">
+    <put-attribute name="header" value="/WEB-INF/tiles/test/exam02_header.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/tiles/test/exam02_footer.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/test/exam02.jsp" />
+  </definition>
+
+  <definition name="test/exam03.app" extends="base" template="/WEB-INF/tiles/test/exam03_template.jsp">
+    <put-attribute name="header" value="/WEB-INF/tiles/test/exam03_header.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/tiles/test/exam03_footer.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/test/exam03.jsp" />
+  </definition>
+  
+  <definition name="test/exam04.app" extends="base" template="/WEB-INF/tiles/test/exam04_template.jsp">
+    <put-attribute name="header" value="/WEB-INF/tiles/test/exam04_header.jsp" />
+    <put-attribute name="footer" value="/WEB-INF/tiles/test/exam04_footer.jsp" />
+    <put-attribute name="body" value="/WEB-INF/views/test/exam04.jsp" />
+  </definition>
+</tiles-definitions>

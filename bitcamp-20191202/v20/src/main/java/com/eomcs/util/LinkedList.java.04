@@ -1,0 +1,29 @@
+package com.eomcs.util;
+
+public class LinkedList {
+  
+  Node first;
+  
+  Node last;
+  
+  int size;
+  
+  public void add(Object value) {
+    Node newNode = new Node();
+    newNode.value = value;
+    
+    if (first == null) {
+      last = first = newNode;
+    } else {
+      last.next = newNode;
+      last = newNode;
+    }
+    
+    this.size++;
+  }
+  
+  static class Node {
+    Object value;
+    Node next;
+  }
+}

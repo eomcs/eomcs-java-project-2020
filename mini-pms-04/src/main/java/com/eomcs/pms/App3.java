@@ -15,6 +15,7 @@ public class App3 {
     // => 코드 중간에 배열의 크기가 바뀌지 않도록 변수의 값 변경을 제한한다.
     // => 한 번 설정된 값은 바꿀 수 없음을 표시하기 위해 변수명을 대문자로 표현한다.
     final int LENGTH = 100;
+    
     int[] no = new int[LENGTH];
     String[] content = new String[LENGTH];
     Date[] deadline = new Date[LENGTH];

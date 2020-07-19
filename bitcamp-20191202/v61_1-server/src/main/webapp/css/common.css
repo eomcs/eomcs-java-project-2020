@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+body {
+  background-color: LightGray;
+}
+div.container {
+  background: white;
+  border: 1px solid gray;
+  width: 600px;
+}
+footer {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: navy;
+  color: white;
+  text-align: center;
+}

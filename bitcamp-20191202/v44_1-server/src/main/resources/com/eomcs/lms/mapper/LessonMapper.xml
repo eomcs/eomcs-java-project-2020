@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="LessonMapper">
+
+  <resultMap type="Lesson" id="LessonMap">
+    <id column="lesson_id"   property="no"/>
+    <result column="titl"  property="title"/>
+    <result column="conts"  property="description"/>
+    <result column="sdt"    property="startDate"/>
+    <result column="edt"    property="endDate"/>
+    <result column="tot_hr" property="totalHours"/>
+    <result column="day_hr" property="dayHours"/>
+  </resultMap>
+  
+  <sql id="select1">
+    select 
+      lesson_id, 
+      titl, 
+      sdt, 
+      edt, 
+      tot_hr
+  </sql>
+  
+  <insert id="insertLesson" parameterType="Lesson">
+    insert into lms_lesson(
+      sdt, 
+      edt, 
+      tot_hr, 
+      day_hr, 
+      titl, 
+      conts)
+    values(
+      #{startDate}, 
+      #{endDate}, 
+      #{totalHours}, 
+      #{dayHours}, 
+      #{title}, 
+      #{description})
+  </insert>
+  
+  <select id="selectLesson" resultMap="LessonMap" parameterType="map">
+    <include refid="select1"/>
+    from lms_lesson
+    <where>
+      <if test="title != null">titl like concat('%', #{title}, '%')</if>
+      <if test="startDate != null">and sdt >= #{startDate}</if>
+      <if test="endDate != null">and edt &lt;= #{endDate}</if>
+      <if test="totalHours != null">and tot_hr &lt;= #{totalHours}</if>
+      <if test="dayHours != null">and day_hr &lt;= #{dayHours}</if>
+    </where>
+  </select>
+
+  
+  <select id="selectDetail" resultMap="LessonMap" parameterType="int">
+    <include refid="select1"/>,
+      conts, 
+      day_hr
+    from 
+      lms_lesson
+    where 
+      lesson_id=#{no}
+  </select>
+  
+  <update id="updateLesson" parameterType="Lesson">
+    update lms_lesson
+    <set>
+      <if test="title != null and title != ''">titl=#{title},</if>
+      <if test="description != null and description != ''">conts=#{description},</if>
+      <if test="startDate != null">sdt=#{startDate},</if>
+      <if test="endDate != null">edt=#{endDate},</if>
+      <if test="totalHours > 0">tot_hr=#{totalHours},</if>
+      <if test="dayHours > 0">day_hr=#{dayHours}</if>
+    </set>
+    where lesson_id=#{no}
+  </update>
+  
+  <delete id="deleteLesson" parameterType="int">
+    delete from lms_lesson
+    where lesson_id=#{no}
+  </delete>
+</mapper>
+
+
+
+
+
+
+

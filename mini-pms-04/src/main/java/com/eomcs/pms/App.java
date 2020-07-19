@@ -3,6 +3,13 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
+// 1) 낱개의 변수를 사용할 때
+// 2) 조건문을 사용하여 입력 및 출력 제어
+// 3) 배열 사용
+// 4) 반복문 사용
+// 5) 배열의 개수를 변수에 저장하여 크기 변경을 쉽게 하기
+// 6) 배열의 개수를 저장한 변수의 값을 코드 중간에서 변경하지 못하게 막기 => final
+
 public class App {
 
   public static void main(String[] args) {
@@ -10,17 +17,20 @@ public class App {
 
     Scanner keyboardScan = new Scanner(System.in);
 
-    // 최대 100명의 회원 정보를 저장할 메모리 준비
-    int[] no = new int[100];
-    String[] name = new String[100];
-    String[] email = new String[100];
-    String[] password = new String[100];
-    String[] photo = new String[100];
-    String[] tel = new String[100];
-    Date[] registeredDate = new Date[100];
+    // 최대 입력 개수
+    final int LENGTH = 100;
+
+    int[] no = new int[LENGTH];
+    String[] name = new String[LENGTH];
+    String[] email = new String[LENGTH];
+    String[] password = new String[LENGTH];
+    String[] photo = new String[LENGTH];
+    String[] tel = new String[LENGTH];
+    Date[] registeredDate = new Date[LENGTH];
 
     int size = 0;
-    for (int i = 0; i < 100; i++) {
+
+    for (int i = 0; i < LENGTH; i++) {
       System.out.print("번호? ");
       no[i] = Integer.parseInt(keyboardScan.nextLine());
 
