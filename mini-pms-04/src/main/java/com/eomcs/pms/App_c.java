@@ -3,10 +3,11 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
-// 1) 낱개의 변수를 사용할 때
-// 2) 조건문을 사용하여 입력 및 출력 제어
-// 3) 배열 사용
-
+// 1) 낱개의 변수를 사용하여 여러 회원 정보 처리하기
+// 2) 조건문을 사용하여 입출력 제어하기
+// - 필요한 만큼만 입력 받고 출력하고 싶다.
+// 3) 배열을 사용하여 여러 개의 값을 다루기
+// - 배열을 사용하면 간단하게 여러 개의 변수를 선언할 수 있다.
 public class App_c {
 
   public static void main(String[] args) {
