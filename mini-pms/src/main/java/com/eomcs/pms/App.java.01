@@ -1,11 +1,8 @@
 package com.eomcs.pms;
 
 import java.sql.Date;
-import java.util.Scanner;
 
-public class App_g {
-
-  static Scanner keyboardScan = new Scanner(System.in);
+public class App {
 
   static class Member {
     int no;
@@ -49,10 +46,9 @@ public class App_g {
 
   public static void main(String[] args) {
 
-    // 사용자로부터 명령어 입력을 반복해서 받는다.
     loop:
       while (true) {
-        String command = prompt();
+        String command = Prompt.inputString("명령> ");
 
         switch (command) {
           case "/member/add": addMember(); break;
@@ -71,42 +67,26 @@ public class App_g {
         System.out.println();
       }
 
-  keyboardScan.close();
+  Prompt.keyboardScan.close();
   }
 
   static void addMember() {
-    System.out.println("[회원 등록]");
+    System.out.println("회원 등록!");
 
-    // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
     Member member = new Member();
-
-    // 메모리에 회원 정보를 저장한다.
-    System.out.print("번호? ");
-    member.no = Integer.parseInt(keyboardScan.nextLine());
-
-    System.out.print("이름? ");
-    member.name = keyboardScan.nextLine();
-
-    System.out.print("이메일? ");
-    member.email = keyboardScan.nextLine();
-
-    System.out.print("암호? ");
-    member.password = keyboardScan.nextLine();
-
-    System.out.print("사진? ");
-    member.photo = keyboardScan.nextLine();
-
-    System.out.print("전화? ");
-    member.tel = keyboardScan.nextLine();
-
+    member.no = Prompt.inputInt("번호? ");
+    member.name = Prompt.inputString("이름? ");
+    member.email = Prompt.inputString("이메일? ");
+    member.password = Prompt.inputString("암호? ");
+    member.photo = Prompt.inputString("사진? ");
+    member.tel = Prompt.inputString("전화? ");
     member.registeredDate = new java.sql.Date(System.currentTimeMillis());
 
-    // 회원 정보를 담은 인스턴스의 주소를 배열에 저장한다.
     members[memberSize++] = member;
   }
 
   static void listMember() {
-    System.out.println("[회원 목록]");
+    System.out.println("회원 목록!");
 
     for (int i = 0; i < memberSize; i++) {
       // 번호, 이름, 이메일, 전화, 가입일
@@ -121,38 +101,22 @@ public class App_g {
   }
 
   static void addProject() {
-    System.out.println("[프로젝트 등록]");
+    System.out.println("프로젝트 등록!");
 
-    // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
     Project project = new Project();
+    project.no = Prompt.inputInt("번호? ");
+    project.title = Prompt.inputString("프로젝트명? ");
+    project.content = Prompt.inputString("내용? ");
+    project.startDate = Prompt.inputDate("시작일? ");
+    project.endDate = Prompt.inputDate("종료일? ");
+    project.owner = Prompt.inputString("만든이? ");
+    project.members = Prompt.inputString("팀원? ");
 
-    System.out.print("번호? ");
-    project.no = Integer.valueOf(keyboardScan.nextLine());
-
-    System.out.print("프로젝트명? ");
-    project.title = keyboardScan.nextLine();
-
-    System.out.print("내용? ");
-    project.content = keyboardScan.nextLine();
-
-    System.out.print("시작일? ");
-    project.startDate = Date.valueOf(keyboardScan.nextLine());
-
-    System.out.print("종료일? ");
-    project.endDate = Date.valueOf(keyboardScan.nextLine());
-
-    System.out.print("만든이? ");
-    project.owner = keyboardScan.nextLine();
-
-    System.out.print("팀원? ");
-    project.members = keyboardScan.nextLine();
-
-    // Project 인스턴스 주소를 배열에 저장
     projects[projectSize++] = project;
   }
 
   static void listProject() {
-    System.out.println("[프로젝트 목록]");
+    System.out.println("프로젝트 목록!");
 
     for (int i = 0; i < projectSize; i++) {
       // 번호, 프로젝트명, 시작일, 종료일, 만든이
@@ -167,36 +131,20 @@ public class App_g {
   }
 
   static void addTask() {
-    System.out.println("[작업 등록]");
+    System.out.println("작업 등록!");
 
-    // 작업 정보를 저장할 Task 인스턴스를 생성한다.
     Task task = new Task();
+    task.no = Prompt.inputInt("번호? ");
+    task.content = Prompt.inputString("내용? ");
+    task.deadline = Prompt.inputDate("마감일? ");
+    task.status = Prompt.inputInt("상태?\n0: 신규\n1: 진행중\n2: 완료\n> ");
+    task.owner = Prompt.inputString("담당자? ");
 
-    System.out.print("번호? ");
-    task.no = Integer.parseInt(keyboardScan.nextLine());
-
-    System.out.print("내용? ");
-    task.content = keyboardScan.nextLine();
-
-    System.out.print("마감일? ");
-    task.deadline = Date.valueOf(keyboardScan.nextLine());
-
-    System.out.println("상태?");
-    System.out.println("0: 신규");
-    System.out.println("1: 진행중");
-    System.out.println("2: 완료");
-    System.out.print("> ");
-    task.status = Integer.valueOf(keyboardScan.nextLine());
-
-    System.out.print("담당자? ");
-    task.owner = keyboardScan.nextLine();
-
-    // 작업 정보를 담은 Task 인스턴스 주소를 배열에 저장한다.
     tasks[taskSize++] = task;
   }
 
   static void listTask() {
-    System.out.println("[작업 목록]");
+    System.out.println("작업 목록!");
 
     for (int i = 0; i < taskSize; i++) {
       String stateLabel = null;
@@ -221,8 +169,5 @@ public class App_g {
     }
   }
 
-  static String prompt() {
-    System.out.print("명령> ");
-    return keyboardScan.nextLine();
-  }
+
 }
