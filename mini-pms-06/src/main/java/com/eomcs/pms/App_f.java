@@ -3,7 +3,7 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
-public class App {
+public class App_f {
 
   public static void main(String[] args) {
     class Member {
@@ -31,7 +31,7 @@ public class App {
 
         switch (command) {
           case "/member/add":
-            System.out.println("회원 등록!");
+            System.out.println("[회원 등록]");
 
             // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
             Member member = new Member();
@@ -62,7 +62,18 @@ public class App {
 
             break;
           case "/member/list":
-            System.out.println("회원 목록!");
+            System.out.println("[회원 목록]");
+
+            for (int i = 0; i < size; i++) {
+              // 번호, 이름, 이메일, 전화, 가입일
+              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
+                  members[i].no, // 회원 번호
+                  members[i].name, // 이름
+                  members[i].email, // 이메일
+                  members[i].tel, // 전화
+                  members[i].registeredDate // 가입일
+                  );
+            }
             break;
           case "quit":
           case "exit":
@@ -74,18 +85,5 @@ public class App {
       }
 
     keyboardScan.close();
-
-    /*
-    for (int i = 0; i < size; i++) {
-      // 번호, 이름, 이메일, 전화, 가입일
-      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-          members[i].no, // 회원 번호
-          members[i].name, // 이름
-          members[i].email, // 이메일
-          members[i].tel, // 전화
-          members[i].registeredDate // 가입일
-          );
-    }
-     */
   }
 }

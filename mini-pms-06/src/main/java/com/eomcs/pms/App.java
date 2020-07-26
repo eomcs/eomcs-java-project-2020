@@ -58,7 +58,7 @@ public class App {
 
         switch (command) {
           case "/member/add":
-            System.out.println("회원 등록!");
+            System.out.println("[회원 등록]");
 
             // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
             Member member = new Member();
@@ -89,7 +89,7 @@ public class App {
 
             break;
           case "/member/list":
-            System.out.println("회원 목록!");
+            System.out.println("[회원 목록]");
 
             for (int i = 0; i < memberSize; i++) {
               // 번호, 이름, 이메일, 전화, 가입일
@@ -103,7 +103,7 @@ public class App {
             }
             break;
           case "/project/add":
-            System.out.println("프로젝트 등록!");
+            System.out.println("[프로젝트 등록]");
 
             // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
             Project project = new Project();
@@ -133,7 +133,7 @@ public class App {
             projects[projectSize++] = project;
             break;
           case "/project/list":
-            System.out.println("프로젝트 목록!");
+            System.out.println("[프로젝트 목록]");
 
             for (int i = 0; i < projectSize; i++) {
               // 번호, 프로젝트명, 시작일, 종료일, 만든이
@@ -147,7 +147,7 @@ public class App {
             }
             break;
           case "/task/add":
-            System.out.println("작업 등록!");
+            System.out.println("[작업 등록]");
 
             // 작업 정보를 저장할 Task 인스턴스를 생성한다.
             Task task = new Task();
@@ -175,7 +175,7 @@ public class App {
             tasks[taskSize++] = task;
             break;
           case "/task/list":
-            System.out.println("작업 목록!");
+            System.out.println("[작업 목록]");
 
             for (int i = 0; i < taskSize; i++) {
               String stateLabel = null;

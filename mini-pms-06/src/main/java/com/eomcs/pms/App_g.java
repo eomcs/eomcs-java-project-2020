@@ -3,7 +3,7 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
-public class App {
+public class App_g {
 
   public static void main(String[] args) {
     class Member {
@@ -45,7 +45,7 @@ public class App {
 
         switch (command) {
           case "/member/add":
-            System.out.println("회원 등록!");
+            System.out.println("[회원 등록]");
 
             // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
             Member member = new Member();
@@ -76,7 +76,7 @@ public class App {
 
             break;
           case "/member/list":
-            System.out.println("회원 목록!");
+            System.out.println("[회원 목록]");
 
             for (int i = 0; i < memberSize; i++) {
               // 번호, 이름, 이메일, 전화, 가입일
@@ -90,7 +90,7 @@ public class App {
             }
             break;
           case "/project/add":
-            System.out.println("프로젝트 등록!");
+            System.out.println("[프로젝트 등록]");
 
             // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
             Project project = new Project();
@@ -119,20 +119,6 @@ public class App {
             // Project 인스턴스 주소를 배열에 저장
             projects[projectSize++] = project;
             break;
-          case "/project/list":
-            System.out.println("프로젝트 목록!");
-
-            for (int i = 0; i < projectSize; i++) {
-              // 번호, 프로젝트명, 시작일, 종료일, 만든이
-              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-                  projects[i].no, // 프로젝트 번호
-                  projects[i].title, // 프로젝트명
-                  projects[i].startDate, // 시작일
-                  projects[i].endDate, // 종료일
-                  projects[i].owner // 프로젝트 생성자
-                  );
-            }
-            break;
           case "quit":
           case "exit":
             System.out.println("안녕!");
@@ -140,7 +126,6 @@ public class App {
           default:
             System.out.println("실행할 수 없는 명령입니다.");
         }
-        System.out.println();
       }
 
     keyboardScan.close();

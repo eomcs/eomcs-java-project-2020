@@ -2,7 +2,7 @@ package com.eomcs.pms;
 
 import java.util.Scanner;
 
-public class App {
+public class App_d {
 
   public static void main(String[] args) {
 
@@ -16,10 +16,10 @@ public class App {
 
         switch (command) {
           case "/member/add":
-            System.out.println("회원 등록!");
+            System.out.println("[회원 등록]");
             break;
           case "/member/list":
-            System.out.println("회원 목록!");
+            System.out.println("[회원 목록]");
             break;
           case "quit":
           case "exit":

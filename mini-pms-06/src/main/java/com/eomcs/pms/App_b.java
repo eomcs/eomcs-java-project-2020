@@ -2,23 +2,15 @@ package com.eomcs.pms;
 
 import java.util.Scanner;
 
-public class App {
+public class App_b {
 
   public static void main(String[] args) {
 
     Scanner keyboardScan = new Scanner(System.in);
 
-    // 사용자로부터 명령어 입력을 반복해서 받는다.
-    while (true) {
-      System.out.print("명령> ");
-      String command = keyboardScan.nextLine();
-      System.out.println(command);
-
-      // "quit" 이나 "exit"를 입력하면 반복을 종료한다.
-      if (command.equalsIgnoreCase("quit") || command.equalsIgnoreCase("exit")) {
-        break;
-      }
-    }
+    System.out.print("명령> ");
+    String command = keyboardScan.nextLine();
+    System.out.println(command);
 
     keyboardScan.close();
 
