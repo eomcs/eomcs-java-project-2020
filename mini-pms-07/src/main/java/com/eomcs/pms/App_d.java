@@ -3,7 +3,7 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
-public class App {
+public class App_d {
 
   static Scanner keyboardScan = new Scanner(System.in);
 
@@ -21,6 +21,7 @@ public class App {
   static Member[] members = new Member[LENGTH];
   static int memberSize = 0;
 
+  //main()과 addProject()가 함께 사용하려면 스태틱 멤버로 만들어야 한다.
   static class Project {
     int no;
     String title;
@@ -34,20 +35,22 @@ public class App {
   static Project[] projects = new Project[LENGTH];
   static int projectSize = 0;
 
-  //main()과 addTask()가 함께 사용하려면 스태틱 멤버로 만들어야 한다.
-  static class Task {
-    int no;
-    String content;
-    Date deadline;
-    int status;
-    String owner;
-  }
-
-  // 최대 100개의 Task 인스턴스의 주소를 저장할 레퍼런스 배열 준비
-  static Task[] tasks = new Task[LENGTH];
-  static int taskSize = 0;
-
   public static void main(String[] args) {
+
+
+    // 작업 정보를 담을 메모리의 설계도를 만든다.
+    class Task {
+      int no;
+      String content;
+      Date deadline;
+      int status;
+      String owner;
+    }
+
+    // 최대 100개의 Task 인스턴스의 주소를 저장할 레퍼런스 배열 준비
+    Task[] tasks = new Task[LENGTH];
+    int taskSize = 0;
+
 
     // 사용자로부터 명령어 입력을 반복해서 받는다.
     loop:
@@ -60,9 +63,36 @@ public class App {
           case "/member/list": listMember(); break;
           case "/project/add": addProject(); break;
           case "/project/list": listProject(); break;
-          case "/task/add": addTask(); break;
+          case "/task/add":
+            System.out.println("[작업 등록]");
+
+            // 작업 정보를 저장할 Task 인스턴스를 생성한다.
+            Task task = new Task();
+
+            System.out.print("번호? ");
+            task.no = Integer.parseInt(keyboardScan.nextLine());
+
+            System.out.print("내용? ");
+            task.content = keyboardScan.nextLine();
+
+            System.out.print("마감일? ");
+            task.deadline = Date.valueOf(keyboardScan.nextLine());
+
+            System.out.println("상태?");
+            System.out.println("0: 신규");
+            System.out.println("1: 진행중");
+            System.out.println("2: 완료");
+            System.out.print("> ");
+            task.status = Integer.valueOf(keyboardScan.nextLine());
+
+            System.out.print("담당자? ");
+            task.owner = keyboardScan.nextLine();
+
+            // 작업 정보를 담은 Task 인스턴스 주소를 배열에 저장한다.
+            tasks[taskSize++] = task;
+            break;
           case "/task/list":
-            System.out.println("작업 목록!");
+            System.out.println("[작업 목록]");
 
             for (int i = 0; i < taskSize; i++) {
               String stateLabel = null;
@@ -96,11 +126,11 @@ public class App {
         System.out.println();
       }
 
-  keyboardScan.close();
+    keyboardScan.close();
   }
 
   static void addMember() {
-    System.out.println("회원 등록!");
+    System.out.println("[회원 등록]");
 
     // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
     Member member = new Member();
@@ -131,7 +161,7 @@ public class App {
   }
 
   static void listMember() {
-    System.out.println("회원 목록!");
+    System.out.println("[회원 목록]");
 
     for (int i = 0; i < memberSize; i++) {
       // 번호, 이름, 이메일, 전화, 가입일
@@ -146,7 +176,7 @@ public class App {
   }
 
   static void addProject() {
-    System.out.println("프로젝트 등록!");
+    System.out.println("[프로젝트 등록]");
 
     // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
     Project project = new Project();
@@ -177,7 +207,7 @@ public class App {
   }
 
   static void listProject() {
-    System.out.println("프로젝트 목록!");
+    System.out.println("[프로젝트 목록]");
 
     for (int i = 0; i < projectSize; i++) {
       // 번호, 프로젝트명, 시작일, 종료일, 만든이
@@ -189,34 +219,5 @@ public class App {
           projects[i].owner // 프로젝트 생성자
           );
     }
-  }
-
-  static void addTask() {
-    System.out.println("작업 등록!");
-
-    // 작업 정보를 저장할 Task 인스턴스를 생성한다.
-    Task task = new Task();
-
-    System.out.print("번호? ");
-    task.no = Integer.parseInt(keyboardScan.nextLine());
-
-    System.out.print("내용? ");
-    task.content = keyboardScan.nextLine();
-
-    System.out.print("마감일? ");
-    task.deadline = Date.valueOf(keyboardScan.nextLine());
-
-    System.out.println("상태?");
-    System.out.println("0: 신규");
-    System.out.println("1: 진행중");
-    System.out.println("2: 완료");
-    System.out.print("> ");
-    task.status = Integer.valueOf(keyboardScan.nextLine());
-
-    System.out.print("담당자? ");
-    task.owner = keyboardScan.nextLine();
-
-    // 작업 정보를 담은 Task 인스턴스 주소를 배열에 저장한다.
-    tasks[taskSize++] = task;
   }
 }

@@ -3,7 +3,7 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
-public class App {
+public class App_g {
 
   static Scanner keyboardScan = new Scanner(System.in);
 
@@ -52,8 +52,7 @@ public class App {
     // 사용자로부터 명령어 입력을 반복해서 받는다.
     loop:
       while (true) {
-        System.out.print("명령> ");
-        String command = keyboardScan.nextLine();
+        String command = prompt();
 
         switch (command) {
           case "/member/add": addMember(); break;
@@ -76,7 +75,7 @@ public class App {
   }
 
   static void addMember() {
-    System.out.println("회원 등록!");
+    System.out.println("[회원 등록]");
 
     // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
     Member member = new Member();
@@ -107,7 +106,7 @@ public class App {
   }
 
   static void listMember() {
-    System.out.println("회원 목록!");
+    System.out.println("[회원 목록]");
 
     for (int i = 0; i < memberSize; i++) {
       // 번호, 이름, 이메일, 전화, 가입일
@@ -122,7 +121,7 @@ public class App {
   }
 
   static void addProject() {
-    System.out.println("프로젝트 등록!");
+    System.out.println("[프로젝트 등록]");
 
     // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
     Project project = new Project();
@@ -153,7 +152,7 @@ public class App {
   }
 
   static void listProject() {
-    System.out.println("프로젝트 목록!");
+    System.out.println("[프로젝트 목록]");
 
     for (int i = 0; i < projectSize; i++) {
       // 번호, 프로젝트명, 시작일, 종료일, 만든이
@@ -168,7 +167,7 @@ public class App {
   }
 
   static void addTask() {
-    System.out.println("작업 등록!");
+    System.out.println("[작업 등록]");
 
     // 작업 정보를 저장할 Task 인스턴스를 생성한다.
     Task task = new Task();
@@ -197,7 +196,7 @@ public class App {
   }
 
   static void listTask() {
-    System.out.println("작업 목록!");
+    System.out.println("[작업 목록]");
 
     for (int i = 0; i < taskSize; i++) {
       String stateLabel = null;
@@ -220,5 +219,10 @@ public class App {
           stateLabel // 작업상태
           );
     }
+  }
+
+  static String prompt() {
+    System.out.print("명령> ");
+    return keyboardScan.nextLine();
   }
 }

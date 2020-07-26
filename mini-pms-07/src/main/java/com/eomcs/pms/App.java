@@ -74,7 +74,7 @@ public class App {
   }
 
   static void addMember() {
-    System.out.println("회원 등록!");
+    System.out.println("[회원 등록]");
 
     Member member = new Member();
     member.no = promptInt("번호? ");
@@ -89,7 +89,7 @@ public class App {
   }
 
   static void listMember() {
-    System.out.println("회원 목록!");
+    System.out.println("[회원 목록]");
 
     for (int i = 0; i < memberSize; i++) {
       // 번호, 이름, 이메일, 전화, 가입일
@@ -104,7 +104,7 @@ public class App {
   }
 
   static void addProject() {
-    System.out.println("프로젝트 등록!");
+    System.out.println("[프로젝트 등록]");
 
     Project project = new Project();
     project.no = promptInt("번호? ");
@@ -119,7 +119,7 @@ public class App {
   }
 
   static void listProject() {
-    System.out.println("프로젝트 목록!");
+    System.out.println("[프로젝트 목록]");
 
     for (int i = 0; i < projectSize; i++) {
       // 번호, 프로젝트명, 시작일, 종료일, 만든이
@@ -134,7 +134,7 @@ public class App {
   }
 
   static void addTask() {
-    System.out.println("작업 등록!");
+    System.out.println("[작업 등록]");
 
     Task task = new Task();
     task.no = promptInt("번호? ");
@@ -147,7 +147,7 @@ public class App {
   }
 
   static void listTask() {
-    System.out.println("작업 목록!");
+    System.out.println("[작업 목록]");
 
     for (int i = 0; i < taskSize; i++) {
       String stateLabel = null;

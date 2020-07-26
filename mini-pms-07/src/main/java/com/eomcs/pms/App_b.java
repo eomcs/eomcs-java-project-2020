@@ -3,23 +3,26 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
-public class App_i {
+public class App_b {
+
+  // main()과 addMember()가 함께 사용하려면 스태틱 멤버로 만들어야 한다.
+  static Scanner keyboardScan = new Scanner(System.in);
+
+  static class Member {
+    int no;
+    String name;
+    String email;
+    String password;
+    String photo;
+    String tel;
+    Date registeredDate;
+  }
+
+  static final int LENGTH = 100;
+  static Member[] members = new Member[LENGTH];
+  static int memberSize = 0;
 
   public static void main(String[] args) {
-    class Member {
-      int no;
-      String name;
-      String email;
-      String password;
-      String photo;
-      String tel;
-      Date registeredDate;
-    }
-
-    // 최대 100 개의 레퍼런스를 생성한다.
-    final int LENGTH = 100;
-    Member[] members = new Member[LENGTH];
-    int memberSize = 0;
 
     // 프로젝트 정보를 담을 메모리의 설계도를 만든다.
     class Project {
@@ -48,7 +51,6 @@ public class App_i {
     Task[] tasks = new Task[LENGTH];
     int taskSize = 0;
 
-    Scanner keyboardScan = new Scanner(System.in);
 
     // 사용자로부터 명령어 입력을 반복해서 받는다.
     loop:
@@ -57,51 +59,8 @@ public class App_i {
         String command = keyboardScan.nextLine();
 
         switch (command) {
-          case "/member/add":
-            System.out.println("[회원 등록]");
-
-            // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
-            Member member = new Member();
-
-            // 메모리에 회원 정보를 저장한다.
-            System.out.print("번호? ");
-            member.no = Integer.parseInt(keyboardScan.nextLine());
-
-            System.out.print("이름? ");
-            member.name = keyboardScan.nextLine();
-
-            System.out.print("이메일? ");
-            member.email = keyboardScan.nextLine();
-
-            System.out.print("암호? ");
-            member.password = keyboardScan.nextLine();
-
-            System.out.print("사진? ");
-            member.photo = keyboardScan.nextLine();
-
-            System.out.print("전화? ");
-            member.tel = keyboardScan.nextLine();
-
-            member.registeredDate = new java.sql.Date(System.currentTimeMillis());
-
-            // 회원 정보를 담은 인스턴스의 주소를 배열에 저장한다.
-            members[memberSize++] = member;
-
-            break;
-          case "/member/list":
-            System.out.println("[회원 목록]");
-
-            for (int i = 0; i < memberSize; i++) {
-              // 번호, 이름, 이메일, 전화, 가입일
-              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-                  members[i].no, // 회원 번호
-                  members[i].name, // 이름
-                  members[i].email, // 이메일
-                  members[i].tel, // 전화
-                  members[i].registeredDate // 가입일
-                  );
-            }
-            break;
+          case "/member/add": addMember(); break;
+          case "/member/list": listMember(); break;
           case "/project/add":
             System.out.println("[프로젝트 등록]");
 
@@ -174,6 +133,31 @@ public class App_i {
             // 작업 정보를 담은 Task 인스턴스 주소를 배열에 저장한다.
             tasks[taskSize++] = task;
             break;
+          case "/task/list":
+            System.out.println("[작업 목록]");
+
+            for (int i = 0; i < taskSize; i++) {
+              String stateLabel = null;
+              switch (tasks[i].status) {
+                case 1:
+                  stateLabel = "진행중";
+                  break;
+                case 2:
+                  stateLabel = "완료";
+                  break;
+                default:
+                  stateLabel = "신규";
+              }
+              // 번호, 작업명, 마감일, 담당자, 상태
+              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
+                  tasks[i].no, // 작업 번호
+                  tasks[i].content, // 작업 내용
+                  tasks[i].deadline, // 마감일
+                  tasks[i].owner, // 담당자
+                  stateLabel // 작업상태
+                  );
+            }
+            break;
           case "quit":
           case "exit":
             System.out.println("안녕!");
@@ -185,5 +169,51 @@ public class App_i {
       }
 
     keyboardScan.close();
+  }
+
+  static void addMember() {
+    System.out.println("[회원 등록]");
+
+    // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
+    Member member = new Member();
+
+    // 메모리에 회원 정보를 저장한다.
+    System.out.print("번호? ");
+    member.no = Integer.parseInt(keyboardScan.nextLine());
+
+    System.out.print("이름? ");
+    member.name = keyboardScan.nextLine();
+
+    System.out.print("이메일? ");
+    member.email = keyboardScan.nextLine();
+
+    System.out.print("암호? ");
+    member.password = keyboardScan.nextLine();
+
+    System.out.print("사진? ");
+    member.photo = keyboardScan.nextLine();
+
+    System.out.print("전화? ");
+    member.tel = keyboardScan.nextLine();
+
+    member.registeredDate = new java.sql.Date(System.currentTimeMillis());
+
+    // 회원 정보를 담은 인스턴스의 주소를 배열에 저장한다.
+    members[memberSize++] = member;
+  }
+
+  static void listMember() {
+    System.out.println("[회원 목록]");
+
+    for (int i = 0; i < memberSize; i++) {
+      // 번호, 이름, 이메일, 전화, 가입일
+      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
+          members[i].no, // 회원 번호
+          members[i].name, // 이름
+          members[i].email, // 이메일
+          members[i].tel, // 전화
+          members[i].registeredDate // 가입일
+          );
+    }
   }
 }
