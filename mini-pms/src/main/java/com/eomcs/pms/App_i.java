@@ -3,7 +3,7 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
-public class App {
+public class App_i {
 
   public static void main(String[] args) {
     class Member {
@@ -173,31 +173,6 @@ public class App {
 
             // 작업 정보를 담은 Task 인스턴스 주소를 배열에 저장한다.
             tasks[taskSize++] = task;
-            break;
-          case "/task/list":
-            System.out.println("[작업 목록]");
-
-            for (int i = 0; i < taskSize; i++) {
-              String stateLabel = null;
-              switch (tasks[i].status) {
-                case 1:
-                  stateLabel = "진행중";
-                  break;
-                case 2:
-                  stateLabel = "완료";
-                  break;
-                default:
-                  stateLabel = "신규";
-              }
-              // 번호, 작업명, 마감일, 담당자, 상태
-              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-                  tasks[i].no, // 작업 번호
-                  tasks[i].content, // 작업 내용
-                  tasks[i].deadline, // 마감일
-                  tasks[i].owner, // 담당자
-                  stateLabel // 작업상태
-                  );
-            }
             break;
           case "quit":
           case "exit":
