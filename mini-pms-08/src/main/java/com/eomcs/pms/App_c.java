@@ -2,7 +2,7 @@ package com.eomcs.pms;
 
 import java.sql.Date;
 
-public class App {
+public class App_c {
 
   static final int LENGTH = 100;
 
@@ -46,7 +46,7 @@ public class App {
   }
 
   static void addTask() {
-    System.out.println("작업 등록!");
+    System.out.println("[작업 등록]");
 
     Task task = new Task();
     task.no = Prompt.inputInt("번호? ");
@@ -59,7 +59,7 @@ public class App {
   }
 
   static void listTask() {
-    System.out.println("작업 목록!");
+    System.out.println("[작업 목록]");
 
     for (int i = 0; i < taskSize; i++) {
       String stateLabel = null;

@@ -19,7 +19,7 @@ public class ProjectHandler {
   static int size = 0;
 
   static void add() {
-    System.out.println("프로젝트 등록!");
+    System.out.println("[프로젝트 등록]");
 
     Project project = new Project();
     project.no = Prompt.inputInt("번호? ");
@@ -34,7 +34,7 @@ public class ProjectHandler {
   }
 
   static void list() {
-    System.out.println("프로젝트 목록!");
+    System.out.println("[프로젝트 목록]");
 
     for (int i = 0; i < size; i++) {
       // 번호, 프로젝트명, 시작일, 종료일, 만든이

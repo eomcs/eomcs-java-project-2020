@@ -19,7 +19,7 @@ public class MemberHandler {
   static int size = 0;
 
   static void add() {
-    System.out.println("회원 등록!");
+    System.out.println("[회원 등록]");
 
     Member member = new Member();
     member.no = Prompt.inputInt("번호? ");
@@ -34,7 +34,7 @@ public class MemberHandler {
   }
 
   static void list() {
-    System.out.println("회원 목록!");
+    System.out.println("[회원 목록]");
 
     for (int i = 0; i < size; i++) {
       // 번호, 이름, 이메일, 전화, 가입일

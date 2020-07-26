@@ -17,7 +17,7 @@ public class TaskHandler {
   static int size = 0;
 
   static void add() {
-    System.out.println("작업 등록!");
+    System.out.println("[작업 등록]");
 
     Task task = new Task();
     task.no = Prompt.inputInt("번호? ");
@@ -30,7 +30,7 @@ public class TaskHandler {
   }
 
   static void list() {
-    System.out.println("작업 목록!");
+    System.out.println("[작업 목록]");
 
     for (int i = 0; i < size; i++) {
       String stateLabel = null;

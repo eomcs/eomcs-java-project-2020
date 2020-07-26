@@ -2,21 +2,9 @@ package com.eomcs.pms;
 
 import java.sql.Date;
 
-public class App {
-
-  static class Member {
-    int no;
-    String name;
-    String email;
-    String password;
-    String photo;
-    String tel;
-    Date registeredDate;
-  }
+public class App_b {
 
   static final int LENGTH = 100;
-  static Member[] members = new Member[LENGTH];
-  static int memberSize = 0;
 
   static class Project {
     int no;
@@ -51,8 +39,8 @@ public class App {
         String command = Prompt.inputString("명령> ");
 
         switch (command) {
-          case "/member/add": addMember(); break;
-          case "/member/list": listMember(); break;
+          case "/member/add": MemberHandler.add(); break;
+          case "/member/list": MemberHandler.list(); break;
           case "/project/add": addProject(); break;
           case "/project/list": listProject(); break;
           case "/task/add": addTask(); break;
@@ -70,38 +58,8 @@ public class App {
   Prompt.keyboardScan.close();
   }
 
-  static void addMember() {
-    System.out.println("회원 등록!");
-
-    Member member = new Member();
-    member.no = Prompt.inputInt("번호? ");
-    member.name = Prompt.inputString("이름? ");
-    member.email = Prompt.inputString("이메일? ");
-    member.password = Prompt.inputString("암호? ");
-    member.photo = Prompt.inputString("사진? ");
-    member.tel = Prompt.inputString("전화? ");
-    member.registeredDate = new java.sql.Date(System.currentTimeMillis());
-
-    members[memberSize++] = member;
-  }
-
-  static void listMember() {
-    System.out.println("회원 목록!");
-
-    for (int i = 0; i < memberSize; i++) {
-      // 번호, 이름, 이메일, 전화, 가입일
-      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-          members[i].no, // 회원 번호
-          members[i].name, // 이름
-          members[i].email, // 이메일
-          members[i].tel, // 전화
-          members[i].registeredDate // 가입일
-          );
-    }
-  }
-
   static void addProject() {
-    System.out.println("프로젝트 등록!");
+    System.out.println("[프로젝트 등록]");
 
     Project project = new Project();
     project.no = Prompt.inputInt("번호? ");
@@ -116,7 +74,7 @@ public class App {
   }
 
   static void listProject() {
-    System.out.println("프로젝트 목록!");
+    System.out.println("[프로젝트 목록]");
 
     for (int i = 0; i < projectSize; i++) {
       // 번호, 프로젝트명, 시작일, 종료일, 만든이
@@ -131,7 +89,7 @@ public class App {
   }
 
   static void addTask() {
-    System.out.println("작업 등록!");
+    System.out.println("[작업 등록]");
 
     Task task = new Task();
     task.no = Prompt.inputInt("번호? ");
@@ -144,7 +102,7 @@ public class App {
   }
 
   static void listTask() {
-    System.out.println("작업 목록!");
+    System.out.println("[작업 목록]");
 
     for (int i = 0; i < taskSize; i++) {
       String stateLabel = null;
