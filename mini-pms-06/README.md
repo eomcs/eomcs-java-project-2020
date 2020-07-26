@@ -289,7 +289,6 @@ $ java -cp bin/main com.eomcs.pms.App
 
 - com.eomcs.pms.App 클래스 변경
   - App3.java 에서 작업 목록 조회와 관련된 코드를 가져온다.
-  - 백업: App_j.java
 
 ## 실습 결과
 
