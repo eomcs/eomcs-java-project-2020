@@ -12,8 +12,7 @@ import java.util.Scanner;
 // 7) `/project/add` 명령을 처리한다.
 // 8) `/project/list` 명령을 처리한다.
 // 9) `/task/add` 명령을 처리한다.
-// 10) `/task/list` 명령을 처리한다
-public class App {
+public class App_i {
 
   public static void main(String[] args) {
     Scanner keyboardScan = new Scanner(System.in);
@@ -150,26 +149,6 @@ public class App {
             towner[tsize] = keyboardScan.nextLine();
 
             tsize++;
-            break;
-          case "/task/list":
-            System.out.println("[작업 목록]");
-            
-            for (int i = 0; i < tsize; i++) {
-              String stateLabel = null;
-              switch (tstatus[i]) {
-                case 1:
-                  stateLabel = "진행중";
-                  break;
-                case 2:
-                  stateLabel = "완료";
-                  break;
-                default:
-                  stateLabel = "신규";
-              }
-              // 번호, 작업명, 마감일, 프로젝트, 상태, 담당자
-              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-                  tno[i], tcontent[i], tdeadline[i], stateLabel, towner[i]);
-            }
             break;
           case "quit":
           case "exit":

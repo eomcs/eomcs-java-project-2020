@@ -3,11 +3,13 @@ package com.eomcs.pms;
 import java.sql.Date;
 import java.util.Scanner;
 
+// 1) 회원 정보를 저장할 새 메모리 타입을 정의한다
+// 2) 프로젝트 정보를 저장할 새 메모리 타입을 정의한다
 public class App_b {
 
-  // main()과 addMember()가 함께 사용하려면 스태틱 멤버로 만들어야 한다.
   static Scanner keyboardScan = new Scanner(System.in);
-
+  
+  // 회원 데이터
   static class Member {
     int no;
     String name;
@@ -17,146 +19,60 @@ public class App_b {
     String tel;
     Date registeredDate;
   }
-
   static final int LENGTH = 100;
   static Member[] members = new Member[LENGTH];
-  static int memberSize = 0;
+  static int size = 0;
+  
+  // 프로젝트 데이터
+  static class Project {
+    // Project 클래스에 선언하는 변수는 
+    // 기존의 회원 데이터 관련 변수나 작업 데이터 관련 변수와 구분되기 때문에 
+    // 변수 이름을 다르게 할 필요가 없다.
+    int no;
+    String title;
+    String content;
+    Date startDate;
+    Date endDate;
+    String owner;
+    String members;
+  }
+  static final int PLENGTH = 100;
+  static Project[] projects = new Project[PLENGTH];
+  static int psize = 0;
+  
+  // 작업 데이터
+  static final int TLENGTH = 100;
+  static int[] tno = new int[TLENGTH];
+  static String[] tcontent = new String[TLENGTH];
+  static Date[] tdeadline = new Date[TLENGTH];
+  static String[] towner = new String[TLENGTH];
+  static int[] tstatus = new int[TLENGTH];
+  static int tsize = 0;
 
   public static void main(String[] args) {
-
-    // 프로젝트 정보를 담을 메모리의 설계도를 만든다.
-    class Project {
-      int no;
-      String title;
-      String content;
-      Date startDate;
-      Date endDate;
-      String owner;
-      String members;
-    }
-    // 최대 100개의 Project 인스턴스의 주소를 저장할 레퍼런스 배열 준비
-    Project[] projects = new Project[LENGTH];
-    int projectSize = 0;
-
-    // 작업 정보를 담을 메모리의 설계도를 만든다.
-    class Task {
-      int no;
-      String content;
-      Date deadline;
-      int status;
-      String owner;
-    }
-
-    // 최대 100개의 Task 인스턴스의 주소를 저장할 레퍼런스 배열 준비
-    Task[] tasks = new Task[LENGTH];
-    int taskSize = 0;
-
-
-    // 사용자로부터 명령어 입력을 반복해서 받는다.
+    
     loop:
       while (true) {
-        System.out.print("명령> ");
-        String command = keyboardScan.nextLine();
+        String command = promptString("명령> ");
 
         switch (command) {
-          case "/member/add": addMember(); break;
-          case "/member/list": listMember(); break;
+          case "/member/add":
+            addMember();
+            break;
+          case "/member/list":
+            listMember();
+            break;
           case "/project/add":
-            System.out.println("[프로젝트 등록]");
-
-            // 프로젝트 정보를 담은 Project 인스턴스를 생성한다.
-            Project project = new Project();
-
-            System.out.print("번호? ");
-            project.no = Integer.valueOf(keyboardScan.nextLine());
-
-            System.out.print("프로젝트명? ");
-            project.title = keyboardScan.nextLine();
-
-            System.out.print("내용? ");
-            project.content = keyboardScan.nextLine();
-
-            System.out.print("시작일? ");
-            project.startDate = Date.valueOf(keyboardScan.nextLine());
-
-            System.out.print("종료일? ");
-            project.endDate = Date.valueOf(keyboardScan.nextLine());
-
-            System.out.print("만든이? ");
-            project.owner = keyboardScan.nextLine();
-
-            System.out.print("팀원? ");
-            project.members = keyboardScan.nextLine();
-
-            // Project 인스턴스 주소를 배열에 저장
-            projects[projectSize++] = project;
+            addProject();
             break;
           case "/project/list":
-            System.out.println("[프로젝트 목록]");
-
-            for (int i = 0; i < projectSize; i++) {
-              // 번호, 프로젝트명, 시작일, 종료일, 만든이
-              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-                  projects[i].no, // 프로젝트 번호
-                  projects[i].title, // 프로젝트명
-                  projects[i].startDate, // 시작일
-                  projects[i].endDate, // 종료일
-                  projects[i].owner // 프로젝트 생성자
-                  );
-            }
+            listProject();
             break;
           case "/task/add":
-            System.out.println("[작업 등록]");
-
-            // 작업 정보를 저장할 Task 인스턴스를 생성한다.
-            Task task = new Task();
-
-            System.out.print("번호? ");
-            task.no = Integer.parseInt(keyboardScan.nextLine());
-
-            System.out.print("내용? ");
-            task.content = keyboardScan.nextLine();
-
-            System.out.print("마감일? ");
-            task.deadline = Date.valueOf(keyboardScan.nextLine());
-
-            System.out.println("상태?");
-            System.out.println("0: 신규");
-            System.out.println("1: 진행중");
-            System.out.println("2: 완료");
-            System.out.print("> ");
-            task.status = Integer.valueOf(keyboardScan.nextLine());
-
-            System.out.print("담당자? ");
-            task.owner = keyboardScan.nextLine();
-
-            // 작업 정보를 담은 Task 인스턴스 주소를 배열에 저장한다.
-            tasks[taskSize++] = task;
+            addTask();
             break;
           case "/task/list":
-            System.out.println("[작업 목록]");
-
-            for (int i = 0; i < taskSize; i++) {
-              String stateLabel = null;
-              switch (tasks[i].status) {
-                case 1:
-                  stateLabel = "진행중";
-                  break;
-                case 2:
-                  stateLabel = "완료";
-                  break;
-                default:
-                  stateLabel = "신규";
-              }
-              // 번호, 작업명, 마감일, 담당자, 상태
-              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-                  tasks[i].no, // 작업 번호
-                  tasks[i].content, // 작업 내용
-                  tasks[i].deadline, // 마감일
-                  tasks[i].owner, // 담당자
-                  stateLabel // 작업상태
-                  );
-            }
+            listTask();
             break;
           case "quit":
           case "exit":
@@ -165,55 +81,114 @@ public class App_b {
           default:
             System.out.println("실행할 수 없는 명령입니다.");
         }
-        System.out.println();
+        System.out.println(); // 이전 명령의 실행을 구분하기 위해 빈 줄 출력
       }
 
     keyboardScan.close();
   }
-
+  
   static void addMember() {
     System.out.println("[회원 등록]");
-
-    // 클래스 설계도에 따라 회원 정보를 담을 메모리(인스턴스)를 준비한다.
+    
     Member member = new Member();
-
-    // 메모리에 회원 정보를 저장한다.
-    System.out.print("번호? ");
-    member.no = Integer.parseInt(keyboardScan.nextLine());
-
-    System.out.print("이름? ");
-    member.name = keyboardScan.nextLine();
-
-    System.out.print("이메일? ");
-    member.email = keyboardScan.nextLine();
-
-    System.out.print("암호? ");
-    member.password = keyboardScan.nextLine();
-
-    System.out.print("사진? ");
-    member.photo = keyboardScan.nextLine();
-
-    System.out.print("전화? ");
-    member.tel = keyboardScan.nextLine();
-
+    member.no = promptInt("번호? ");
+    member.name = promptString("이름? ");
+    member.email = promptString("이메일? ");
+    member.password = promptString("암호? ");
+    member.photo = promptString("사진? ");
+    member.tel = promptString("전화? ");
     member.registeredDate = new java.sql.Date(System.currentTimeMillis());
-
-    // 회원 정보를 담은 인스턴스의 주소를 배열에 저장한다.
-    members[memberSize++] = member;
+    
+    members[size++] = member;
   }
-
+  
   static void listMember() {
     System.out.println("[회원 목록]");
-
-    for (int i = 0; i < memberSize; i++) {
-      // 번호, 이름, 이메일, 전화, 가입일
-      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-          members[i].no, // 회원 번호
-          members[i].name, // 이름
-          members[i].email, // 이메일
-          members[i].tel, // 전화
-          members[i].registeredDate // 가입일
-          );
+    
+    for (int i = 0; i < size; i++) {
+      Member member = members[i];
+      System.out.printf("%d, %s, %s, %s, %s\n",
+          member.no, 
+          member.name, 
+          member.email, 
+          member.tel, 
+          member.registeredDate);
     }
+  }
+  
+  static void addProject() {
+    System.out.println("[프로젝트 등록]");
+    
+    Project project = new Project();
+    project.no = promptInt("번호? ");
+    project.title = promptString("프로젝트명? ");
+    project.content = promptString("내용? ");
+    project.startDate = promptDate("시작일? ");
+    project.endDate = promptDate("종료일? ");
+    project.owner = promptString("만든이? ");
+    project.members = promptString("팀원? ");
+
+    projects[psize++] = project;
+  }
+  
+  static void listProject() {
+    System.out.println("[프로젝트 목록]");
+    
+    for (int i = 0; i < psize; i++) {
+      Project project = projects[i];
+      System.out.printf("%d, %s, %s, %s, %s\n",
+          project.no, 
+          project.title, 
+          project.startDate, 
+          project.endDate, 
+          project.owner);
+    }
+  }
+  
+  static void addTask() {
+    System.out.println("[작업 등록]");
+    
+    tno[tsize] = promptInt("번호? ");
+    tcontent[tsize] = promptString("내용? ");
+    tdeadline[tsize] = promptDate("마감일? ");
+    tstatus[tsize] = promptInt("상태?\n0: 신규\n1: 진행중\n2: 완료\n> ");
+    towner[tsize] = promptString("담당자? ");
+
+    tsize++;
+  }
+  
+  static void listTask() {
+    System.out.println("[작업 목록]");
+    
+    for (int i = 0; i < tsize; i++) {
+      String stateLabel = null;
+      switch (tstatus[i]) {
+        case 1:
+          stateLabel = "진행중";
+          break;
+        case 2:
+          stateLabel = "완료";
+          break;
+        default:
+          stateLabel = "신규";
+      }
+      System.out.printf("%d, %s, %s, %s, %s\n",
+          tno[i], tcontent[i], tdeadline[i], stateLabel, towner[i]);
+    }
+  }
+  
+  static String promptString(String title) {
+    System.out.print(title);
+    return keyboardScan.nextLine();
+  }
+
+  static int promptInt(String title) {
+    System.out.print(title);
+    return Integer.parseInt(keyboardScan.nextLine());
+  }
+
+  static Date promptDate(String title) {
+    System.out.print(title);
+    return Date.valueOf(keyboardScan.nextLine());
   }
 }

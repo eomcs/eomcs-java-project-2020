@@ -13,18 +13,19 @@ public class App2 {
     // 최대 100개의 프로젝트 정보를 저장할 메모리 준비
     // => 배열의 크기를 미리 변수에 저장하여 사용한다.
     // => 나중에 배열의 크기를 바꾸기 쉽다.
-    int length = 100;
+    final int LENGTH = 100;
     
-    int[] no = new int[length];
-    String[] title = new String[length];
-    String[] content = new String[length];
-    Date[] startDate = new Date[length];
-    Date[] endDate = new Date[length];
-    String[] owner = new String[length];
-    String[] members = new String[length];
+    int[] no = new int[LENGTH];
+    String[] title = new String[LENGTH];
+    String[] content = new String[LENGTH];
+    Date[] startDate = new Date[LENGTH];
+    Date[] endDate = new Date[LENGTH];
+    String[] owner = new String[LENGTH];
+    String[] members = new String[LENGTH];
 
     int size = 0;
-    for (int i = 0; i < 100; i++) {
+    
+    for (int i = 0; i < LENGTH; i++) {
       System.out.print("번호? ");
       no[i] = Integer.valueOf(keyboardScan.nextLine());
 

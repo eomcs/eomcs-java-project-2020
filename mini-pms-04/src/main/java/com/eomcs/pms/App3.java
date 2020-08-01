@@ -27,7 +27,8 @@ public class App3 {
     System.out.println();
 
     int size = 0;
-    for (int i = 0; i < 100; i++) {
+
+    for (int i = 0; i < LENGTH; i++) {
       System.out.print("번호? ");
       no[i] = Integer.parseInt(keyboardScan.nextLine());
 

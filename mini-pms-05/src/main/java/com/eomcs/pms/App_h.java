@@ -11,9 +11,7 @@ import java.util.Scanner;
 // 6) `/member/list` 명령을 처리한다.
 // 7) `/project/add` 명령을 처리한다.
 // 8) `/project/list` 명령을 처리한다.
-// 9) `/task/add` 명령을 처리한다.
-// 10) `/task/list` 명령을 처리한다
-public class App {
+public class App_h {
 
   public static void main(String[] args) {
     Scanner keyboardScan = new Scanner(System.in);
@@ -41,17 +39,6 @@ public class App {
     String[] pmembers = new String[PLENGTH];
 
     int psize = 0;
-    
-    // 작업 데이터
-    final int TLENGTH = 100;
-    
-    int[] tno = new int[TLENGTH];
-    String[] tcontent = new String[TLENGTH];
-    Date[] tdeadline = new Date[TLENGTH];
-    String[] towner = new String[TLENGTH];
-    int[] tstatus = new int[TLENGTH];
-    
-    int tsize = 0;
     
     loop:
       while (true) {
@@ -125,50 +112,6 @@ public class App {
               // 번호, 프로젝트명, 시작일, 종료일, 만든이
               System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
                   pno[i], ptitle[i], pstartDate[i], pendDate[i], powner[i]);
-            }
-            break;
-          case "/task/add":
-            System.out.println("[작업 등록]");
-            
-            System.out.print("번호? ");
-            tno[tsize] = Integer.parseInt(keyboardScan.nextLine());
-
-            System.out.print("내용? ");
-            tcontent[tsize] = keyboardScan.nextLine();
-
-            System.out.print("마감일? ");
-            tdeadline[tsize] = Date.valueOf(keyboardScan.nextLine());
-
-            System.out.println("상태?");
-            System.out.println("0: 신규");
-            System.out.println("1: 진행중");
-            System.out.println("2: 완료");
-            System.out.print("> ");
-            tstatus[tsize] = Integer.valueOf(keyboardScan.nextLine());
-
-            System.out.print("담당자? ");
-            towner[tsize] = keyboardScan.nextLine();
-
-            tsize++;
-            break;
-          case "/task/list":
-            System.out.println("[작업 목록]");
-            
-            for (int i = 0; i < tsize; i++) {
-              String stateLabel = null;
-              switch (tstatus[i]) {
-                case 1:
-                  stateLabel = "진행중";
-                  break;
-                case 2:
-                  stateLabel = "완료";
-                  break;
-                default:
-                  stateLabel = "신규";
-              }
-              // 번호, 작업명, 마감일, 프로젝트, 상태, 담당자
-              System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-                  tno[i], tcontent[i], tdeadline[i], stateLabel, towner[i]);
             }
             break;
           case "quit":
