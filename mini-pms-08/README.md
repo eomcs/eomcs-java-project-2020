@@ -23,53 +23,57 @@
 
 ## 실습
 
-### 1단계 - 사용자 입력을 받는 프롬프트 메서드를 클래스로 분리한다
+### 1단계 - 사용자의 입력을 받는 프롬프트 메서드를 별도의 클래스로 분리한다
+
+- `App` 클래스에서 사용자의 입력을 받는 프롬프트 관련 필드와 메서드를 추출하여 `Prompt` 라는 별도의 클래스로 옮긴다.
+- `App` 클래스는 사용자 입력을 필요할 때 `Prompt` 클래스로 옮겨진 메서드를 사용하여 처리한다.
 
 #### 작업 파일
 
 - com.eomcs.pms.Prompt 클래스 생성
-    - `App.java` 에 있는 프롬프트 관련 필드 및 메서드를 이 클래스로 옮긴다.
-    - 메서드 이름을 적절하게 변경한다.
+    - 프롬프트 메서드의 이름을 적절하게 변경한다.
 - com.eomcs.pms.App 변경
-    - `Prompt` 클래스에 소속된 프롬프트 메서드를 호출하도록 코드를 변경한다.
     - 백업: App_a.java
 
 ### 2단계 - 회원 데이터 처리와 관련된 메서드를 별도의 클래스로 분리한다
 
+- `App` 클래스에서 회원 관리와 관련된 필드와 메서드를 추출하여 `MemberHandler` 라는 별도의 클래스로 옮긴다.
+- `App` 클래스는 회원 입력과 목록 조회를 처리할 때 `MemberHandler` 클래스를 사용하여 처리한다.
+
 #### 작업 파일
 
 - com.eomcs.pms.MemberHandler 클래스 생성
-    - `App.java` 에 있는 회원 관리와 관련된 필드와 메서드를 이 클래스로 옮긴다.
-    - 필드와 메서드를 적절한 이름으로 변경한다.
 - com.eomcs.pms.App 변경
-    - 회원 관리 명령을 처리할 때 `MemberHandler` 클래스 사용한다.
     - 백업: App_b.java
 
 ### 3단계 - 프로젝트 데이터 처리와 관련된 메서드를 별도의 클래스로 분리한다
 
+- `App` 클래스에서 프로젝트 관리와 관련된 필드와 메서드를 추출하여 `ProjectHandler` 라는 별도의 클래스로 옮긴다.
+- `App` 클래스는 프로젝트 입력과 목록 조회를 처리할 때 `ProjectHandler` 클래스를 사용하여 처리한다.
+
 #### 작업 파일
 
 - com.eomcs.pms.ProjectHandler 클래스 생성
-    - `App.java` 에 있는 프로젝트 관리와 관련된 필드와 메서드를 이 클래스로 옮긴다.
     - 필드와 메서드를 적절한 이름으로 변경한다.
 - com.eomcs.pms.App 변경
-    - 프로젝트 관리 명령을 처리할 때 `ProjectHandler` 클래스 사용한다.
     - 백업: App_c.java
 
 ### 4단계 - 작업 데이터 처리와 관련된 메서드를 별도의 클래스로 분리한다
 
+- `App` 클래스에서 작업 관리와 관련된 필드와 메서드를 추출하여 `TaskHandler` 라는 별도의 클래스로 옮긴다.
+- `App` 클래스는 작업 입력과 목록 조회를 처리할 때 `TaskHandler` 클래스를 사용하여 처리한다.
+- 
 #### 작업 파일
 
 - com.eomcs.pms.TaskHandler 클래스 생성
-    - `App.java` 에 있는 작업 관리와 관련된 필드와 메서드를 이 클래스로 옮긴다.
     - 필드와 메서드를 적절한 이름으로 변경한다.
 - com.eomcs.pms.App 변경
-    - 작업 관리 명령을 처리할 때 `TaskHandler` 클래스 사용한다.
 
 
 ## 실습 결과
 
 - src/main/java/com/eomcs/pms/App.java 변경
+- src/main/java/com/eomcs/pms/Prompt.java 추가
 - src/main/java/com/eomcs/pms/MemberHandler.java 추가
 - src/main/java/com/eomcs/pms/ProjectHandler.java 추가
 - src/main/java/com/eomcs/pms/TaskHandler.java 추가

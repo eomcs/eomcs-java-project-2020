@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class TaskHandler {
 
+  // 작업 데이터
   static class Task {
     int no;
     String content;
@@ -11,14 +12,13 @@ public class TaskHandler {
     int status;
     String owner;
   }
+  static final int LENGTH = 100; // TLENGTH 를 LENGTH 로 변경한다.
+  static Task[] list = new Task[LENGTH]; // tasks 를 list 로 변경한다.
+  static int size = 0; // tsize 를 size 로 변경한다.
 
-  static final int LENGTH = 100;
-  static Task[] list = new Task[LENGTH];
-  static int size = 0;
-
-  static void add() {
+  static void addTask() {
     System.out.println("[작업 등록]");
-
+    
     Task task = new Task();
     task.no = Prompt.inputInt("번호? ");
     task.content = Prompt.inputString("내용? ");
@@ -28,13 +28,14 @@ public class TaskHandler {
 
     list[size++] = task;
   }
-
-  static void list() {
+  
+  static void listTask() {
     System.out.println("[작업 목록]");
-
+    
     for (int i = 0; i < size; i++) {
+      Task task = list[i];
       String stateLabel = null;
-      switch (list[i].status) {
+      switch (task.status) {
         case 1:
           stateLabel = "진행중";
           break;
@@ -44,14 +45,12 @@ public class TaskHandler {
         default:
           stateLabel = "신규";
       }
-      // 번호, 작업명, 마감일, 담당자, 상태
-      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-          list[i].no, // 작업 번호
-          list[i].content, // 작업 내용
-          list[i].deadline, // 마감일
-          list[i].owner, // 담당자
-          stateLabel // 작업상태
-          );
+      System.out.printf("%d, %s, %s, %s, %s\n",
+          task.no, 
+          task.content, 
+          task.deadline, 
+          stateLabel, 
+          task.owner);
     }
   }
 }

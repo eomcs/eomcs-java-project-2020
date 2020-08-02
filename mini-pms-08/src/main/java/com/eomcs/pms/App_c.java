@@ -2,11 +2,12 @@ package com.eomcs.pms;
 
 import java.sql.Date;
 
+// 1) 사용자의 입력을 받는 프롬프트 메서드를 별도의 클래스로 분리한다
+// 2) 회원 데이터 처리와 관련된 메서드를 별도의 클래스로 분리한다
+// 3) 프로젝트 데이터 처리와 관련된 메서드를 별도의 클래스로 분리한다
 public class App_c {
 
-  static final int LENGTH = 100;
-
-  //main()과 addTask()가 함께 사용하려면 스태틱 멤버로 만들어야 한다.
+  // 작업 데이터
   static class Task {
     int no;
     String content;
@@ -14,24 +15,35 @@ public class App_c {
     int status;
     String owner;
   }
-
-  // 최대 100개의 Task 인스턴스의 주소를 저장할 레퍼런스 배열 준비
-  static Task[] tasks = new Task[LENGTH];
-  static int taskSize = 0;
+  static final int TLENGTH = 100;
+  static Task[] tasks = new Task[TLENGTH];
+  static int tsize = 0;
 
   public static void main(String[] args) {
-
+    
     loop:
       while (true) {
         String command = Prompt.inputString("명령> ");
 
         switch (command) {
-          case "/member/add": MemberHandler.add(); break;
-          case "/member/list": MemberHandler.list(); break;
-          case "/project/add": ProjectHandler.add(); break;
-          case "/project/list": ProjectHandler.list(); break;
-          case "/task/add": addTask(); break;
-          case "/task/list": listTask(); break;
+          case "/member/add":
+            MemberHandler.addMember();
+            break;
+          case "/member/list":
+            MemberHandler.listMember();
+            break;
+          case "/project/add":
+            ProjectHandler.addProject();
+            break;
+          case "/project/list":
+            ProjectHandler.listProject();
+            break;
+          case "/task/add":
+            addTask();
+            break;
+          case "/task/list":
+            listTask();
+            break;
           case "quit":
           case "exit":
             System.out.println("안녕!");
@@ -39,15 +51,15 @@ public class App_c {
           default:
             System.out.println("실행할 수 없는 명령입니다.");
         }
-        System.out.println();
+        System.out.println(); // 이전 명령의 실행을 구분하기 위해 빈 줄 출력
       }
 
-  Prompt.keyboardScan.close();
+    Prompt.close();
   }
-
+  
   static void addTask() {
     System.out.println("[작업 등록]");
-
+    
     Task task = new Task();
     task.no = Prompt.inputInt("번호? ");
     task.content = Prompt.inputString("내용? ");
@@ -55,15 +67,16 @@ public class App_c {
     task.status = Prompt.inputInt("상태?\n0: 신규\n1: 진행중\n2: 완료\n> ");
     task.owner = Prompt.inputString("담당자? ");
 
-    tasks[taskSize++] = task;
+    tasks[tsize++] = task;
   }
-
+  
   static void listTask() {
     System.out.println("[작업 목록]");
-
-    for (int i = 0; i < taskSize; i++) {
+    
+    for (int i = 0; i < tsize; i++) {
+      Task task = tasks[i];
       String stateLabel = null;
-      switch (tasks[i].status) {
+      switch (task.status) {
         case 1:
           stateLabel = "진행중";
           break;
@@ -73,16 +86,12 @@ public class App_c {
         default:
           stateLabel = "신규";
       }
-      // 번호, 작업명, 마감일, 담당자, 상태
-      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-          tasks[i].no, // 작업 번호
-          tasks[i].content, // 작업 내용
-          tasks[i].deadline, // 마감일
-          tasks[i].owner, // 담당자
-          stateLabel // 작업상태
-          );
+      System.out.printf("%d, %s, %s, %s, %s\n",
+          task.no, 
+          task.content, 
+          task.deadline, 
+          stateLabel, 
+          task.owner);
     }
   }
-
-
 }

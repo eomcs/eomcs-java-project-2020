@@ -4,6 +4,7 @@ import java.sql.Date;
 
 public class ProjectHandler {
 
+  // 프로젝트 데이터
   static class Project {
     int no;
     String title;
@@ -13,14 +14,13 @@ public class ProjectHandler {
     String owner;
     String members;
   }
+  static final int LENGTH = 100;  // PLENGTH 를 LENGTH 로 변경한다.
+  static Project[] list = new Project[LENGTH]; // projects 를 list 로 변경한다.
+  static int size = 0; // psize 를 size 로 변경한다.
 
-  static final int LENGTH = 100;
-  static Project[] list = new Project[LENGTH];
-  static int size = 0;
-
-  static void add() {
+  static void addProject() {
     System.out.println("[프로젝트 등록]");
-
+    
     Project project = new Project();
     project.no = Prompt.inputInt("번호? ");
     project.title = Prompt.inputString("프로젝트명? ");
@@ -32,19 +32,18 @@ public class ProjectHandler {
 
     list[size++] = project;
   }
-
-  static void list() {
+  
+  static void listProject() {
     System.out.println("[프로젝트 목록]");
-
+    
     for (int i = 0; i < size; i++) {
-      // 번호, 프로젝트명, 시작일, 종료일, 만든이
-      System.out.printf("%d, %s, %s, %s, %s\n", // 출력 형식 지정
-          list[i].no, // 프로젝트 번호
-          list[i].title, // 프로젝트명
-          list[i].startDate, // 시작일
-          list[i].endDate, // 종료일
-          list[i].owner // 프로젝트 생성자
-          );
+      Project project = list[i];
+      System.out.printf("%d, %s, %s, %s, %s\n",
+          project.no, 
+          project.title, 
+          project.startDate, 
+          project.endDate, 
+          project.owner);
     }
   }
 }
