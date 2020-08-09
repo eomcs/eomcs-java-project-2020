@@ -43,10 +43,10 @@ public class App_b {
 
         switch (command) {
           case "/member/add":
-            MemberHandler.addMember();
+            MemberHandler.add();
             break;
           case "/member/list":
-            MemberHandler.listMember();
+            MemberHandler.list();
             break;
           case "/project/add":
             addProject();

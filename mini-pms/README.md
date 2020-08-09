@@ -1,58 +1,82 @@
-# 09 - 패키지로 클래스를 분류하기
+# 10.a - 문법 활용 연습 1 : 게시판 만들기
 
-**패키지(package)** 는 여러 개의 클래스를 관리하기 좋게 분류할 때 사용하는 문법이다.
-패키지는 실제 폴더를 가리키며, 각 클래스 파일을 *역할에 따라 패키지에 나누어 배치* 한다.
+조건문 반복문을 이용하면 명령의 실행 흐름을 제어할 수 있다. 
+클래스 문법은 새 유형의 데이터를 담을 수 있는 메모리를 설계할 때 유용하다. 
+또한 특정 작업과 관련된 메서드를 유지보수하기 쉽도록 묶을 때도 사용한다. 
+이번 훈련에서는 조건문, 반복문, 클래스, 필드, 메서드 등 자바 기본 문법을 활용하는 것을 연습한다.
 
 ## 훈련 목표
 
-- 패키지를 이용하여 역할에 따라 클래스를 분류하는 방법을 배운다.
-- 패키지와 폴더의 관계를 이해한다.
-- 멤버의 접근을 제어하는 default와 public의 사용법을 이해한다.
+- 클래스를 이용하여 새 데이터 타입을 정의하는 것을 연습한다.
+- 클래스를 이용하여 특정 작업과 관련된 메서드를 묶는 방법을 연습한다.
+- 조건문, 반복문 등 기본 문법을 활용하여 명령의 흐름을 제어하는 것을 연습한다.
 
 ## 훈련 내용
 
-- Prompt 클래스를 다른 패키지로 분류한다.
-- Handler 클래스들을 다른 패키지로 분류한다.
-- 메서드의 접근 범위를 public 으로 확장한다.
+- 프로젝트 참여자들이 의견을 나눌 게시판을 추가한다.
+- 게시글을 다룰 클래스를 정의한다
+- 게시글 데이터를 다룰 때 사용할 중첩 클래스를 정의한다. 
+- 정의한 클래스를 사용하여 게시글의 등록과 목록 출력을 처리한다
 
 ## 실습
 
-### 1단계 - `Prompt` 클래스를 별도의 패키지로 분류한다
+### 1단계 - 게시글 입력을 처리한다
 
-- 여러 프로젝트에서 공통으로 사용할 클래스라면 별도의 패키지로 분류하는 것이 클래스 관리에 좋다.
-- 프롬프트를 다루는 클래스는 여러 프로젝트에서 사용할 것이기 때문에 별도의 패키지로 분류한다.
+다음과 같이 게시글을 입력하는 기능을 추가한다.
 
-#### 작업 파일
+```console
+명령> /board/add
+[새 게시글]
+번호? 1
+제목? 제목입니다.
+내용? 내용입니다.
+작성자? 홍길동
+게시글을 등록하였습니다.
 
-- 유틸리티 패키지 생성
-  - `com.eomcs.util` 패키지 생성
-- com.eomcs.util.Prompt 클래스 변경
-  - Prompt 클래스를 `util` 패키지로 이동한다.
-  - 다른 패키지의 클래스가 메서드를 사용할 수 있도록 메서드의 사용 범위를 public 으로 확장한다.
-- com.eomcs.pms.App 클래스 변경
-  - Prompt 클래스의 import 문을 추가한다.
+명령>
+```
 
-### 2단계 - 핸들러 클래스들을 별도의 패키지로 분류한다
+- 게시글 관리 작업을 수행할 클래스 `BoardHandler`를 만든다.
+- 게시글 데이터를 위한 새 데이터 타입 `Board`을 정의한다.
+- 게시글 입력을 처리할 메서드 `add()`를 정의한다.
+- App 클래스에 *게시글 입력 명령* `/board/add`에 대한 처리를 추가한다.
 
-#### 작업 파일
+#### 작업 파일 
 
-- 핸들러 패키지 생성
-    - `com.eomcs.pms.handler` 패키지 생성
-- com.eomcs.pms.handler.MemberHandler 패키지 변경
-  - 다른 패키지에서 메서드를 호출할 수 있도록 사용 범위를 public 으로 확장한다.
-- com.eomcs.pms.handler.ProjectHandler 패키지 변경
-  - 다른 패키지에서 메서드를 호출할 수 있도록 사용 범위를 public 으로 확장한다.
-- com.eomcs.pms.handler.TaskHandler 패키지 변경
-  - 다른 패키지에서 메서드를 호출할 수 있도록 사용 범위를 public 으로 확장한다.
-- com.eomcs.pms.App 클래스 변경
-    - 핸들러 클래스에 대해 import 문 변경
+- com.eomcs.pms.handler.BoardHandler  클래스 추가
+  - 백업: BoardHandler_a.java
+- com.eomcs.pms.App 변경
+
+
+### 2단계 - 게시글 목록 출력을 처리한다.
+
+다음과 게시물(같이 번호, 제목, 등록일, 작성자, 조회수) 목록을 출력하는 기능을 추가한다.
+
+
+```
+명령> /board/list
+[게시글 목록]
+1, 제목1, 홍길동, 2020-01-10, 0
+2, 제목2, 임꺽정, 2020-01-20, 12
+3, 제목3, 유관순, 2020-01-30, 7
+```
+
+- 게시글에 등록일 `registeredDate`과 조회수 `viewCount` 필드를 추가한다.
+- `add()`에서 게시글을 입력을 처리할 때 등록일과 조회수를 설정한다.
+- 게시글 목록을 처리할 메서드 `list()`를 정의한다.
+
+#### 작업 파일 
+
+- com.eomcs.pms.handler.BoardHandler.Board 중첩 클래스 변경 
+  - 등록일 과 조회수를 저장할 필드를 추가한다
+- com.eomcs.pms.handler.BoardHandler 클래스 변경
+  - add() 메서드 변경
+  - list() 메서드 추가
+  - 백업: BoardHandler_b.java
+- com.eomcs.pms.App 변경
+  - `/board/list` 명령 처리 추가
 
 ## 실습 결과
 
-- com.eomcs.util 패키지 추가
-- src/main/java/com/eomcs/util/Prompt.java 패키지 변경
-- com.eomcs.pms.handler 패키지 추가
-- src/main/java/com/eomcs/pms/handler/MemberHandler.java 패키지 변경
-- src/main/java/com/eomcs/pms/handler/ProjectHandler.java 패키지 변경
-- src/main/java/com/eomcs/pms/handler/TaskHandler.java 패키지 변경
+- src/main/java/com/eomcs/pms/handler/BoardHandler.java 추가
 - src/main/java/com/eomcs/pms/App.java 변경

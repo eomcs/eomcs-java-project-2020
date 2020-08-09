@@ -43,8 +43,9 @@
 #### 작업 파일
 
 - com.eomcs.pms.MemberHandler 클래스 생성
+  - 메서드 이름을 적절하게 변경한다. 예) addMember() --> add()
 - com.eomcs.pms.App 변경
-    - 백업: App_b.java
+  - 백업: App_b.java
 
 ### 3단계 - 프로젝트 데이터 처리와 관련된 메서드를 별도의 클래스로 분리한다
 
@@ -54,9 +55,9 @@
 #### 작업 파일
 
 - com.eomcs.pms.ProjectHandler 클래스 생성
-    - 필드와 메서드를 적절한 이름으로 변경한다.
+  - 필드와 메서드를 적절한 이름으로 변경한다.
 - com.eomcs.pms.App 변경
-    - 백업: App_c.java
+  - 백업: App_c.java
 
 ### 4단계 - 작업 데이터 처리와 관련된 메서드를 별도의 클래스로 분리한다
 
@@ -66,7 +67,7 @@
 #### 작업 파일
 
 - com.eomcs.pms.TaskHandler 클래스 생성
-    - 필드와 메서드를 적절한 이름으로 변경한다.
+  - 필드와 메서드를 적절한 이름으로 변경한다.
 - com.eomcs.pms.App 변경
 
 

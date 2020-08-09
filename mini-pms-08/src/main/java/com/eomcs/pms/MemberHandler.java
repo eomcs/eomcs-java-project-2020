@@ -18,7 +18,7 @@ public class MemberHandler {
   static Member[] list = new Member[LENGTH]; // list로 이름을 바꾼다.
   static int size = 0;
 
-  static void addMember() {
+  static void add() { // 메서드 이름을 변경한다.
     System.out.println("[회원 등록]");
     
     Member member = new Member();
@@ -33,7 +33,7 @@ public class MemberHandler {
     list[size++] = member;
   }
   
-  static void listMember() {
+  static void list() { // 메서드 이름을 변경한다.
     System.out.println("[회원 목록]");
     
     for (int i = 0; i < size; i++) {

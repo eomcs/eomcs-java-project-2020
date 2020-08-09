@@ -1,12 +1,13 @@
 package com.eomcs.pms;
 
+import com.eomcs.pms.handler.BoardHandler;
 import com.eomcs.pms.handler.MemberHandler;
 import com.eomcs.pms.handler.ProjectHandler;
 import com.eomcs.pms.handler.TaskHandler;
 import com.eomcs.util.Prompt;
 
-// 1) `Prompt` 클래스를 별도의 패키지로 분류한다
-// 2) 핸들러 클래스들을 별도의 패키지로 분류한다
+// 1) `/board/add` 명령을 처리한다.
+// 2) `/board/list` 명령을 처리한다.
 public class App {
 
   public static void main(String[] args) {
@@ -17,22 +18,28 @@ public class App {
 
         switch (command) {
           case "/member/add":
-            MemberHandler.addMember();
+            MemberHandler.add();
             break;
           case "/member/list":
-            MemberHandler.listMember();
+            MemberHandler.list();
             break;
           case "/project/add":
-            ProjectHandler.addProject();
+            ProjectHandler.add();
             break;
           case "/project/list":
-            ProjectHandler.listProject();
+            ProjectHandler.list();
             break;
           case "/task/add":
-            TaskHandler.addTask();
+            TaskHandler.add();
             break;
           case "/task/list":
-            TaskHandler.listTask();
+            TaskHandler.list();
+            break;
+          case "/board/add":
+            BoardHandler.add();
+            break;
+          case "/board/list":
+            BoardHandler.list();
             break;
           case "quit":
           case "exit":

@@ -18,7 +18,7 @@ public class ProjectHandler {
   static Project[] list = new Project[LENGTH]; // projects 를 list 로 변경한다.
   static int size = 0; // psize 를 size 로 변경한다.
 
-  static void addProject() {
+  static void add() { // 메서드 이름을 변경한다.
     System.out.println("[프로젝트 등록]");
     
     Project project = new Project();
@@ -33,7 +33,7 @@ public class ProjectHandler {
     list[size++] = project;
   }
   
-  static void listProject() {
+  static void list() {
     System.out.println("[프로젝트 목록]");
     
     for (int i = 0; i < size; i++) {

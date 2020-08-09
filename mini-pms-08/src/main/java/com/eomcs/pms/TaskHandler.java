@@ -16,7 +16,7 @@ public class TaskHandler {
   static Task[] list = new Task[LENGTH]; // tasks 를 list 로 변경한다.
   static int size = 0; // tsize 를 size 로 변경한다.
 
-  static void addTask() {
+  static void add() { // 메서드 이름을 변경한다.
     System.out.println("[작업 등록]");
     
     Task task = new Task();
@@ -29,7 +29,7 @@ public class TaskHandler {
     list[size++] = task;
   }
   
-  static void listTask() {
+  static void list() { // 메서드 이름을 변경한다.
     System.out.println("[작업 목록]");
     
     for (int i = 0; i < size; i++) {

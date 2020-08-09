@@ -183,12 +183,10 @@ public class App_b {
   }
 
   static int promptInt(String title) {
-    System.out.print(title);
-    return Integer.parseInt(keyboardScan.nextLine());
+    return Integer.parseInt(promptString(title));
   }
 
   static Date promptDate(String title) {
-    System.out.print(title);
-    return Date.valueOf(keyboardScan.nextLine());
+    return Date.valueOf(promptString(title));
   }
 }

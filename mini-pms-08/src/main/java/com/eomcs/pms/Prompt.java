@@ -12,13 +12,11 @@ public class Prompt {
   }
 
   static int inputInt(String title) {
-    System.out.print(title);
-    return Integer.parseInt(keyboardScan.nextLine());
+    return Integer.parseInt(inputString(title));
   }
 
   static Date inputDate(String title) {
-    System.out.print(title);
-    return Date.valueOf(keyboardScan.nextLine());
+    return Date.valueOf(inputString(title));
   }
   
   // 프롬프트의 사용이 모두 끝났으면 

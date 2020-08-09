@@ -18,7 +18,7 @@ public class TaskHandler {
   static int size = 0; // tsize 를 size 로 변경한다.
 
   //다른 패키지에서 이 메서드를 사용할 수 있도록 public 으로 사용 범위를 공개한다.
-  public static void addTask() {
+  public static void add() {
     System.out.println("[작업 등록]");
     
     Task task = new Task();
@@ -31,7 +31,7 @@ public class TaskHandler {
     list[size++] = task;
   }
   
-  public static void listTask() {
+  public static void list() {
     System.out.println("[작업 목록]");
     
     for (int i = 0; i < size; i++) {

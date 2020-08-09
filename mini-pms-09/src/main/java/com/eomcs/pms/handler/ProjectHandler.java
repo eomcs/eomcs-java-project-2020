@@ -20,7 +20,7 @@ public class ProjectHandler {
   static int size = 0; // psize 를 size 로 변경한다.
 
   //다른 패키지에서 이 메서드를 사용할 수 있도록 public 으로 사용 범위를 공개한다.
-  public static void addProject() {
+  public static void add() {
     System.out.println("[프로젝트 등록]");
     
     Project project = new Project();
@@ -35,7 +35,7 @@ public class ProjectHandler {
     list[size++] = project;
   }
   
-  public static void listProject() {
+  public static void list() {
     System.out.println("[프로젝트 목록]");
     
     for (int i = 0; i < size; i++) {

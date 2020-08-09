@@ -20,7 +20,7 @@ public class MemberHandler {
   static int size = 0;
 
   // 다른 패키지에서 이 메서드를 사용할 수 있도록 public 으로 사용 범위를 공개한다.
-  public static void addMember() {
+  public static void add() {
     System.out.println("[회원 등록]");
     
     Member member = new Member();
@@ -35,7 +35,7 @@ public class MemberHandler {
     list[size++] = member;
   }
   
-  public static void listMember() {
+  public static void list() {
     System.out.println("[회원 목록]");
     
     for (int i = 0; i < size; i++) {
