@@ -17,30 +17,14 @@ public class App {
         String command = Prompt.inputString("명령> ");
 
         switch (command) {
-          case "/member/add":
-            MemberHandler.add();
-            break;
-          case "/member/list":
-            MemberHandler.list();
-            break;
-          case "/project/add":
-            ProjectHandler.add();
-            break;
-          case "/project/list":
-            ProjectHandler.list();
-            break;
-          case "/task/add":
-            TaskHandler.add();
-            break;
-          case "/task/list":
-            TaskHandler.list();
-            break;
-          case "/board/add":
-            BoardHandler.add();
-            break;
-          case "/board/list":
-            BoardHandler.list();
-            break;
+          case "/member/add": MemberHandler.add(); break;
+          case "/member/list": MemberHandler.list(); break;
+          case "/project/add": ProjectHandler.add(); break;
+          case "/project/list": ProjectHandler.list(); break;
+          case "/task/add": TaskHandler.add(); break;
+          case "/task/list": TaskHandler.list(); break;
+          case "/board/add": BoardHandler.add(); break;
+          case "/board/list": BoardHandler.list(); break;
           case "quit":
           case "exit":
             System.out.println("안녕!");

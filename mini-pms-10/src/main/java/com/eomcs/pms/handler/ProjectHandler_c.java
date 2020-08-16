@@ -3,7 +3,7 @@ package com.eomcs.pms.handler;
 import java.sql.Date;
 import com.eomcs.util.Prompt;
 
-public class ProjectHandler {
+public class ProjectHandler_c {
 
   // 프로젝트 데이터
   static class Project {
@@ -69,13 +69,12 @@ public class ProjectHandler {
     
     for (int i = 0; i < size; i++) {
       Project project = list[i];
-      System.out.printf("%d, %s, %s, %s, %s, [%s]\n",
+      System.out.printf("%d, %s, %s, %s, %s\n",
           project.no, 
           project.title, 
           project.startDate, 
           project.endDate, 
-          project.owner,
-          project.members);
+          project.owner);
     }
   }
 }

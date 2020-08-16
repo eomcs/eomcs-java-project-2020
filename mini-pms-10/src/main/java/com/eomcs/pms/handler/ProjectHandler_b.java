@@ -3,7 +3,7 @@ package com.eomcs.pms.handler;
 import java.sql.Date;
 import com.eomcs.util.Prompt;
 
-public class ProjectHandler {
+public class ProjectHandler_b {
 
   // 프로젝트 데이터
   static class Project {
@@ -29,7 +29,6 @@ public class ProjectHandler {
     project.content = Prompt.inputString("내용? ");
     project.startDate = Prompt.inputDate("시작일? ");
     project.endDate = Prompt.inputDate("종료일? ");
-    
     while (true) {
       String name = Prompt.inputString("만든이?(취소: 빈 문자열) ");
       
@@ -43,23 +42,7 @@ public class ProjectHandler {
       
       System.out.println("등록된 회원이 아닙니다.");
     }
-    
-    StringBuilder members = new StringBuilder();
-    while (true) {
-      String name = Prompt.inputString("팀원?(완료: 빈 문자열) ");
-      
-      if (name.length() == 0) {
-        break;
-      } else if (MemberHandler.findByName(name) != null) {
-        if (members.length() > 0) {
-          members.append(",");
-        }
-        members.append(name);
-      } else {
-        System.out.println("등록된 회원이 아닙니다.");
-      }
-    }
-    project.members = members.toString();
+    project.members = Prompt.inputString("팀원? ");
 
     list[size++] = project;
   }
@@ -69,13 +52,12 @@ public class ProjectHandler {
     
     for (int i = 0; i < size; i++) {
       Project project = list[i];
-      System.out.printf("%d, %s, %s, %s, %s, [%s]\n",
+      System.out.printf("%d, %s, %s, %s, %s\n",
           project.no, 
           project.title, 
           project.startDate, 
           project.endDate, 
-          project.owner,
-          project.members);
+          project.owner);
     }
   }
 }
