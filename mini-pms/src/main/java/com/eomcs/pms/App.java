@@ -27,8 +27,12 @@ public class App {
     BoardHandler boardHandler6 = new BoardHandler();
 
     MemberHandler memberHandler = new MemberHandler();
-    ProjectHandler projectHandler = new ProjectHandler(memberHandler);
-    TaskHandler taskHandler = new TaskHandler(memberHandler);
+
+    ProjectHandler projectHandler = new ProjectHandler();
+    projectHandler.memberHandler = memberHandler;
+
+    TaskHandler taskHandler = new TaskHandler();
+    taskHandler.memberHandler = memberHandler;
 
     loop:
       while (true) {

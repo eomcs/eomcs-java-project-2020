@@ -69,11 +69,9 @@
 
 - com.eomcs.pms.handler.MemberHandler 클래스 변경
 - com.eomcs.pms.handler.ProjectHandler 클래스 변경
-  - MemberHandler의 인스턴스 가리킬 레퍼런스를 추가한다.
-  - MemberHandler의 인스턴스를 받는 생성자를 추가한다.
+  - ProjectHandler가 사용할 의존 객체(MemberHandler)를 담을 레퍼런스를 추가한다.
 - com.eomcs.pms.handler.TaskHandler 클래스 변경
-  - MemberHandler의 인스턴스 가리킬 레퍼런스를 추가한다.
-  - MemberHandler의 인스턴스를 받는 생성자를 추가한다.
+  - TaskHandler가 사용할 의존 객체(MemberHandler)를 담을 레퍼런스를 추가한다.
 - com.eomcs.pms.App 클래스 변경
 
 

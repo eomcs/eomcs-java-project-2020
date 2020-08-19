@@ -20,11 +20,7 @@ public class ProjectHandler {
   Project[] list = new Project[LENGTH]; // projects 를 list 로 변경한다.
   int size = 0; // psize 를 size 로 변경한다.
 
-  MemberHandler memberHandler;
-
-  public ProjectHandler(MemberHandler memberHandler) {
-    this.memberHandler = memberHandler;
-  }
+  public MemberHandler memberHandler;
 
   //다른 패키지에서 이 메서드를 사용할 수 있도록 public 으로 사용 범위를 공개한다.
   public void add() {
