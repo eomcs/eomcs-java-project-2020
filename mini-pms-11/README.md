@@ -154,8 +154,8 @@
 
 - src/main/java/com/eomcs/pms/handler/BoardHandler.java 추가
 - src/main/java/com/eomcs/pms/handler/BoardHandler2.java 추가
-- com.eomcs.pms.handler.BoardHandler3 클래스 추가
-- com.eomcs.pms.handler.BoardHandler4 클래스 추가
-- com.eomcs.pms.handler.BoardHandler5 클래스 추가
-- com.eomcs.pms.handler.BoardHandler6 클래스 추가
+- src/main/java/com/eomcs/pms/handler/BoardHandler3.java 추가
+- src/main/java/com/eomcs/pms/handler/BoardHandler4.java 추가
+- src/main/java/com/eomcs/pms/handler/BoardHandler5.java 추가
+- src/main/java/com/eomcs/pms/handler/BoardHandler6.java 추가
 - src/main/java/com/eomcs/pms/App.java 변경
