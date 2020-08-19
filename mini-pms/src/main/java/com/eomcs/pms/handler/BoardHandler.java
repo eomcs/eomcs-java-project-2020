@@ -32,7 +32,7 @@ public class BoardHandler {
     board.registeredDate = new Date(System.currentTimeMillis());
     board.viewCount = 0;
 
-    list[size++] = board;
+    this.list[this.size++] = board;
 
     System.out.println("게시글을 등록하였습니다.");
   }
@@ -40,8 +40,8 @@ public class BoardHandler {
   public void list() {
     System.out.println("[게시물 목록]");
 
-    for (int i = 0; i < size; i++) {
-      Board board = list[i];
+    for (int i = 0; i < this.size; i++) {
+      Board board = this.list[i];
       System.out.printf("%d, %s, %s, %s, %d\n",
           board.no,
           board.title,
