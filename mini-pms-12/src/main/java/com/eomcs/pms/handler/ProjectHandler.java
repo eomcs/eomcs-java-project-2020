@@ -22,6 +22,14 @@ public class ProjectHandler {
 
   public MemberHandler memberHandler;
 
+  // 인스턴스 메서드
+  // => 인스턴스가 있어야만 호출할 수 있는 메서드이다.
+  // => 인스턴스를 사용하는 메서드인 경우 인스턴스 메서드로 선언하라.
+  // => 호출할 때는 반드시 인스턴스 주소를 줘야 한다.
+  //      인스턴스주소.메서드명();
+  // => 이렇게 인스턴스의 변수 값을 다루는 메서드는
+  //    "연산자(operation)"라 부를 수 있다.
+  //  
   //다른 패키지에서 이 메서드를 사용할 수 있도록 public 으로 사용 범위를 공개한다.
   public void add() {
     System.out.println("[프로젝트 등록]");

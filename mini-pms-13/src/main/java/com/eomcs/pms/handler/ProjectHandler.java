@@ -70,14 +70,6 @@ public class ProjectHandler {
     project.members = members.toString();
 
     this.list[this.size++] = project;
-
-    // MemberHandler의 인스턴스 필드가 외부로부터의 접근을 막지 않기 때문에
-    // 다음과 같이 임의의 값으로 변경될 수 있다.
-    // => 문제는 이렇게 변경된 값을 사용하는 다른 쪽에서 영향을 받을 수 있다.
-    //memberHandler.size = 0;
-    // 이렇게 무효한 값으로 변경하는 것을 막지 못한다면?
-    // 코드 작성한 의도와 다르게 동작할 수 있다.
-    //
   }
 
   public void list() {

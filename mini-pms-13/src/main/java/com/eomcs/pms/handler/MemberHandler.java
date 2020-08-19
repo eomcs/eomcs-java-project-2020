@@ -17,8 +17,8 @@ public class MemberHandler {
   }
   static final int LENGTH = 100;
 
-  private Member[] list = new Member[LENGTH]; // list로 이름을 바꾼다.
-  private int size = 0;
+  Member[] list = new Member[LENGTH]; // list로 이름을 바꾼다.
+  int size = 0;
 
   // 다른 패키지에서 이 메서드를 사용할 수 있도록 public 으로 사용 범위를 공개한다.
   public void add() {

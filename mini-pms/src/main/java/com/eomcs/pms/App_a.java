@@ -6,7 +6,7 @@ import com.eomcs.pms.handler.ProjectHandler;
 import com.eomcs.pms.handler.TaskHandler;
 import com.eomcs.util.Prompt;
 
-public class App {
+public class App_a {
 
   public static void main(String[] args) {
 
@@ -17,18 +17,21 @@ public class App {
     BoardHandler boardHandler5 = new BoardHandler();
     BoardHandler boardHandler6 = new BoardHandler();
 
-    // 다음과 같이 기본 생성자만 있는 경우는,
-    // 해당 인스턴스를 생성하고 초기화시킬 때
-    // 외부에서 값을 받을 필요가 없다는 의미다.
     MemberHandler memberHandler = new MemberHandler();
 
-    // ProjectHandler 나 TaskHandler 를 생성할 때
-    // 필요로 하는 의존 객체를 전달한다.
-    // => 이렇게 생성자를 적용하면,
-    //    객체를 생성하는 개발자에게 인스턴스 사용에 필요한
-    //    값이나 의존 객체 주입을 강제하는 효과가 있다.
-    ProjectHandler projectHandler = new ProjectHandler(memberHandler);
-    TaskHandler taskHandler = new TaskHandler(memberHandler);
+    ProjectHandler projectHandler = new ProjectHandler();
+
+    // ProjectHandler의 의존 객체 주입을 막는다.
+    //projectHandler.memberHandler = memberHandler;
+
+    TaskHandler taskHandler = new TaskHandler();
+
+    // TaskHandler의 의존 객체 주입을 막는다.
+    //taskHandler.memberHandler = memberHandler;
+
+    // 인스턴스를 사용하는데 필요한 의존 객체 주입을 누락하더라도
+    // 컴파일러는 알 수가 없다.
+    // 실행할 때 비로서 의존 객체가 누락된 문제가 발생할 것이다.
 
     loop:
       while (true) {

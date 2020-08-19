@@ -1,7 +1,7 @@
 # 10 - 다른 클래스와 관계 맺기 : 의존 관계
 
 소스 코드 관리를 위해 메서드를 여러 클래스로 분리하게 되면 
-반드시 클래스 간에 **의존 관계(dependency relationship)**를 형성하게 된다.
+반드시 클래스 간에 **의존 관계(dependency relationship)** 를 형성하게 된다.
 즉, 메서드를 사용하는 클래스(client)와 메서드를 제공하는 클래스(supplier)가 생겨난다.
 예를 들면, `App` 클래스에서 `MemberHandler` 클래스로 회원 데이터 처리와 관련된 메서드를 분리하는 순간
 `App` 클래스와 `MemberHandler` 클래스는 의존 관계를 맺게 된다.
