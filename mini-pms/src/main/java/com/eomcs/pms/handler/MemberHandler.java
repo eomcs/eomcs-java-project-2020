@@ -1,24 +1,12 @@
 package com.eomcs.pms.handler;
 
-import java.sql.Date;
+import com.eomcs.pms.domain.Member;
 import com.eomcs.util.Prompt;
 
 public class MemberHandler {
 
-  // 회원 데이터
-  static class Member {
-    int no;
-    String name;
-    String email;
-    String password;
-    String photo;
-    String tel;
-    Date registeredDate;
-  }
-  static final int LENGTH = 100;
-
-  private Member[] list = new Member[LENGTH]; // list로 이름을 바꾼다.
-  private int size = 0;
+  // MemberHandler가 데이터를 다루기 위해 의존하는 객체를 준비한다.
+  MemberList memberList = new MemberList();
 
   // 다른 패키지에서 이 메서드를 사용할 수 있도록 public 으로 사용 범위를 공개한다.
   public void add() {
@@ -33,14 +21,15 @@ public class MemberHandler {
     member.tel = Prompt.inputString("전화? ");
     member.registeredDate = new java.sql.Date(System.currentTimeMillis());
 
-    this.list[this.size++] = member;
+    memberList.add(member);
   }
 
   public void list() {
     System.out.println("[회원 목록]");
 
-    for (int i = 0; i < this.size; i++) {
-      Member member = this.list[i];
+    Member[] members = memberList.toArray();
+
+    for (Member member : members) {
       System.out.printf("%d, %s, %s, %s, %s\n",
           member.no,
           member.name,
@@ -51,8 +40,9 @@ public class MemberHandler {
   }
 
   public Member findByName(String name) {
-    for (int i = 0; i < this.size; i++) {
-      Member member = this.list[i];
+    Member[] members = memberList.toArray();
+
+    for (Member member : members) {
       if (member.name.equals(name)) {
         return member;
       }
