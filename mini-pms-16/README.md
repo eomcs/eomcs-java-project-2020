@@ -1,4 +1,4 @@
-# 16 - 다형성과 형변환
+# 16 - 다형성과 형변환 응용
 
 이번 훈련에서는 **다형성(polymorphism)** 의 특징을 이용하는 사례를 다룰 것이다.
 
@@ -29,7 +29,7 @@
 
 ## 실습
 
-### 1단계 - `Board`, `Member`, `Project`, `Task` 타입의 객체를 모두 다룰 수 있는 ArrayList 클래스를 만든다.
+### 1단계 - `Board`, `Member`, `Project`, `Task` 타입의 객체를 모두 다룰 수 있는 `ArrayList` 클래스를 만든다.
 
 - `BoardList`, `MemberList`, `ProjectList`, `TaskList` 클래스를 합쳐 한 클래스(`ArrayList`)로 만든다.
 
@@ -37,7 +37,7 @@
 
 - com.eomcs.util.ArrayList 클래스 생성
 
-### 2단계 - XxxHandler 에서 사용하던 XxxList 클래스를 ArrayList로 교체한다.
+### 2단계 - XxxHandler 에서 사용하던 XxxList 클래스를 `ArrayList` 로 교체한다.
 
 - `BoardHandler` 에서 `Board` 인스턴스 목록을 다루기 위해 사용하던 `BoardList` 클래스를 `ArrayList` 클래스로 변경한다. 
 - `MemberHandler` 에서 `Member` 인스턴스 목록을 다루기 위해 사용하던 `MemberList` 클래스를 `ArrayList` 클래스로 변경한다. 
@@ -63,7 +63,7 @@
 - src/main/java/com/eomcs/pms/handler/MemberHandler.java 변경
 - src/main/java/com/eomcs/pms/handler/ProjectHandler.java 변경
 - src/main/java/com/eomcs/pms/handler/TaskHandler.java 변경
-- src/main/java/com/eomcs/pms/handler/BoardList.java 변경
-- src/main/java/com/eomcs/pms/handler/MemberList.java 변경
-- src/main/java/com/eomcs/pms/handler/ProjectList.java 변경
-- src/main/java/com/eomcs/pms/handler/TaskList.java 변경
+- src/main/java/com/eomcs/pms/handler/BoardList.java 삭제
+- src/main/java/com/eomcs/pms/handler/MemberList.java 삭제
+- src/main/java/com/eomcs/pms/handler/ProjectList.java 삭제
+- src/main/java/com/eomcs/pms/handler/TaskList.java 삭제
