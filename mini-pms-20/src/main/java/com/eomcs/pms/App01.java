@@ -7,7 +7,7 @@ import com.eomcs.pms.handler.TaskHandler;
 import com.eomcs.util.Prompt;
 import com.eomcs.util.Stack;
 
-public class App {
+public class App01 {
 
   public static void main(String[] args) {
 
@@ -45,8 +45,6 @@ public class App {
           case "/board/detail": boardHandler.detail(); break;
           case "/board/update": boardHandler.update(); break;
           case "/board/delete": boardHandler.delete(); break;
-
-          // history 명령을 처리한다.
           case "history": printCommandHistory(commandStack); break;
           case "quit":
           case "exit":
@@ -68,16 +66,8 @@ public class App {
       // 또한 clone() 메서드는 복제 작업 중 오류가 발생하면 예외를 발생시키기 때문에
       // try...catch... 블록으로 처리한다.
       Stack<String> history = commandStack.clone();
-
-      int count = 0;
       while (!history.empty()) {
         System.out.println(history.pop());
-        count++;
-
-        // 5개 출력할 때 마다 계속 출력할지 묻는다.
-        if ((count % 5) == 0 && Prompt.inputString(":").equalsIgnoreCase("q")) {
-          break;
-        }
       }
     } catch (Exception e) {
       System.out.println("history 명령 처리 중 오류 발생!");
