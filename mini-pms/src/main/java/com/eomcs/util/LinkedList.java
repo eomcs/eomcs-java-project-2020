@@ -164,6 +164,22 @@ public class LinkedList<E> {
 
     return arr;
   }
+
+  // Object.clone()을 오버라이딩 할 때 'deep copy' 이용하여 스택 객체 복사하기
+  // => 새 연결 리스트를 만들어 원본에 보관된 값을 복사한다.
+  // => 따라서 복사본의 Node 객체는 원본의 Node 객체와 다르다. 
+  //    복사본의 상태 변경에 원본은 영향 받지 않는다.
+  //
+  @SuppressWarnings("unchecked")
+  @Override
+  public LinkedList<E> clone() throws CloneNotSupportedException {
+    LinkedList<E> newList = new LinkedList<>();
+    Object[] values = this.toArray();
+    for (Object value : values) {
+      newList.add((E) value);
+    }
+    return newList;
+  }
 }
 
 
