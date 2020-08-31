@@ -5,6 +5,7 @@ import com.eomcs.pms.handler.MemberHandler;
 import com.eomcs.pms.handler.ProjectHandler;
 import com.eomcs.pms.handler.TaskHandler;
 import com.eomcs.util.Prompt;
+import com.eomcs.util.Queue;
 import com.eomcs.util.Stack;
 
 public class App {
@@ -16,6 +17,7 @@ public class App {
     ProjectHandler projectHandler = new ProjectHandler(memberHandler);
     TaskHandler taskHandler = new TaskHandler(memberHandler);
     Stack<String> commandStack = new Stack<>();
+    Queue<String> commandQueue = new Queue<>();
 
     loop:
       while (true) {
@@ -23,6 +25,7 @@ public class App {
 
         // 사용자가 입력한 명령을 보관한다.
         commandStack.push(command);
+        commandQueue.offer(command);
 
         switch (command) {
           case "/member/add": memberHandler.add(); break;
@@ -45,9 +48,9 @@ public class App {
           case "/board/detail": boardHandler.detail(); break;
           case "/board/update": boardHandler.update(); break;
           case "/board/delete": boardHandler.delete(); break;
-
-          // history 명령을 처리한다.
           case "history": printCommandHistory(commandStack); break;
+          // history2 명령을 처리한다.
+          case "history2": printCommandHistory2(commandQueue); break;
           case "quit":
           case "exit":
             System.out.println("안녕!");
@@ -81,6 +84,29 @@ public class App {
       }
     } catch (Exception e) {
       System.out.println("history 명령 처리 중 오류 발생!");
+    }
+  }
+
+  static void printCommandHistory2(Queue<String> commandQueue) {
+    try {
+      // Queue는 한 번 poll() 하면 데이터가 제거된다.
+      // 따라서 복제본을 만들어 사용한다.
+      // 또한 clone() 메서드는 복제 작업 중 오류가 발생하면 예외를 발생시키기 때문에
+      // try...catch... 블록으로 처리한다.
+      Queue<String> history = commandQueue.clone();
+
+      int count = 0;
+      while (history.size() > 0) {
+        System.out.println(history.poll());
+        count++;
+
+        // 5개 출력할 때 마다 계속 출력할지 묻는다.
+        if ((count % 5) == 0 && Prompt.inputString(":").equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("history2 명령 처리 중 오류 발생!");
     }
   }
 }
