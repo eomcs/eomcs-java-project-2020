@@ -6,7 +6,7 @@ import com.eomcs.pms.domain.Task;
 public class TaskList {
 
   static final int DEFAULT_CAPACITY = 100;
-  Task[] list = new Task[DEFAULT_CAPACITY];
+  Task[] list;
   int size = 0;
 
   public TaskList() {

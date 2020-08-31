@@ -6,7 +6,7 @@ import com.eomcs.pms.domain.Member;
 public class MemberList {
 
   static final int DEFAULT_CAPACITY = 100;
-  Member[] list = new Member[DEFAULT_CAPACITY];
+  Member[] list;
   int size = 0;
 
   public MemberList() {

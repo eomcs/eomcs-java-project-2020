@@ -6,7 +6,7 @@ import com.eomcs.pms.domain.Project;
 public class ProjectList {
 
   static final int DEFAULT_CAPACITY = 100;
-  Project[] list = new Project[DEFAULT_CAPACITY];
+  Project[] list;
   int size = 0;
 
   public ProjectList() {
