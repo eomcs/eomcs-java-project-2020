@@ -1,88 +1,62 @@
-# 21 - 큐 자료구조 구현과 활용
+# 22 - 추상 클래스와 추상 메서드
 
-이번 훈련에서는 **큐(queue)** 방식으로 데이터를 저장하는 자료 구조를 만들어보자.
+**추상 클래스** 는 
 
-**큐(queue)** 는
+- 서브 클래스에 기본 기능 및 공통 분모를 상속해 주는 역할을 하는 클래스다.
+- new 명령을 통해 인스턴스를 생성할 수 없다.
+- **상속** 의 기법 중에서 **일반화** 를 통해 수퍼 클래스를 정의한 경우 보통 추상 클래스로 선언한다.
+- 추상 메서드를 가질 수 있다.
 
-- FIFO(First In First Out) 방식으로 데이터를 넣고 꺼낸다.
-- 데이터를 넣는 것을 `offer`라고 하고 목록의 맨 끝에 추가한다.
-- 데이터를 꺼내는 것을 `poll`이라 하고 목록의 맨 앞의 값을 꺼낸다.
-- 보통 입력한 순으로 데이터를 꺼내야 하는 상황에서 이 자료구조를 사용한다.
-- 예)
-  - 등록된 예약을 처리할 때 
-  - 네트워킹에서 연결된 순서대로 소켓을 승인하고 처리할 때
+**추상 메서드** 는 
+
+- 서브 클래스에 따라 구현 방법이 다를 수 있을 때 보통 추상 메서드로 선언한다.
+- 서브 클래스에서 반드시 구현해야 하는 메서드다.
+- 즉 서브 클래스가 반드시 해당 메서드를 구현하도록 강제하고 싶을 때 추상 메서드로 선언한다.
+- 일반 클래스는 추상 메서드를 가질 수 없다. 
+- 추상 클래스와 인터페이스 만이 추상 메서드를 가질 수 있다.
+
+이번 훈련에서는 **추상 클래스** 로 만들어야 하는 경우를 확인할 것이다. 
 
 
 ## 훈련 목표
 
-- 큐(queue) 자료구조를 구현하고 구동 원리를 이해한다.
-- Object.clone() 메서드의 용도와 인스턴스를 복제하는 방법을 배운다.
-- 얕은 복제(shallow copy)와 깊은 복제(deep copy)의 차이점을 이해한다.
+- **추상 클래스** 의 용도를 이해하고 활용법을 연습한다.
+- **추상 메서드** 의 활용법을 연습한다.
+
 
 ## 훈련 내용
 
-- `java.util.Queue` 인터페이스의 메서드를 모방하여 `Queue` 클래스를 구현한다. 
-- 큐를 이용하여 사용자가 입력한 명령을 보관한다.
-- 사용자가 입력한 명령을 순서대로 출력하는 `history2` 명령을 추가한다.
-  
+- `List` 클래스를 추상 클래스로 변경한다.
+- `List` 클래스에서 추상 메서드로 변경해야 하는 것들을 확인하고 변경한다.
+
+
 ## 실습
 
-### 1단계 - `java.util.Queue` 인터페이스의 메서드를 모방하여 `Queue` 클래스를 구현한다. 
+### 1단계 - `List` 클래스를 추상 클래스로 선언한다.
 
-**큐(queue)** 자료 구조를 직접 구현해본다.
-
-- `Queue` 클래스를 작성한다.
-
-#### 작업 파일
-
-- com.eomcs.util.Queue 클래스 생성
-
-
-### 2단계 - 사용자가 입력한 명령을 스택에 보관한다. 
-
-- `Queue` 객체를 준비하여 사용자가 명령어를 입력할 때 마다 저장한다.
+- `List` 클래스
+    - 추상 클래스로 선언한다.
+    - 서브 클래스에서 반드시 재정의 해야 하는 메서드를 추상 메서드로 바꾼다. 
 
 #### 작업 파일
 
-- com.eomcs.pms.App 클래스 변경
+- com.eomcs.util.List 클래스의 이름 변경
+  - com.eomcs.util.AbstractList 로 변경한다.
 
-
-### 3단계 - 사용자가 입력한 명령을 최신순으로 출력하는 `history2` 명령을 추가한다. 
-
-- 사용자가 입력한 명령을 최신순으로 출력하는 `printCommandHistory2()` 메서드를 정의한다.
-- `history2` 명령을 처리하는 분기문을 추가한다.
-
-```
-명령> history2
-/board/add
-/board/add
-/board/add
-/board/list
-/board/detail
-:
-/member/add
-/member/add
-/member/add
-/member/list
-/member/detail
-:
-/member/detail
-/project/add
-/project/list
-history
-history2
-:q
-
-명령> 
-
-```
+### 2단계 - XxxHandler 의 의존 객체 타입을 `List` 에서 `ArrayList` 로 변경한다.
 
 #### 작업 파일
 
-- com.eomcs.pms.App 클래스 변경
+- com.eomcs.pms.handler.BoardHandler 클래스 변경
+- com.eomcs.pms.handler.MemberHandler 클래스 변경
+- com.eomcs.pms.handler.ProjectHandler 클래스 변경
+- com.eomcs.pms.handler.TaskHandler 클래스 변경
 
 
 ## 실습 결과
 
-- src/main/java/com/eomcs/util/Queue.java 추가
-- src/main/java/com/eomcs/pms/App.java 변경
+- src/main/java/com/eomcs/util/AbstractList.java 변경
+- src/main/java/com/eomcs/pms/handler/BoardHandler.java 변경
+- src/main/java/com/eomcs/pms/handler/MemberHandler.java 변경
+- src/main/java/com/eomcs/pms/handler/ProjectHandler.java 변경
+- src/main/java/com/eomcs/pms/handler/TaskHandler.java 변경
