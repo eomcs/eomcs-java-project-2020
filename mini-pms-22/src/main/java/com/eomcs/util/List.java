@@ -1,5 +1,7 @@
 package com.eomcs.util;
 
+// => ArrayList와 LinkedList 사이의 공통 분모를 추출하여 수퍼 클래스를 정의한다.
+// => ArrayList와 LinkedList는 이렇게 정의한 수퍼 클래스를 상속 받는다.
 public class List<E> {
 
   protected int size;
