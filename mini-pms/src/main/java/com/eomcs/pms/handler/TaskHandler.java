@@ -7,6 +7,12 @@ import com.eomcs.util.Prompt;
 
 public class TaskHandler {
 
+  // 목록을 다루는 객체를 지정할 때,
+  // => 특정 클래스(예: AbstractList, LinkedList, ArrayList)를 지정하는 대신에,
+  // => 사용 규칙(예: List)을 지정함으로써
+  //    더 다양한 타입의 객체로 교체할 수 있게 만든다.
+  // => `List` 규칙을 따르는 객체라면 어떤 클래스의 객체든지 사용할 수 있다.
+  //    결국 유지보수를 더 유연하게 하기 위함이다.
   List<Task> taskList;
   MemberHandler memberHandler;
 

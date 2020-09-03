@@ -10,6 +10,7 @@ import com.eomcs.pms.handler.ProjectHandler;
 import com.eomcs.pms.handler.TaskHandler;
 import com.eomcs.util.ArrayList;
 import com.eomcs.util.LinkedList;
+import com.eomcs.util.List;
 import com.eomcs.util.Prompt;
 import com.eomcs.util.Queue;
 import com.eomcs.util.Stack;
@@ -18,16 +19,16 @@ public class App {
 
   public static void main(String[] args) {
 
-    ArrayList<Board> boardList = new ArrayList<>();
+    List<Board> boardList = new ArrayList<>();
     BoardHandler boardHandler = new BoardHandler(boardList);
 
-    LinkedList<Member> memberList = new LinkedList<>();
+    List<Member> memberList = new LinkedList<>();
     MemberHandler memberHandler = new MemberHandler(memberList);
 
-    LinkedList<Project> projectList = new LinkedList<>();
+    List<Project> projectList = new LinkedList<>();
     ProjectHandler projectHandler = new ProjectHandler(projectList, memberHandler);
 
-    ArrayList<Task> taskList = new ArrayList<>();
+    List<Task> taskList = new ArrayList<>();
     TaskHandler taskHandler = new TaskHandler(taskList, memberHandler);
 
     Stack<String> commandStack = new Stack<>();

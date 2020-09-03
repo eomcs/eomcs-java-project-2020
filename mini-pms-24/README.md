@@ -57,14 +57,16 @@
 
 - `BoardHandler`, `MemberHandler`, `ProjectHandler`, `TaskHandler` 클래스
   - 기존의 `AbstractList` 인스턴스 필드를 `List` 타입으로 변경한다.
-
+- `App` 클래스
+  - `ArrayList` 나 `LinkedList` 를 담은 레퍼런스 필드의 타입을 `List` 로 변경한다.
+  
 #### 작업 파일
 
 - com.eomcs.pms.handler.BoardHandler 클래스 변경
 - com.eomcs.pms.handler.MemberHandler 클래스 변경
 - com.eomcs.pms.handler.ProjectHandler 클래스 변경
 - com.eomcs.pms.handler.TaskHandler 클래스 변경
-
+- com.eomcs.pms.App 클래스 변경
 
 ## 실습 결과
 
@@ -74,3 +76,4 @@
 - src/main/java/com/eomcs/pms/handler/MemberHandler.java 변경
 - src/main/java/com/eomcs/pms/handler/ProjectHandler.java 변경
 - src/main/java/com/eomcs/pms/handler/TaskHandler.java 변경
+- src/main/java/com/eomcs/pms/App.java 변경
