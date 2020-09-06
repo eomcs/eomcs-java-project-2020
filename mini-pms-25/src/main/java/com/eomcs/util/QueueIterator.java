@@ -5,7 +5,6 @@ import java.util.NoSuchElementException;
 // Queue 객체의 목록 조회 기능을 담당한다.
 public class QueueIterator<E> implements Iterator<E> {
   Queue<E> queue;
-  int cursor;
 
   public QueueIterator(Queue<E> queue) {
     this.queue = queue;
@@ -13,9 +12,7 @@ public class QueueIterator<E> implements Iterator<E> {
 
   @Override
   public boolean hasNext() {
-    if (queue.size() > 0)
-      return true;
-    return false;
+    return queue.size() > 0;
   }
 
   @Override

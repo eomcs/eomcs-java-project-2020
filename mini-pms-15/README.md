@@ -1,4 +1,4 @@
-# 15 - 캡슐화와 접근 제어 : 세터(setter) / 게터(getter)
+# 15. 캡슐화와 접근 제어 : 세터(setter) / 게터(getter)
 
 이번 훈련에서는 **캡슐화(encapsulation)** 를 다룰 것이다.
 

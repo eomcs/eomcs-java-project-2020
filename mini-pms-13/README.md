@@ -1,4 +1,4 @@
-# 13 - 생성자가 필요한 이유 : 의존 객체 주입(Dependency Injection; DI)
+# 13. 생성자가 필요한 이유 : 의존 객체 주입(Dependency Injection; DI)
 
 **생성자(constructor)** 는 인스턴스를 사용하는데 문제가 없도록,
 

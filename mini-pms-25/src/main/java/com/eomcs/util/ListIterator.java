@@ -13,9 +13,7 @@ public class ListIterator<E> implements Iterator<E> {
 
   @Override
   public boolean hasNext() {
-    if (cursor < list.size())
-      return true;
-    return false;
+    return cursor < list.size();
   }
 
   @Override

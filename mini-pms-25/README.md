@@ -1,4 +1,4 @@
-# 25 - `Iterator` 디자인 패턴
+# 25. `Iterator` 디자인 패턴
 
 **반복자(Iterator) 패턴** 은 
 
@@ -97,6 +97,7 @@
 
 - `App` 클래스 변경
   - `printCommandHistory()` 메서드를 변경한다.
+  - `Stack` 객체로부터 값을 직접 꺼내지 않고 `Iterator` 객체를 통해 값을 꺼낸다.
 
 #### 작업 파일
 
@@ -120,7 +121,7 @@
 
 - `App` 클래스 변경
   - `printCommandHistory()` 메서드의 파라미터의 타입을 `Iterator` 변경한다.
-  - `history` 명령과 `history2` 명령을 이 메서드에서 처리한다.
+  - 이 메서드에서 `history` 명령과 `history2` 명령을 모두 처리한다.
   - `printCommandHistory2()` 메서드를 삭제한다.
 
 #### 작업 파일

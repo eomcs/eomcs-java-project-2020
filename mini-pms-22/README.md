@@ -1,4 +1,4 @@
-# 22 - 상속 : 일반화(generalization)를 이용한 공통점 분리
+# 22. 상속 : 일반화(generalization)를 이용한 공통점 분리
 
 **상속(inheritance)** 을 구현하는 방법에는 두 가지가 있다. 
 
