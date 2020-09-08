@@ -44,13 +44,12 @@ public class Queue<E> extends LinkedList<E> {
   public Iterator<E> iterator() {
 
     // local class에는 로컬 변수처럼 접근 제어 키워드(private, protected, public)를 붙일 수 없다. 
-    class QueueIterator<T> implements Iterator<T> {
-      Queue<T> queue;
+    class QueueIterator implements Iterator<E> {
+      Queue<E> queue;
 
-      @SuppressWarnings("unchecked")
       public QueueIterator() {
         try {
-          this.queue = (Queue<T>) Queue.this.clone();
+          this.queue = Queue.this.clone();
         } catch (Exception e) {
           throw new RuntimeException("큐를 복제하는 중에 오류 발생!");
         }
@@ -62,13 +61,13 @@ public class Queue<E> extends LinkedList<E> {
       }
 
       @Override
-      public T next() {
+      public E next() {
         if (queue.size() == 0)
           throw new NoSuchElementException();
         return queue.poll();
       }
     }
 
-    return new QueueIterator<E>();
+    return new QueueIterator();
   }
 }

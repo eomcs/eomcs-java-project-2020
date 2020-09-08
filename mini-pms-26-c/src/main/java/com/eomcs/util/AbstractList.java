@@ -15,7 +15,7 @@ public abstract class AbstractList<E> implements List<E>{
   @Override
   public Iterator<E> iterator() {
     // local class에는 로컬 변수처럼 접근 제어 키워드(private, protected, public)를 붙일 수 없다. 
-    class ListIterator<T> implements Iterator<T> {
+    class ListIterator implements Iterator<E> {
       int cursor;
 
       @Override
@@ -25,16 +25,15 @@ public abstract class AbstractList<E> implements List<E>{
         return cursor < AbstractList.this.size();
       }
 
-      @SuppressWarnings("unchecked")
       @Override
-      public T next() {
+      public E next() {
         // 물론 바깥 클래스의 인스턴스를 가리키는 AbstractList.this 를 생략할 수 있다.
         if (cursor ==  /*AbstractList.this.*/size())
           throw new NoSuchElementException();
 
-        return (T) get(cursor++);
+        return get(cursor++);
       }
     }
-    return new ListIterator<E>();
+    return new ListIterator();
   }
 }

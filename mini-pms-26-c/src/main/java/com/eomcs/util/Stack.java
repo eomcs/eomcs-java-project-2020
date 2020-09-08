@@ -45,13 +45,12 @@ public class Stack<E> extends LinkedList<E> {
   public Iterator<E> iterator() {
 
     // local class에는 로컬 변수처럼 접근 제어 키워드(private, protected, public)를 붙일 수 없다. 
-    class StackIterator<T> implements Iterator<T> {
-      Stack<T> stack;
+    class StackIterator implements Iterator<E> {
+      Stack<E> stack;
 
-      @SuppressWarnings("unchecked")
       public StackIterator() {
         try {
-          this.stack = (Stack<T>) Stack.this.clone();
+          this.stack = Stack.this.clone();
         } catch (Exception e) {
           throw new RuntimeException("큐를 복제하는 중에 오류 발생!");
         }
@@ -63,13 +62,13 @@ public class Stack<E> extends LinkedList<E> {
       }
 
       @Override
-      public T next() {
+      public E next() {
         if (stack.empty())
           throw new NoSuchElementException();
         return stack.pop();
       }
     }
 
-    return new StackIterator<E>();
+    return new StackIterator();
   }
 }
