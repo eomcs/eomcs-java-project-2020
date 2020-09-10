@@ -51,7 +51,7 @@
     - `App` 클래스와 명령을 처리하는 클래스 사이의 호출 규칙을 정의한다.
 
 ### 훈련2. 명령을 처리하는 각 메서드를 객체로 분리하라.
-
+ 
 - LessonHandler.java
     - 수업 CRUD 각 기능을 `Command` 규칙에 따라 객체로 분리한다.
 - MemberHandler.java
