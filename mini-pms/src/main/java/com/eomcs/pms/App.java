@@ -84,46 +84,30 @@ public class App {
 
     loop:
       while (true) {
-        String command = Prompt.inputString("명령> ");
+        String inputStr = Prompt.inputString("명령> ");
+
+        if (inputStr.length() == 0) {
+          continue;
+        }
 
         // 사용자가 입력한 명령을 보관한다.
-        commandStack.push(command);
-        commandQueue.offer(command);
+        commandStack.push(inputStr);
+        commandQueue.offer(inputStr);
 
-        switch (command) {
-          case "/member/add": memberAddCommand.execute(); break;
-          case "/member/list": memberListCommand.execute(); break;
-          case "/member/detail": memberDetailCommand.execute(); break;
-          case "/member/update": memberUpdateCommand.execute(); break;
-          case "/member/delete": memberDeleteCommand.execute(); break;
-          case "/project/add": projectAddCommand.execute(); break;
-          case "/project/list": projectListCommand.execute(); break;
-          case "/project/detail": projectDetailCommand.execute(); break;
-          case "/project/update": projectUpdateCommand.execute(); break;
-          case "/project/delete": projectDeleteCommand.execute(); break;
-          case "/task/add": taskAddCommand.execute(); break;
-          case "/task/list": taskListCommand.execute(); break;
-          case "/task/detail": taskDetailCommand.execute(); break;
-          case "/task/update": taskUpdateCommand.execute(); break;
-          case "/task/delete": taskDeleteCommand.execute(); break;
-          case "/board/add": boardAddCommand.execute(); break;
-          case "/board/list": boardListCommand.execute(); break;
-          case "/board/detail": boardDetailCommand.execute(); break;
-          case "/board/update": boardUpdateCommand.execute(); break;
-          case "/board/delete": boardDeleteCommand.execute(); break;
-          case "/hello": helloCommand.execute(); break;
-
-          // Iterator 패턴을 이용하면,
-          // 자료 구조와 상관없이 일관된 방법으로 목록의 값을 조회할 수 있다.
+        switch (inputStr) {
           case "history": printCommandHistory(commandStack.iterator()); break;
           case "history2": printCommandHistory(commandQueue.iterator()); break;
-
           case "quit":
           case "exit":
             System.out.println("안녕!");
             break loop;
           default:
-            System.out.println("실행할 수 없는 명령입니다.");
+            Command command = commandMap.get(inputStr);
+            if (command != null) {
+              command.execute();
+            } else {
+              System.out.println("실행할 수 없는 명령입니다.");
+            }
         }
         System.out.println(); // 이전 명령의 실행을 구분하기 위해 빈 줄 출력
       }
