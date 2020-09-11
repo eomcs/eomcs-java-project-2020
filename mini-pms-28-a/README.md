@@ -1,4 +1,4 @@
-# 28-1. 커맨드 디자인 패턴을 적용하기 : 메서드를 객체로 분리하기
+# 28-a. 커맨드 디자인 패턴을 적용하기 : 메서드를 객체로 분리하기
 
 이번 훈련에서는 **커맨드 패턴(command pattern)** 을 프로젝트에 적용할 것이다.
 
@@ -7,7 +7,7 @@
 - 메서드의 객체화 설계 기법이다.
 - 한 개의 명령어를 처리하는 메서드를 별개의 클래스로 분리하는 기법이다. 
 - 이렇게 하면 명령어가 추가될 때마다 새 클래스를 만들면 되기 때문에  
-  기존 코드를 손대지 않아 유지보수에 좋다.
+  기존 코드를 손대지 않아서 유지보수에 좋다.
 - 즉 기존 소스에 영향을 끼치지 않고 새 기능을 추가하는 방식이다.
 - 명령처리를 별도의 객체로 분리하기 때문에 실행 내역을 관리하기 좋고,
   각 명령이 수행했던 작업을 다루기가 편하다.
@@ -35,6 +35,10 @@
 
 ### 0단계 - 커맨드 패턴 적용 전 : 게시물 검색 기능을 추가해보자.
 
+- 커맨드 패턴을 적용하기 전에는 새 기능을 추가할 때 마다 기존 코드를 변경해야 한다.
+- 기존 코드에 새 코드를 추가하는 것은 기존 코드를 손댈 수 있는 위험성이 있다.
+- 즉 잘되던 기능을 망치는 경우가 발생할 수 있다.
+
 ```console
 명령> /board/search
 검색어? aa
@@ -54,6 +58,7 @@
 #### 작업 파일
 
 - com.eomcs.pms.handler.BoardHandler 클래스 변경
+
 
 ### 1단계 - 사용자 명령을 처리하는 메서드의 호출 규칙을 정의한다.
 
@@ -107,6 +112,23 @@
 - com.eocms.pms.App 클래스 변경
 
 
+### 4단계 - `/hello` 명령을 추가한다.
+
+- 커맨드 패턴을 적용하여 애플리케이션 아키텍처를 변경되었다.
+- 커맨드 패턴을 적용할 경우 새 기능 추가가 쉽다는 것을 확인해보자. 
+
+```console
+명령> /hello
+안녕하세요!
+
+명령>
+```
+
+#### 작업 파일
+
+- com.eomcs.pms.handler.HelloCommand 생성
+
+
 ## 실습 결과
 
 - src/main/java/com/eomcs/pms/handler/Command.java 생성
@@ -134,6 +156,7 @@
 - src/main/java/com/eomcs/pms/handler/TaskUpdateCommand.java 생성
 - src/main/java/com/eomcs/pms/handler/TaskDeleteCommand.java 생성
 - src/main/java/com/eomcs/pms/handler/TaskHandler.java 삭제
+- src/main/java/com/eomcs/pms/handler/HelloCommand.java 생성
 - src/main/java/com/eomcs/pms/App.java 변경
 
   

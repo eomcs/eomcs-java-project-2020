@@ -16,6 +16,7 @@ import com.eomcs.pms.handler.BoardDeleteCommand;
 import com.eomcs.pms.handler.BoardDetailCommand;
 import com.eomcs.pms.handler.BoardListCommand;
 import com.eomcs.pms.handler.BoardUpdateCommand;
+import com.eomcs.pms.handler.HelloCommand;
 import com.eomcs.pms.handler.MemberAddCommand;
 import com.eomcs.pms.handler.MemberDeleteCommand;
 import com.eomcs.pms.handler.MemberDetailCommand;
@@ -65,6 +66,8 @@ public class App {
     TaskUpdateCommand taskUpdateCommand = new TaskUpdateCommand(taskList, memberListCommand);
     TaskDeleteCommand taskDeleteCommand = new TaskDeleteCommand(taskList);
 
+    HelloCommand helloCommand = new HelloCommand();
+
     // 자바에서는 stack 알고리즘(LIFO)에 대한 인터페이스로 Deque 를 제공한다.
     Deque<String> commandStack = new ArrayDeque<>();
 
@@ -100,6 +103,7 @@ public class App {
           case "/board/detail": boardDetailCommand.execute(); break;
           case "/board/update": boardUpdateCommand.execute(); break;
           case "/board/delete": boardDeleteCommand.execute(); break;
+          case "/hello": helloCommand.execute(); break;
 
           // Iterator 패턴을 이용하면,
           // 자료 구조와 상관없이 일관된 방법으로 목록의 값을 조회할 수 있다.
