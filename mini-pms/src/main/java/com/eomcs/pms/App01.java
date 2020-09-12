@@ -44,7 +44,7 @@ import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.Prompt;
 
-public class App {
+public class App01 {
 
   // main(), saveBoards(), loadBoards() 가 공유하는 필드 
   static List<Board> boardList = new ArrayList<>();
