@@ -1,0 +1,214 @@
+package com.eomcs.pms;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import com.eomcs.pms.domain.Board;
+import com.eomcs.pms.domain.Member;
+import com.eomcs.pms.domain.Project;
+import com.eomcs.pms.domain.Task;
+import com.eomcs.pms.handler.BoardAddCommand;
+import com.eomcs.pms.handler.BoardDeleteCommand;
+import com.eomcs.pms.handler.BoardDetailCommand;
+import com.eomcs.pms.handler.BoardListCommand;
+import com.eomcs.pms.handler.BoardUpdateCommand;
+import com.eomcs.pms.handler.Command;
+import com.eomcs.pms.handler.HelloCommand;
+import com.eomcs.pms.handler.MemberAddCommand;
+import com.eomcs.pms.handler.MemberDeleteCommand;
+import com.eomcs.pms.handler.MemberDetailCommand;
+import com.eomcs.pms.handler.MemberListCommand;
+import com.eomcs.pms.handler.MemberUpdateCommand;
+import com.eomcs.pms.handler.ProjectAddCommand;
+import com.eomcs.pms.handler.ProjectDeleteCommand;
+import com.eomcs.pms.handler.ProjectDetailCommand;
+import com.eomcs.pms.handler.ProjectListCommand;
+import com.eomcs.pms.handler.ProjectUpdateCommand;
+import com.eomcs.pms.handler.TaskAddCommand;
+import com.eomcs.pms.handler.TaskDeleteCommand;
+import com.eomcs.pms.handler.TaskDetailCommand;
+import com.eomcs.pms.handler.TaskListCommand;
+import com.eomcs.pms.handler.TaskUpdateCommand;
+import com.eomcs.util.CsvData;
+import com.eomcs.util.Prompt;
+import com.google.gson.Gson;
+
+public class App {
+
+  public static void main(String[] args) {
+    // 쓸데없이 클래스 필드나 인스턴스 필드로 만들지 말아야 한다.
+    // 메서드 안에서만 사용된다면 로컬 변수로 만들라.
+    List<Board> boardList = new ArrayList<>();
+    File boardFile = new File("./board.json"); // 게시글을 저장할 파일 정보
+
+    List<Member> memberList = new LinkedList<>();
+    File memberFile = new File("./member.json"); // 회원을 저장할 파일 정보
+
+    List<Project> projectList = new LinkedList<>();
+    File projectFile = new File("./project.json"); // 프로젝트를 저장할 파일 정보
+
+    List<Task> taskList = new ArrayList<>();
+    File taskFile = new File("./task.json"); // 작업을 저장할 파일 정보
+
+    // 파일에서 데이터 로딩
+    // Gson을 사용하여 JSON 을 객체로 바꿀 때 배열의 타입 정보를 넘긴다.
+    loadObjects(boardList, boardFile, Board[].class);
+    loadObjects(memberList, memberFile, Member[].class);
+    loadObjects(projectList, projectFile, Project[].class);
+    loadObjects(taskList, taskFile, Task[].class);
+
+    Map<String,Command> commandMap = new HashMap<>();
+
+    commandMap.put("/board/add", new BoardAddCommand(boardList));
+    commandMap.put("/board/list", new BoardListCommand(boardList));
+    commandMap.put("/board/detail", new BoardDetailCommand(boardList));
+    commandMap.put("/board/update", new BoardUpdateCommand(boardList));
+    commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
+
+    MemberListCommand memberListCommand = new MemberListCommand(memberList);
+    commandMap.put("/member/add", new MemberAddCommand(memberList));
+    commandMap.put("/member/list", memberListCommand);
+    commandMap.put("/member/detail", new MemberDetailCommand(memberList));
+    commandMap.put("/member/update", new MemberUpdateCommand(memberList));
+    commandMap.put("/member/delete", new MemberDeleteCommand(memberList));
+
+    commandMap.put("/project/add", new ProjectAddCommand(projectList, memberListCommand));
+    commandMap.put("/project/list", new ProjectListCommand(projectList));
+    commandMap.put("/project/detail", new ProjectDetailCommand(projectList));
+    commandMap.put("/project/update", new ProjectUpdateCommand(projectList, memberListCommand));
+    commandMap.put("/project/delete", new ProjectDeleteCommand(projectList));
+
+    commandMap.put("/task/add", new TaskAddCommand(taskList, memberListCommand));
+    commandMap.put("/task/list", new TaskListCommand(taskList));
+    commandMap.put("/task/detail", new TaskDetailCommand(taskList));
+    commandMap.put("/task/update", new TaskUpdateCommand(taskList, memberListCommand));
+    commandMap.put("/task/delete", new TaskDeleteCommand(taskList));
+
+    commandMap.put("/hello", new HelloCommand());
+
+    Deque<String> commandStack = new ArrayDeque<>();
+    Queue<String> commandQueue = new LinkedList<>();
+
+    loop:
+      while (true) {
+        String inputStr = Prompt.inputString("명령> ");
+
+        if (inputStr.length() == 0) {
+          continue;
+        }
+
+        commandStack.push(inputStr);
+        commandQueue.offer(inputStr);
+
+        switch (inputStr) {
+          case "history": printCommandHistory(commandStack.iterator()); break;
+          case "history2": printCommandHistory(commandQueue.iterator()); break;
+          case "quit":
+          case "exit":
+            System.out.println("안녕!");
+            break loop;
+          default:
+            Command command = commandMap.get(inputStr);
+            if (command != null) {
+              try {
+                // 실행 중 오류가 발생할 수 있는 코드는 try 블록 안에 둔다.
+                command.execute();
+              } catch (Exception e) {
+                // 오류가 발생하면 그 정보를 갖고 있는 객체의 클래스 이름을 출력한다.
+                System.out.println("--------------------------------------------------------------");
+                System.out.printf("명령어 실행 중 오류 발생: %s\n", e);
+                System.out.println("--------------------------------------------------------------");
+              }
+            } else {
+              System.out.println("실행할 수 없는 명령입니다.");
+            }
+        }
+        System.out.println();
+      }
+
+    Prompt.close();
+
+    // 데이터를 파일에 저장
+    saveObjects(boardFile, boardList);
+    saveObjects(memberFile, memberList);
+    saveObjects(projectFile, projectList);
+    saveObjects(taskFile, taskList);
+  }
+
+  static void printCommandHistory(Iterator<String> iterator) {
+    try {
+      int count = 0;
+      while (iterator.hasNext()) {
+        System.out.println(iterator.next());
+        count++;
+
+        if ((count % 5) == 0 && Prompt.inputString(":").equalsIgnoreCase("q")) {
+          break;
+        }
+      }
+    } catch (Exception e) {
+      System.out.println("history 명령 처리 중 오류 발생!");
+    }
+  }
+
+  // CsvData 구현체 목록을 파일에 저장하는 메서드이다.
+  // 이전에 각 도메인 별로 만들었던 메서드를 다음과 같이 한 메서드로 통합한다.
+  private static <T extends CsvData> void saveObjects(File file, List<T> list) {
+    FileWriter out = null;
+
+    try {
+      out = new FileWriter(file);
+      Gson gson = new Gson();
+      gson.toJson(list, out);
+      System.out.printf("%s => 총 %d 개의 데이터를 저장했습니다.\n", 
+          file.getName(), 
+          list.size());
+
+    } catch (IOException e) {
+      System.out.printf("%s => 데이터의 파일 쓰기 중 오류 발생! - %s\n", 
+          file.getName(), 
+          e.getMessage());
+
+    } finally {
+      try {
+        out.close();
+      } catch (IOException e) {
+      }
+    }
+  }
+
+  private static <T> void loadObjects(List<T> list, File file, Class<T[]> clazz) {
+    FileReader in = null;
+    try {
+      in = new FileReader(file);
+
+      list.addAll(Arrays.asList(new Gson().fromJson(in, clazz)));
+      // => 위 코드는 다음 코드와 같다.
+      //      T[] arr = new Gson().fromJson(in, clazz);
+      //      for (T obj : arr) {
+      //        list.add(obj);
+      //      }
+
+      System.out.printf("%s => 총 %d 개의 데이터를 로딩했습니다.\n", file.getName(), list.size());
+
+    } catch (Exception e) {
+      System.out.printf("%s => 파일 읽기 중 오류 발생! - %s\n", file.getName(), e.getMessage());
+    } finally {
+      try {
+        in.close();
+      } catch (Exception e) {
+      }
+    }
+  }
+}

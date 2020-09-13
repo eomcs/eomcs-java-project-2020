@@ -65,7 +65,7 @@
 - com.eomcs.pms.App 변경
 
 
-### 4단계 - 파일에서 데이터를 로딩하는 메서드를 통합한다.
+### 4단계 - 파일의 데이터를 로딩하는 메서드를 통합한다.
 
 - App 변경
   - loadBoards(), loadMembers(), loadProjects(), loadTasks() 메서드를
