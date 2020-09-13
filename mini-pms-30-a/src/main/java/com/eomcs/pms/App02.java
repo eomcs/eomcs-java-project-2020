@@ -44,16 +44,21 @@ import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.Prompt;
 
-public class App01 {
+public class App02 {
 
   // main(), saveBoards(), loadBoards() 가 공유하는 필드 
   static List<Board> boardList = new ArrayList<>();
   static File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
 
+  // main(), saveMembers(), loadMembers() 가 공유하는 필드 
+  static List<Member> memberList = new LinkedList<>();
+  static File memberFile = new File("./member.csv"); // 회원을 저장할 파일 정보
+
   public static void main(String[] args) {
 
     // 파일에서 데이터 로딩
     loadBoards();
+    loadMembers();
 
     Map<String,Command> commandMap = new HashMap<>();
 
@@ -63,7 +68,6 @@ public class App01 {
     commandMap.put("/board/update", new BoardUpdateCommand(boardList));
     commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
 
-    List<Member> memberList = new LinkedList<>();
     MemberListCommand memberListCommand = new MemberListCommand(memberList);
     commandMap.put("/member/add", new MemberAddCommand(memberList));
     commandMap.put("/member/list", memberListCommand);
@@ -131,6 +135,7 @@ public class App01 {
 
     // 데이터를 파일에 저장
     saveBoards();
+    saveMembers();
   }
 
   static void printCommandHistory(Iterator<String> iterator) {
@@ -250,5 +255,82 @@ public class App01 {
     }
   }
 
+  private static void saveMembers() {
+    FileWriter out = null;
 
+    try {
+      out = new FileWriter(memberFile);
+      int count = 0;
+
+      for (Member member : memberList) {
+        String line = String.format("%d,%s,%s,%s,%s,%s,%s\n", 
+            member.getNo(),
+            member.getName(),
+            member.getEmail(),
+            member.getPassword(),
+            member.getPhoto(),
+            member.getTel(),
+            member.getRegisteredDate());
+
+        out.write(line);
+        count++;
+      }
+      System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", count);
+
+    } catch (IOException e) {
+      System.out.println("회원 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
+
+    } finally {
+      try {
+        out.close();
+      } catch (IOException e) {
+      }
+    }
+  }
+
+  private static void loadMembers() {
+    FileReader in = null;
+    Scanner dataScan = null;
+
+    try {
+      in = new FileReader(memberFile);
+      dataScan = new Scanner(in);
+      int count = 0;
+
+      while (true) {
+        try {
+          String line = dataScan.nextLine();
+          String[] data = line.split(",");
+
+          Member member = new Member();
+          member.setNo(Integer.parseInt(data[0]));
+          member.setName(data[1]);
+          member.setEmail(data[2]);
+          member.setPassword(data[3]);
+          member.setPhoto(data[4]);
+          member.setTel(data[5]);
+          member.setRegisteredDate(Date.valueOf(data[6]));
+
+          memberList.add(member);
+          count++;
+
+        } catch (Exception e) {
+          break;
+        }
+      }
+      System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", count);
+
+    } catch (FileNotFoundException e) {
+      System.out.println("회원 파일 읽기 중 오류 발생! - " + e.getMessage());
+    } finally {
+      try {
+        dataScan.close();
+      } catch (Exception e) {
+      }
+      try {
+        in.close();
+      } catch (Exception e) {
+      }
+    }
+  }
 }
