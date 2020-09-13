@@ -1,11 +1,10 @@
 package com.eomcs.pms;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Date;
+import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -42,18 +41,31 @@ import com.eomcs.pms.handler.TaskDeleteCommand;
 import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
+import com.eomcs.util.CsvData;
 import com.eomcs.util.Prompt;
 
-public class App01 {
-
-  // main(), saveBoards(), loadBoards() 가 공유하는 필드 
-  static List<Board> boardList = new ArrayList<>();
-  static File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
+public class App {
 
   public static void main(String[] args) {
+    // 쓸데없이 클래스 필드나 인스턴스 필드로 만들지 말아야 한다.
+    // 메서드 안에서만 사용된다면 로컬 변수로 만들라.
+    List<Board> boardList = new ArrayList<>();
+    File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
+
+    List<Member> memberList = new LinkedList<>();
+    File memberFile = new File("./member.csv"); // 회원을 저장할 파일 정보
+
+    List<Project> projectList = new LinkedList<>();
+    File projectFile = new File("./project.csv"); // 프로젝트를 저장할 파일 정보
+
+    List<Task> taskList = new ArrayList<>();
+    File taskFile = new File("./task.csv"); // 작업을 저장할 파일 정보
 
     // 파일에서 데이터 로딩
-    loadBoards();
+    loadObjects(boardList, boardFile, Board.class);
+    loadObjects(memberList, memberFile, Member.class);
+    loadObjects(projectList, projectFile, Project.class);
+    loadObjects(taskList, taskFile, Task.class);
 
     Map<String,Command> commandMap = new HashMap<>();
 
@@ -63,7 +75,6 @@ public class App01 {
     commandMap.put("/board/update", new BoardUpdateCommand(boardList));
     commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
 
-    List<Member> memberList = new LinkedList<>();
     MemberListCommand memberListCommand = new MemberListCommand(memberList);
     commandMap.put("/member/add", new MemberAddCommand(memberList));
     commandMap.put("/member/list", memberListCommand);
@@ -71,14 +82,12 @@ public class App01 {
     commandMap.put("/member/update", new MemberUpdateCommand(memberList));
     commandMap.put("/member/delete", new MemberDeleteCommand(memberList));
 
-    List<Project> projectList = new LinkedList<>();
     commandMap.put("/project/add", new ProjectAddCommand(projectList, memberListCommand));
     commandMap.put("/project/list", new ProjectListCommand(projectList));
     commandMap.put("/project/detail", new ProjectDetailCommand(projectList));
     commandMap.put("/project/update", new ProjectUpdateCommand(projectList, memberListCommand));
     commandMap.put("/project/delete", new ProjectDeleteCommand(projectList));
 
-    List<Task> taskList = new ArrayList<>();
     commandMap.put("/task/add", new TaskAddCommand(taskList, memberListCommand));
     commandMap.put("/task/list", new TaskListCommand(taskList));
     commandMap.put("/task/detail", new TaskDetailCommand(taskList));
@@ -130,7 +139,10 @@ public class App01 {
     Prompt.close();
 
     // 데이터를 파일에 저장
-    saveBoards();
+    saveObjects(boardFile, boardList);
+    saveObjects(memberFile, memberList);
+    saveObjects(projectFile, projectList);
+    saveObjects(taskFile, taskList);
   }
 
   static void printCommandHistory(Iterator<String> iterator) {
@@ -149,106 +161,71 @@ public class App01 {
     }
   }
 
-  private static void saveBoards() {
+  // CsvData 구현체 목록을 파일에 저장하는 메서드이다.
+  // 이전에 각 도메인 별로 만들었던 메서드를 다음과 같이 한 메서드로 통합한다.
+  private static <T extends CsvData> void saveObjects(File file, List<T> list) {
     FileWriter out = null;
 
     try {
-      // 파일로 데이터를 출력할 때 사용할 도구를 준비한다.
-      out = new FileWriter(boardFile);
+      out = new FileWriter(file);
       int count = 0;
 
-      for (Board board : boardList) {
-        // 게시글 목록에서 게시글 데이터를 꺼내 CSV 형식의 문자열로 만든다.
-        // => 번호, 제목, 내용, 작성자, 등록일, 조회수
-        String line = String.format("%d,%s,%s,%s,%s,%d\n", 
-            board.getNo(),
-            board.getTitle(),
-            board.getContent(),
-            board.getWriter(),
-            board.getRegisteredDate(),
-            board.getViewCount());
-
-        out.write(line);
+      for (CsvData csvData : list) {
+        out.write(csvData.toCsvString());
         count++;
       }
-      System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", count);
+      System.out.printf("%s => 총 %d 개의 데이터를 저장했습니다.\n", 
+          file.getName(), 
+          count);
 
     } catch (IOException e) {
-      System.out.println("게시글 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
+      System.out.printf("%s => 데이터의 파일 쓰기 중 오류 발생! - %s\n", 
+          file.getName(), 
+          e.getMessage());
 
     } finally {
       try {
         out.close();
       } catch (IOException e) {
-        // FileWriter를 닫을 때 발생하는 예외는 무시한다.
       }
     }
   }
 
-  private static void loadBoards() {
+  @SuppressWarnings("unchecked")
+  private static <T> void loadObjects(List<T> list, File file, Class<T> clazz) {
     FileReader in = null;
     Scanner dataScan = null;
 
     try {
-      // 파일을 읽을 때 사용할 도구를 준비한다.
-      in = new FileReader(boardFile);
-
-      // .csv 파일에서 한 줄 단위로 문자열을 읽는 기능이 필요한데,
-      // FileReader에는 그런 기능이 없다.
-      // 그래서 FileReader를 그대로 사용할 수 없고,
-      // 이 객체에 다른 도구를 연결하여 사용할 것이다.
-      //
+      in = new FileReader(file);
       dataScan = new Scanner(in);
       int count = 0;
 
+      // 클래스 정보에서 valueOfCsv() 메서드 정보를 추출한다.
+      Method m = clazz.getMethod("valueOfCsv", String.class);
+
       while (true) {
         try {
-          // 파일에서 한 줄을 읽는다.
-          String line = dataScan.nextLine();
-
-          // 한 줄을 콤마(,)로 나눈다.
-          String[] data = line.split(",");
-
-          // 한 줄에 들어 있던 데이터를 추출하여 Board 객체에 담는다.
-          // // => 번호, 제목, 내용, 작성자, 등록일, 조회수
-          Board board = new Board();
-          board.setNo(Integer.parseInt(data[0]));
-          board.setTitle(data[1]);
-          board.setContent(data[2]);
-          board.setWriter(data[3]);
-          board.setRegisteredDate(Date.valueOf(data[4]));
-          board.setViewCount(Integer.parseInt(data[5]));
-
-          // 게시글 객체를 Command가 사용하는 목록에 저장한다.
-          boardList.add(board);
+          // 메서드 객체를 이용하여 valueOfCsv() 메서드를 호출한다.
+          list.add((T)m.invoke(null, dataScan.nextLine()));
           count++;
-
         } catch (Exception e) {
           break;
         }
       }
-      System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", count);
+      System.out.printf("%s => 총 %d 개의 데이터를 로딩했습니다.\n", file.getName(), count);
 
-    } catch (FileNotFoundException e) {
-      System.out.println("게시글 파일 읽기 중 오류 발생! - " + e.getMessage());
-      // 파일에서 데이터를 읽다가 오류가 발생하더라도
-      // 시스템을 멈추지 않고 계속 실행하게 한다.
-      // 이것이 예외처리를 하는 이유이다!!!
+    } catch (Exception e) {
+      System.out.printf("%s => 파일 읽기 중 오류 발생! - %s\n", file.getName(), e.getMessage());
     } finally {
-      // 자원이 서로 연결된 경우에는 다른 자원을 이용하는 객체부터 닫는다.
       try {
         dataScan.close();
       } catch (Exception e) {
-        // Scanner 객체 닫다가 오류가 발생하더라도 무시한다.
       }
       try {
         in.close();
       } catch (Exception e) {
-        // close() 실행하다가 오류가 발생한 경우 무시한다.
-        // 왜? 닫다가 발생한 오류는 특별히 처리할 게 없다.
       }
     }
   }
-
-
 }
