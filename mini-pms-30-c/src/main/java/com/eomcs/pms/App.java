@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -41,31 +40,35 @@ import com.eomcs.pms.handler.TaskDeleteCommand;
 import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
-import com.eomcs.util.CsvData;
+import com.eomcs.util.CsvObject;
+import com.eomcs.util.CsvObjectFactory;
 import com.eomcs.util.Prompt;
 
 public class App {
 
+  // main(), saveBoards(), loadBoards() 가 공유하는 필드 
+  static List<Board> boardList = new ArrayList<>();
+  static File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
+
+  // main(), saveMembers(), loadMembers() 가 공유하는 필드 
+  static List<Member> memberList = new LinkedList<>();
+  static File memberFile = new File("./member.csv"); // 회원을 저장할 파일 정보
+
+  // main(), saveProjects(), loadProjects() 가 공유하는 필드 
+  static List<Project> projectList = new LinkedList<>();
+  static File projectFile = new File("./project.csv"); // 프로젝트를 저장할 파일 정보
+
+  // main(), saveTasks(), loadTasks() 가 공유하는 필드 
+  static List<Task> taskList = new ArrayList<>();
+  static File taskFile = new File("./task.csv"); // 작업을 저장할 파일 정보
+
   public static void main(String[] args) {
-    // 쓸데없이 클래스 필드나 인스턴스 필드로 만들지 말아야 한다.
-    // 메서드 안에서만 사용된다면 로컬 변수로 만들라.
-    List<Board> boardList = new ArrayList<>();
-    File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
-
-    List<Member> memberList = new LinkedList<>();
-    File memberFile = new File("./member.csv"); // 회원을 저장할 파일 정보
-
-    List<Project> projectList = new LinkedList<>();
-    File projectFile = new File("./project.csv"); // 프로젝트를 저장할 파일 정보
-
-    List<Task> taskList = new ArrayList<>();
-    File taskFile = new File("./task.csv"); // 작업을 저장할 파일 정보
 
     // 파일에서 데이터 로딩
-    loadObjects(boardList, boardFile, Board.class);
-    loadObjects(memberList, memberFile, Member.class);
-    loadObjects(projectList, projectFile, Project.class);
-    loadObjects(taskList, taskFile, Task.class);
+    loadObjects(boardFile, boardList, Board::new);
+    loadObjects(memberFile, memberList, Member::new);
+    loadObjects(projectFile, projectList, Project::new);
+    loadObjects(taskFile, taskList, Task::new);
 
     Map<String,Command> commandMap = new HashMap<>();
 
@@ -161,16 +164,16 @@ public class App {
     }
   }
 
-  // CsvData 구현체 목록을 파일에 저장하는 메서드이다.
+  //CsvObject 구현체 목록을 파일에 저장하는 메서드이다.
   // 이전에 각 도메인 별로 만들었던 메서드를 다음과 같이 한 메서드로 통합한다.
-  private static <T extends CsvData> void saveObjects(File file, List<T> list) {
+  private static <T extends CsvObject> void saveObjects(File file, List<T> list) {
     FileWriter out = null;
 
     try {
       out = new FileWriter(file);
       int count = 0;
 
-      for (CsvData csvData : list) {
+      for (CsvObject csvData : list) {
         out.write(csvData.toCsvString());
         count++;
       }
@@ -191,8 +194,8 @@ public class App {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  private static <T> void loadObjects(List<T> list, File file, Class<T> clazz) {
+
+  private static <T> void loadObjects(File file, List<T> list, CsvObjectFactory<T> factory) {
     FileReader in = null;
     Scanner dataScan = null;
 
@@ -201,13 +204,9 @@ public class App {
       dataScan = new Scanner(in);
       int count = 0;
 
-      // 클래스 정보에서 valueOfCsv() 메서드 정보를 추출한다.
-      Method m = clazz.getMethod("valueOfCsv", String.class);
-
       while (true) {
         try {
-          // 메서드 객체를 이용하여 valueOfCsv() 메서드를 호출한다.
-          list.add((T)m.invoke(null, dataScan.nextLine()));
+          list.add(factory.create(dataScan.nextLine()));
           count++;
         } catch (Exception e) {
           break;

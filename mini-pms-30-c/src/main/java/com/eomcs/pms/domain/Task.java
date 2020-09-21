@@ -1,9 +1,9 @@
 package com.eomcs.pms.domain;
 
 import java.sql.Date;
-import com.eomcs.util.CsvData;
+import com.eomcs.util.CsvObject;
 
-public class Task implements CsvData {
+public class Task implements CsvObject {
   private int no;
   private String content;
   private Date deadline;
@@ -41,17 +41,14 @@ public class Task implements CsvData {
     this.owner = owner;
   }
 
-  public static Task valueOfCsv(String csv) {
+  public Task(String csv) {
     String[] data = csv.split(",");
 
-    Task task = new Task();
-    task.setNo(Integer.parseInt(data[0]));
-    task.setContent(data[1]);
-    task.setDeadline(Date.valueOf(data[2]));
-    task.setStatus(Integer.parseInt(data[3]));
-    task.setOwner(data[4]);
-
-    return task;
+    this.setNo(Integer.parseInt(data[0]));
+    this.setContent(data[1]);
+    this.setDeadline(Date.valueOf(data[2]));
+    this.setStatus(Integer.parseInt(data[3]));
+    this.setOwner(data[4]);
   }
 
   @Override

@@ -35,19 +35,19 @@
 
 ## 실습
 
-### 1단계 - 객체에서 CSV 형식의 문자열을 뽑는 메서드를 규칙으로 정의한다.
+### 1단계 - 객체를 CSV 형식의 문자열로 뽑는 메서드를 규칙으로 정의한다.
 
-- com.eomcs.util.CsvData 인터페이스 생성
-  - toCsvString() 메서드를 규칙을 정의한다.
+- com.eomcs.util.CsvObject 인터페이스 생성
+  - toCsvString() 메서드를 규칙으로 정의한다.
 
 #### 작업 파일
-- com.eomcs.util.CsvData 생성
+- com.eomcs.util.CsvObject 생성
 
 
-### 2단계 - 도메인 클래스는 CsvData 인터페이스를 구현한다.
+### 2단계 - 도메인 클래스는 CsvObject 인터페이스를 구현한다.
 
 - Board, Member, Project, Task 변경
-  - CsvData 인터페이스의 구현체로 선언한다.
+  - CsvObject 인터페이스의 구현체로 선언한다.
 
 #### 작업 파일
 - com.eomcs.pms.domain.Board 변경
@@ -56,7 +56,7 @@
 - com.eomcs.pms.domain.Task 변경
 
 ### 3단계 - Board, Member, Project, Task 의 파일 저장 메서드를 통합한다.
-
+ 
 - App 변경
   - saveBoards(), saveMembers(), saveProjects(), saveTasks() 메서드를
     saveObjects() 메서드로 통합한다.
@@ -64,8 +64,15 @@
 #### 작업 파일
 - com.eomcs.pms.App 변경
 
+### 4단계 - CSV 형식의 문자열을 객체로 변환하는 메서드를 규칙으로 정의한다.
 
-### 4단계 - 파일의 데이터를 로딩하는 메서드를 통합한다.
+- com.eomcs.util.CsvObjectFactory 인터페이스 생성
+  - create() 메서드를 규칙으로 정의한다.
+
+#### 작업 파일
+- com.eomcs.util.CsvObjectFactory 생성
+
+### 5단계 - 파일의 데이터를 로딩하는 메서드를 통합한다.
 
 - App 변경
   - loadBoards(), loadMembers(), loadProjects(), loadTasks() 메서드를
@@ -76,7 +83,8 @@
 
 
 ## 실습 결과
-- src/main/java/com/eomcs/util/CsvData.java 생성
+- src/main/java/com/eomcs/util/CsvObject.java 생성
+- src/main/java/com/eomcs/util/CsvObjectFactory.java 생성
 - src/main/java/com/eomcs/pms/domain/Board.java 변경
 - src/main/java/com/eomcs/pms/domain/Member.java 변경
 - src/main/java/com/eomcs/pms/domain/Project.java 변경
