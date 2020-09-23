@@ -183,6 +183,11 @@ public class App {
         out.writeObject(obj);
       }
 
+      out.flush(); 
+      // close()가 호출되면 flush()가 자동 호출된다.
+      // 그러나 가능한 버퍼를 사용할 때, 
+      // 출력한 후에 flush()를 호출하는 것을 습관을 들여라.
+
       System.out.printf("총 %d 개의 객체를 '%s' 파일에 저장했습니다.\n", 
           list.size(), file.getName());
 
