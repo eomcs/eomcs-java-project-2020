@@ -1,10 +1,9 @@
 package com.eomcs.pms;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayDeque;
@@ -16,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Scanner;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
@@ -50,25 +50,10 @@ public class App {
   static List<Board> boardList = new ArrayList<>();
   static File boardFile = new File("./board.data"); // 게시글을 저장할 파일 정보
 
-  // main(), saveMembers(), loadMembers() 가 공유하는 필드 
-  static List<Member> memberList = new LinkedList<>();
-  static File memberFile = new File("./member.data"); // 회원을 저장할 파일 정보
-
-  // main(), saveProjects(), loadProjects() 가 공유하는 필드 
-  static List<Project> projectList = new LinkedList<>();
-  static File projectFile = new File("./project.data"); // 프로젝트를 저장할 파일 정보
-
-  // main(), saveTasks(), loadTasks() 가 공유하는 필드 
-  static List<Task> taskList = new ArrayList<>();
-  static File taskFile = new File("./task.data"); // 작업을 저장할 파일 정보
-
   public static void main(String[] args) {
 
     // 파일에서 데이터 로딩
     loadBoards();
-    loadMembers();
-    loadProjects();
-    loadTasks();
 
     Map<String,Command> commandMap = new HashMap<>();
 
@@ -78,6 +63,7 @@ public class App {
     commandMap.put("/board/update", new BoardUpdateCommand(boardList));
     commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
 
+    List<Member> memberList = new LinkedList<>();
     MemberListCommand memberListCommand = new MemberListCommand(memberList);
     commandMap.put("/member/add", new MemberAddCommand(memberList));
     commandMap.put("/member/list", memberListCommand);
@@ -85,12 +71,14 @@ public class App {
     commandMap.put("/member/update", new MemberUpdateCommand(memberList));
     commandMap.put("/member/delete", new MemberDeleteCommand(memberList));
 
+    List<Project> projectList = new LinkedList<>();
     commandMap.put("/project/add", new ProjectAddCommand(projectList, memberListCommand));
     commandMap.put("/project/list", new ProjectListCommand(projectList));
     commandMap.put("/project/detail", new ProjectDetailCommand(projectList));
     commandMap.put("/project/update", new ProjectUpdateCommand(projectList, memberListCommand));
     commandMap.put("/project/delete", new ProjectDeleteCommand(projectList));
 
+    List<Task> taskList = new ArrayList<>();
     commandMap.put("/task/add", new TaskAddCommand(taskList, memberListCommand));
     commandMap.put("/task/list", new TaskListCommand(taskList));
     commandMap.put("/task/detail", new TaskDetailCommand(taskList));
@@ -143,9 +131,6 @@ public class App {
 
     // 데이터를 파일에 저장
     saveBoards();
-    saveMembers();
-    saveProjects();
-    saveTasks();
   }
 
   static void printCommandHistory(Iterator<String> iterator) {
@@ -166,315 +151,132 @@ public class App {
 
   private static void saveBoards() {
     FileOutputStream out = null;
-    DataOutputStream out2 = null;
 
     try {
+      // 파일로 데이터를 출력할 때 사용할 도구를 준비한다.
       out = new FileOutputStream(boardFile);
-      out2 = new DataOutputStream(out);
-
-      // 몇개의 데이터를 저장할 것인지 그 개수를 먼저 출력한다.
-      // => 파일을 읽을 때 사용하기 위함이다.
-      // => 해당 개수 만큼만 읽을 것이다.
-      out2.writeInt(boardList.size());
+      int count = 0;
 
       for (Board board : boardList) {
-        out2.writeInt(board.getNo());
-        out2.writeUTF(board.getTitle());
-        out2.writeUTF(board.getContent());
-        out2.writeUTF(board.getWriter());
-        out2.writeUTF(board.getRegisteredDate().toString());
-        out2.writeInt(board.getViewCount());
+        // 게시글 목록에서 게시글 데이터를 꺼내 바이너리 형식으로 출력한다.
+        // => 게시글 번호 출력 (4바이트)
+        out.write(board.getNo() >> 24);
+        out.write(board.getNo() >> 16);
+        out.write(board.getNo() >> 8);
+        out.write(board.getNo());
+
+        // => 게시글 제목 출력 
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        byte[] bytes = board.getTitle().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 게시글 내용 출력
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        bytes = board.getContent().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 게시글 작성자 출력
+        bytes = board.getWriter().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 게시글 등록일 출력
+        bytes = board.getRegisteredDate().toString().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 게시글 조회수 출력
+        out.write(board.getViewCount() >> 24);
+        out.write(board.getViewCount() >> 16);
+        out.write(board.getViewCount() >> 8);
+        out.write(board.getViewCount());
+
+        count++;
       }
-      System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
+      System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", count);
 
     } catch (IOException e) {
       System.out.println("게시글 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
 
     } finally {
       try {
-        out2.close();
-      } catch (IOException e) {
-      }
-      try {
         out.close();
       } catch (IOException e) {
+        // FileWriter를 닫을 때 발생하는 예외는 무시한다.
       }
     }
   }
 
   private static void loadBoards() {
-    FileInputStream in = null;
-    DataInputStream in2 = null;
+    FileReader in = null;
+    Scanner dataScan = null;
 
     try {
-      in = new FileInputStream(boardFile);
-      in2 = new DataInputStream(in);
+      // 파일을 읽을 때 사용할 도구를 준비한다.
+      in = new FileReader(boardFile);
 
-      int size = in2.readInt();
+      // .csv 파일에서 한 줄 단위로 문자열을 읽는 기능이 필요한데,
+      // FileReader에는 그런 기능이 없다.
+      // 그래서 FileReader를 그대로 사용할 수 없고,
+      // 이 객체에 다른 도구를 연결하여 사용할 것이다.
+      //
+      dataScan = new Scanner(in);
+      int count = 0;
 
-      // 파일에 출력한 개수 만큼 객체 값을 읽어야 한다.
-      for (int i = 0; i < size; i++) {
-        Board board = new Board();
+      while (true) {
+        try {
+          // 파일에서 한 줄을 읽는다.
+          String line = dataScan.nextLine();
 
-        // 파일에 출력한 순서대로 필드 값을 읽어야 한다.
-        board.setNo(in2.readInt());
-        board.setTitle(in2.readUTF());
-        board.setContent(in2.readUTF());
-        board.setWriter(in2.readUTF());
-        board.setRegisteredDate(Date.valueOf(in2.readUTF()));
-        board.setViewCount(in2.readInt());
+          // 한 줄을 콤마(,)로 나눈다.
+          String[] data = line.split(",");
 
-        boardList.add(board);
+          // 한 줄에 들어 있던 데이터를 추출하여 Board 객체에 담는다.
+          // // => 번호, 제목, 내용, 작성자, 등록일, 조회수
+          Board board = new Board();
+          board.setNo(Integer.parseInt(data[0]));
+          board.setTitle(data[1]);
+          board.setContent(data[2]);
+          board.setWriter(data[3]);
+          board.setRegisteredDate(Date.valueOf(data[4]));
+          board.setViewCount(Integer.parseInt(data[5]));
+
+          // 게시글 객체를 Command가 사용하는 목록에 저장한다.
+          boardList.add(board);
+          count++;
+
+        } catch (Exception e) {
+          break;
+        }
       }
-      System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
+      System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", count);
 
-    } catch (Exception e) {
+    } catch (FileNotFoundException e) {
       System.out.println("게시글 파일 읽기 중 오류 발생! - " + e.getMessage());
+      // 파일에서 데이터를 읽다가 오류가 발생하더라도
+      // 시스템을 멈추지 않고 계속 실행하게 한다.
+      // 이것이 예외처리를 하는 이유이다!!!
     } finally {
+      // 자원이 서로 연결된 경우에는 다른 자원을 이용하는 객체부터 닫는다.
       try {
-        in2.close();
+        dataScan.close();
       } catch (Exception e) {
+        // Scanner 객체 닫다가 오류가 발생하더라도 무시한다.
       }
       try {
         in.close();
       } catch (Exception e) {
+        // close() 실행하다가 오류가 발생한 경우 무시한다.
+        // 왜? 닫다가 발생한 오류는 특별히 처리할 게 없다.
       }
     }
   }
 
-  private static void saveMembers() {
-    FileOutputStream out = null;
-    DataOutputStream out2 = null;
 
-    try {
-      out = new FileOutputStream(memberFile);
-      out2 = new DataOutputStream(out);
-
-      // 몇개의 데이터를 저장할 것인지 그 개수를 먼저 출력한다.
-      // => 파일을 읽을 때 사용하기 위함이다.
-      // => 해당 개수 만큼만 읽을 것이다.
-      out2.writeInt(memberList.size());
-
-      for (Member member : memberList) {
-        out2.writeInt(member.getNo());
-        out2.writeUTF(member.getName());
-        out2.writeUTF(member.getEmail());
-        out2.writeUTF(member.getPassword());
-        out2.writeUTF(member.getPhoto());
-        out2.writeUTF(member.getTel());
-        out2.writeUTF(member.getRegisteredDate().toString());
-      }
-      System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", memberList.size());
-
-    } catch (IOException e) {
-      System.out.println("회원 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
-
-    } finally {
-      try {
-        out2.close();
-      } catch (IOException e) {
-      }
-      try {
-        out.close();
-      } catch (IOException e) {
-      }
-    }
-  }
-
-  private static void loadMembers() {
-    FileInputStream in = null;
-    DataInputStream in2 = null;
-
-    try {
-      in = new FileInputStream(memberFile);
-      in2 = new DataInputStream(in);
-
-      int size = in2.readInt();
-
-      // 파일에 출력한 개수 만큼 객체 값을 읽어야 한다.
-      for (int i = 0; i < size; i++) {
-        Member member = new Member();
-
-        // 파일에 출력한 순서대로 필드 값을 읽어야 한다.
-        member.setNo(in2.readInt());
-        member.setName(in2.readUTF());
-        member.setEmail(in2.readUTF());
-        member.setPassword(in2.readUTF());
-        member.setPhoto(in2.readUTF());
-        member.setTel(in2.readUTF());
-        member.setRegisteredDate(Date.valueOf(in2.readUTF()));
-
-        memberList.add(member);
-      }
-      System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", memberList.size());
-
-    } catch (Exception e) {
-      System.out.println("회원 파일 읽기 중 오류 발생! - " + e.getMessage());
-    } finally {
-      try {
-        in2.close();
-      } catch (Exception e) {
-      }
-      try {
-        in.close();
-      } catch (Exception e) {
-      }
-    }
-  }
-
-  private static void saveProjects() {
-    FileOutputStream out = null;
-    DataOutputStream out2 = null;
-
-    try {
-      out = new FileOutputStream(projectFile);
-      out2 = new DataOutputStream(out);
-
-      // 몇개의 데이터를 저장할 것인지 그 개수를 먼저 출력한다.
-      // => 파일을 읽을 때 사용하기 위함이다.
-      // => 해당 개수 만큼만 읽을 것이다.
-      out2.writeInt(projectList.size());
-
-      for (Project project : projectList) {
-        out2.writeInt(project.getNo());
-        out2.writeUTF(project.getTitle());
-        out2.writeUTF(project.getContent());
-        out2.writeUTF(project.getStartDate().toString());
-        out2.writeUTF(project.getEndDate().toString());
-        out2.writeUTF(project.getOwner());
-        out2.writeUTF(project.getMembers());
-      }
-      System.out.printf("총 %d 개의 프로젝트 데이터를 저장했습니다.\n", projectList.size());
-
-    } catch (IOException e) {
-      System.out.println("프로젝트 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
-
-    } finally {
-      try {
-        out2.close();
-      } catch (IOException e) {
-      }
-      try {
-        out.close();
-      } catch (IOException e) {
-      }
-    }
-  }
-
-  private static void loadProjects() {
-    FileInputStream in = null;
-    DataInputStream in2 = null;
-
-    try {
-      in = new FileInputStream(projectFile);
-      in2 = new DataInputStream(in);
-
-      int size = in2.readInt();
-
-      // 파일에 출력한 개수 만큼 객체 값을 읽어야 한다.
-      for (int i = 0; i < size; i++) {
-        Project project = new Project();
-
-        // 파일에 출력한 순서대로 필드 값을 읽어야 한다.
-        project.setNo(in2.readInt());
-        project.setTitle(in2.readUTF());
-        project.setContent(in2.readUTF());
-        project.setStartDate(Date.valueOf(in2.readUTF()));
-        project.setEndDate(Date.valueOf(in2.readUTF()));
-        project.setOwner(in2.readUTF());
-        project.setMembers(in2.readUTF());
-
-        projectList.add(project);
-      }
-      System.out.printf("총 %d 개의 프로젝트 데이터를 로딩했습니다.\n", projectList.size());
-
-    } catch (Exception e) {
-      System.out.println("프로젝트 파일 읽기 중 오류 발생! - " + e.getMessage());
-    } finally {
-      try {
-        in2.close();
-      } catch (Exception e) {
-      }
-      try {
-        in.close();
-      } catch (Exception e) {
-      }
-    }
-  }
-
-  private static void saveTasks() {
-    FileOutputStream out = null;
-    DataOutputStream out2 = null;
-
-    try {
-      out = new FileOutputStream(taskFile);
-      out2 = new DataOutputStream(out);
-
-      // 몇개의 데이터를 저장할 것인지 그 개수를 먼저 출력한다.
-      // => 파일을 읽을 때 사용하기 위함이다.
-      // => 해당 개수 만큼만 읽을 것이다.
-      out2.writeInt(taskList.size());
-
-      for (Task task : taskList) {
-        out2.writeInt(task.getNo());
-        out2.writeUTF(task.getContent());
-        out2.writeUTF(task.getDeadline().toString());
-        out2.writeInt(task.getStatus());
-        out2.writeUTF(task.getOwner());
-      }
-      System.out.printf("총 %d 개의 작업 데이터를 저장했습니다.\n", taskList.size());
-
-    } catch (IOException e) {
-      System.out.println("작업 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
-
-    } finally {
-      try {
-        out2.close();
-      } catch (IOException e) {
-      }
-      try {
-        out.close();
-      } catch (IOException e) {
-      }
-    }
-  }
-
-  private static void loadTasks() {
-    FileInputStream in = null;
-    DataInputStream in2 = null;
-
-    try {
-      in = new FileInputStream(taskFile);
-      in2 = new DataInputStream(in);
-
-      int size = in2.readInt();
-
-      // 파일에 출력한 개수 만큼 객체 값을 읽어야 한다.
-      for (int i = 0; i < size; i++) {
-        Task task = new Task();
-
-        // 파일에 출력한 순서대로 필드 값을 읽어야 한다.
-        task.setNo(in2.readInt());
-        task.setContent(in2.readUTF());
-        task.setDeadline(Date.valueOf(in2.readUTF()));
-        task.setStatus(in2.readInt());
-        task.setOwner(in2.readUTF());
-
-        taskList.add(task);
-      }
-      System.out.printf("총 %d 개의 작업 데이터를 로딩했습니다.\n", taskList.size());
-
-    } catch (Exception e) {
-      System.out.println("작업 파일 읽기 중 오류 발생! - " + e.getMessage());
-    } finally {
-      try {
-        in2.close();
-      } catch (Exception e) {
-      }
-      try {
-        in.close();
-      } catch (Exception e) {
-      }
-    }
-  }
 }
