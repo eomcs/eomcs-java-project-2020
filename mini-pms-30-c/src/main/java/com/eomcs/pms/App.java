@@ -200,6 +200,8 @@ public class App {
         out.writeInt(board.getViewCount());
       }
 
+      out.flush(); // 버퍼에 남아 있는 잔여 데이터를 출력한다.
+
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
     } catch (IOException e) {
@@ -285,6 +287,9 @@ public class App {
         // => 회원 등록일
         out.writeUTF(member.getRegisteredDate().toString());
       }
+
+      out.flush(); // 버퍼에 남아 있는 잔여 데이터를 출력한다.
+
       System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", memberList.size());
 
     } catch (IOException e) {
@@ -369,6 +374,9 @@ public class App {
         // => 프로젝트 멤버들
         out.writeUTF(project.getMembers());
       }
+
+      out.flush(); // 버퍼에 남아 있는 잔여 데이터를 출력한다.
+
       System.out.printf("총 %d 개의 프로젝트 데이터를 저장했습니다.\n", projectList.size());
 
     } catch (IOException e) {
@@ -446,6 +454,9 @@ public class App {
         // => 작업 소유주
         out.writeUTF(task.getOwner());
       }
+
+      out.flush(); // 버퍼에 남아 있는 잔여 데이터를 출력한다.
+      
       System.out.printf("총 %d 개의 작업 데이터를 저장했습니다.\n", taskList.size());
 
     } catch (IOException e) {

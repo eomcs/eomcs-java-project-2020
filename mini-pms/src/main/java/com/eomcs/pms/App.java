@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -168,11 +170,11 @@ public class App {
   }
 
   private static void saveBoards() {
-    DataOutputStream out = null;
+    ObjectOutputStream out = null;
 
     try {
       // 기존의 스트림 객체에 데코레이터를 꼽아서 사용한다.
-      out = new DataOutputStream(
+      out = new ObjectOutputStream(
           new BufferedOutputStream(
               new FileOutputStream(boardFile)));
 
@@ -180,24 +182,8 @@ public class App {
       out.writeInt(boardList.size());
 
       for (Board board : boardList) {
-        // 게시글 목록에서 게시글 데이터를 꺼내 바이너리 형식으로 출력한다.
-        // => 게시글 번호 출력 
-        out.writeInt(board.getNo());
-
-        // => 게시글 제목 출력 
-        out.writeUTF(board.getTitle());
-
-        // => 게시글 내용 출력
-        out.writeUTF(board.getContent());
-
-        // => 게시글 작성자 출력
-        out.writeUTF(board.getWriter());
-
-        // => 게시글 등록일 출력 
-        out.writeUTF(board.getRegisteredDate().toString());
-
-        // => 게시글 조회수 출력
-        out.writeInt(board.getViewCount());
+        // 게시글 목록에서 게시글 데이터를 꺼내 직렬화하여 출력한다.
+        out.writeObject(board);
       }
 
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
@@ -215,11 +201,11 @@ public class App {
   }
 
   private static void loadBoards() {
-    DataInputStream in = null;
+    ObjectInputStream in = null;
 
     try {
       // 기존의 스트림 객체에 데코레이터를 꼽아서 사용한다.
-      in = new DataInputStream(
+      in = new ObjectInputStream(
           new BufferedInputStream(
               new FileInputStream(boardFile)));
 
@@ -227,15 +213,7 @@ public class App {
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
-        Board board = new Board();
-        board.setNo(in.readInt());
-        board.setTitle(in.readUTF());
-        board.setContent(in.readUTF());
-        board.setWriter(in.readUTF());
-        board.setRegisteredDate(Date.valueOf(in.readUTF()));
-        board.setViewCount(in.readInt());
-
-        boardList.add(board);
+        boardList.add((Board) in.readObject());
       }
 
       System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());

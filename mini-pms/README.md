@@ -40,9 +40,11 @@
 - com.eomcs.pms.domain.Project 변경
 - com.eomcs.pms.domain.Task 변경
 
+### 2단계 - DataInputStream/DataOutputStream 을 ObjectInputStream/ObjectOutputStream 으로 교체하여 객체를 저장하고 읽는다.
 
 - App 클래스
-  - 기존의 `saveXxx()` 와 `loadXxx()`를 변경한다.
+  - `saveXxx()` 와 `loadXxx()` 메서드를 변경한다.
+  - `DataInputStream` / `DataOutputStream` 을 사용하는 대신에 `ObjectInputStream` / `ObjectOutputStream` 을 사용하여 객체를 저장하고 읽는다.
 
 #### 작업 파일
 

@@ -1,8 +1,14 @@
 package com.eomcs.pms.domain;
 
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Board {
+// serialize 기능을 활성화시킨다.
+// => java.io.Serializable 인터페이스를 구현한다.
+//
+public class Board implements Serializable {
+  private static final long serialVersionUID = 1L;
+
   private int no;
   private String title;
   private String content;
