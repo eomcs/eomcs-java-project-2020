@@ -2,7 +2,6 @@ package com.eomcs.pms;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
@@ -43,15 +42,11 @@ import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.Prompt;
 
-public class App {
+public class App01 {
 
   // main(), saveBoards(), loadBoards() 가 공유하는 필드 
   static List<Board> boardList = new ArrayList<>();
   static File boardFile = new File("./board.data"); // 게시글을 저장할 파일 정보
-
-  // main(), saveMembers(), loadMembers() 가 공유하는 필드 
-  static List<Member> memberList = new LinkedList<>();
-  static File memberFile = new File("./member.data"); // 회원을 저장할 파일 정보
 
   public static void main(String[] args) {
 
@@ -66,6 +61,7 @@ public class App {
     commandMap.put("/board/update", new BoardUpdateCommand(boardList));
     commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
 
+    List<Member> memberList = new LinkedList<>();
     MemberListCommand memberListCommand = new MemberListCommand(memberList);
     commandMap.put("/member/add", new MemberAddCommand(memberList));
     commandMap.put("/member/list", memberListCommand);
@@ -286,108 +282,6 @@ public class App {
       } catch (Exception e) {
         // close() 실행하다가 오류가 발생한 경우 무시한다.
         // 왜? 닫다가 발생한 오류는 특별히 처리할 게 없다.
-      }
-    }
-  }
-
-
-  private static void saveMembers() {
-    FileOutputStream out = null;
-
-    try {
-      out = new FileOutputStream(memberFile);
-      int count = 0;
-
-      for (Member member : memberList) {
-        // 회원 목록에서 회원 데이터를 꺼내 바이너리 형식으로 출력한다.
-        // => 회원 번호 출력 (4바이트)
-        out.write(member.getNo() >> 24);
-        out.write(member.getNo() >> 16);
-        out.write(member.getNo() >> 8);
-        out.write(member.getNo());
-
-        // => 회원 이름 
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        byte[] bytes = member.getName().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 회원 이메일 
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = member.getEmail().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 회원 암호 
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = member.getPassword().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 회원 사진 
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = member.getPhoto().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 회원 전화 
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = member.getTel().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 회원 등록일
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = member.getRegisteredDate().toString().getBytes("UTF-8");
-        out.write(bytes);
-
-        count++;
-      }
-      System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", count);
-
-    } catch (IOException e) {
-      System.out.println("회원 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
-
-    } finally {
-      try {
-        out.close();
-      } catch (IOException e) {
-      }
-    }
-  }
-
-  private static void loadMembers() {
-    FileInputStream in = null;
-
-    try {
-      in = new FileInputStream(memberFile);
-      int count = 0;
-
-      while (true) {
-        try {
-          Member member = new Member();
-
-
-          memberList.add(member);
-          count++;
-
-        } catch (Exception e) {
-          break;
-        }
-      }
-      System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", count);
-
-    } catch (FileNotFoundException e) {
-      System.out.println("회원 파일 읽기 중 오류 발생! - " + e.getMessage());
-    } finally {
-      try {
-        in.close();
-      } catch (Exception e) {
       }
     }
   }
