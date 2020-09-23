@@ -1,9 +1,8 @@
 package com.eomcs.pms;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayDeque;
@@ -15,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Scanner;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
@@ -48,11 +46,11 @@ public class App02 {
 
   // main(), saveBoards(), loadBoards() 가 공유하는 필드 
   static List<Board> boardList = new ArrayList<>();
-  static File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
+  static File boardFile = new File("./board.data"); // 게시글을 저장할 파일 정보
 
   // main(), saveMembers(), loadMembers() 가 공유하는 필드 
   static List<Member> memberList = new LinkedList<>();
-  static File memberFile = new File("./member.csv"); // 회원을 저장할 파일 정보
+  static File memberFile = new File("./member.data"); // 회원을 저장할 파일 정보
 
   public static void main(String[] args) {
 
@@ -155,28 +153,58 @@ public class App02 {
   }
 
   private static void saveBoards() {
-    FileWriter out = null;
+    FileOutputStream out = null;
 
     try {
       // 파일로 데이터를 출력할 때 사용할 도구를 준비한다.
-      out = new FileWriter(boardFile);
-      int count = 0;
+      out = new FileOutputStream(boardFile);
+
+      // 데이터의 개수를 먼저 출력한다.(4바이트)
+      out.write(boardList.size() >> 24);
+      out.write(boardList.size() >> 16);
+      out.write(boardList.size() >> 8);
+      out.write(boardList.size());
 
       for (Board board : boardList) {
-        // 게시글 목록에서 게시글 데이터를 꺼내 CSV 형식의 문자열로 만든다.
-        // => 번호, 제목, 내용, 작성자, 등록일, 조회수
-        String line = String.format("%d,%s,%s,%s,%s,%d\n", 
-            board.getNo(),
-            board.getTitle(),
-            board.getContent(),
-            board.getWriter(),
-            board.getRegisteredDate(),
-            board.getViewCount());
+        // 게시글 목록에서 게시글 데이터를 꺼내 바이너리 형식으로 출력한다.
+        // => 게시글 번호 출력 (4바이트)
+        out.write(board.getNo() >> 24);
+        out.write(board.getNo() >> 16);
+        out.write(board.getNo() >> 8);
+        out.write(board.getNo());
 
-        out.write(line);
-        count++;
+        // => 게시글 제목 출력 
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        byte[] bytes = board.getTitle().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 게시글 내용 출력
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        bytes = board.getContent().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 게시글 작성자 출력
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        bytes = board.getWriter().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 게시글 등록일 출력 (10바이트)
+        bytes = board.getRegisteredDate().toString().getBytes("UTF-8");
+        out.write(bytes);
+
+        // => 게시글 조회수 출력
+        out.write(board.getViewCount() >> 24);
+        out.write(board.getViewCount() >> 16);
+        out.write(board.getViewCount() >> 8);
+        out.write(board.getViewCount());
       }
-      System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", count);
+      System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
     } catch (IOException e) {
       System.out.println("게시글 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
@@ -191,61 +219,69 @@ public class App02 {
   }
 
   private static void loadBoards() {
-    FileReader in = null;
-    Scanner dataScan = null;
+    FileInputStream in = null;
 
     try {
       // 파일을 읽을 때 사용할 도구를 준비한다.
-      in = new FileReader(boardFile);
+      in = new FileInputStream(boardFile);
 
-      // .csv 파일에서 한 줄 단위로 문자열을 읽는 기능이 필요한데,
-      // FileReader에는 그런 기능이 없다.
-      // 그래서 FileReader를 그대로 사용할 수 없고,
-      // 이 객체에 다른 도구를 연결하여 사용할 것이다.
-      //
-      dataScan = new Scanner(in);
-      int count = 0;
+      // 데이터의 개수를 먼저 읽는다. (4바이트)
+      int size = in.read() << 24;
+      size += in.read() << 16;
+      size += in.read() << 8;
+      size += in.read();
 
-      while (true) {
-        try {
-          // 파일에서 한 줄을 읽는다.
-          String line = dataScan.nextLine();
+      for (int i = 0; i < size; i++) {
+        Board board = new Board();
 
-          // 한 줄을 콤마(,)로 나눈다.
-          String[] data = line.split(",");
+        // 출력 형식에 맞춰서 파일에서 데이터를 읽는다.
+        // => 게시글 번호 읽기
+        int value = in.read() << 24;
+        value += in.read() << 16;
+        value += in.read() << 8;
+        value += in.read();
+        board.setNo(value);
 
-          // 한 줄에 들어 있던 데이터를 추출하여 Board 객체에 담는다.
-          // // => 번호, 제목, 내용, 작성자, 등록일, 조회수
-          Board board = new Board();
-          board.setNo(Integer.parseInt(data[0]));
-          board.setTitle(data[1]);
-          board.setContent(data[2]);
-          board.setWriter(data[3]);
-          board.setRegisteredDate(Date.valueOf(data[4]));
-          board.setViewCount(Integer.parseInt(data[5]));
+        // 문자열을 읽을 바이트 배열을 준비한다.
+        byte[] bytes = new byte[30000];
 
-          // 게시글 객체를 Command가 사용하는 목록에 저장한다.
-          boardList.add(board);
-          count++;
+        // => 게시글 제목 읽기
+        int len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        board.setTitle(new String(bytes, 0, len, "UTF-8"));
 
-        } catch (Exception e) {
-          break;
-        }
+        // => 게시글 내용 읽기
+        len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        board.setContent(new String(bytes, 0, len, "UTF-8"));
+
+        // => 게시글 작성자 읽기
+        len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        board.setWriter(new String(bytes, 0, len, "UTF-8"));
+
+        // => 게시글 등록일 읽기
+        in.read(bytes, 0, 10);
+        board.setRegisteredDate(Date.valueOf(new String(bytes, 0, 10, "UTF-8")));
+
+        // => 게시글 조회수 읽기
+        value = in.read() << 24;
+        value += in.read() << 16;
+        value += in.read() << 8;
+        value += in.read();
+        board.setViewCount(value);
+
+        // 게시글 객체를 Command가 사용하는 목록에 저장한다.
+        boardList.add(board);
       }
-      System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", count);
+      System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
 
-    } catch (FileNotFoundException e) {
+    } catch (Exception e) {
       System.out.println("게시글 파일 읽기 중 오류 발생! - " + e.getMessage());
       // 파일에서 데이터를 읽다가 오류가 발생하더라도
       // 시스템을 멈추지 않고 계속 실행하게 한다.
       // 이것이 예외처리를 하는 이유이다!!!
     } finally {
-      // 자원이 서로 연결된 경우에는 다른 자원을 이용하는 객체부터 닫는다.
-      try {
-        dataScan.close();
-      } catch (Exception e) {
-        // Scanner 객체 닫다가 오류가 발생하더라도 무시한다.
-      }
       try {
         in.close();
       } catch (Exception e) {
@@ -255,27 +291,67 @@ public class App02 {
     }
   }
 
+
   private static void saveMembers() {
-    FileWriter out = null;
+    FileOutputStream out = null;
 
     try {
-      out = new FileWriter(memberFile);
-      int count = 0;
+      out = new FileOutputStream(memberFile);
+
+      // 데이터의 개수를 먼저 출력한다.(4바이트)
+      out.write(memberList.size() >> 24);
+      out.write(memberList.size() >> 16);
+      out.write(memberList.size() >> 8);
+      out.write(memberList.size());
 
       for (Member member : memberList) {
-        String line = String.format("%d,%s,%s,%s,%s,%s,%s\n", 
-            member.getNo(),
-            member.getName(),
-            member.getEmail(),
-            member.getPassword(),
-            member.getPhoto(),
-            member.getTel(),
-            member.getRegisteredDate());
+        // 회원 목록에서 회원 데이터를 꺼내 바이너리 형식으로 출력한다.
+        // => 회원 번호 출력 (4바이트)
+        out.write(member.getNo() >> 24);
+        out.write(member.getNo() >> 16);
+        out.write(member.getNo() >> 8);
+        out.write(member.getNo());
 
-        out.write(line);
-        count++;
+        // => 회원 이름 
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        byte[] bytes = member.getName().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 회원 이메일 
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        bytes = member.getEmail().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 회원 암호 
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        bytes = member.getPassword().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 회원 사진 
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        bytes = member.getPhoto().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 회원 전화 
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
+        bytes = member.getTel().getBytes("UTF-8");
+        out.write(bytes.length >> 8);
+        out.write(bytes.length);
+        out.write(bytes);
+
+        // => 회원 등록일(10바이트)
+        bytes = member.getRegisteredDate().toString().getBytes("UTF-8");
+        out.write(bytes);
       }
-      System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", count);
+      System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", memberList.size());
 
     } catch (IOException e) {
       System.out.println("회원 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
@@ -289,48 +365,74 @@ public class App02 {
   }
 
   private static void loadMembers() {
-    FileReader in = null;
-    Scanner dataScan = null;
+    FileInputStream in = null;
 
     try {
-      in = new FileReader(memberFile);
-      dataScan = new Scanner(in);
-      int count = 0;
+      in = new FileInputStream(memberFile);
 
-      while (true) {
-        try {
-          String line = dataScan.nextLine();
-          String[] data = line.split(",");
+      // 데이터의 개수를 먼저 읽는다. (4바이트)
+      int size = in.read() << 24;
+      size += in.read() << 16;
+      size += in.read() << 8;
+      size += in.read();
 
-          Member member = new Member();
-          member.setNo(Integer.parseInt(data[0]));
-          member.setName(data[1]);
-          member.setEmail(data[2]);
-          member.setPassword(data[3]);
-          member.setPhoto(data[4]);
-          member.setTel(data[5]);
-          member.setRegisteredDate(Date.valueOf(data[6]));
+      for (int i = 0; i < size; i++) {
+        // 데이터를 담을 객체 준비
+        Member member = new Member();
 
-          memberList.add(member);
-          count++;
+        // 출력 형식에 맞춰서 파일에서 데이터를 읽는다.
+        // => 회원 번호 읽기
+        int value = in.read() << 24;
+        value += in.read() << 16;
+        value += in.read() << 8;
+        value += in.read();
+        member.setNo(value);
 
-        } catch (Exception e) {
-          break;
-        }
+        // 문자열을 읽을 바이트 배열을 준비한다.
+        byte[] bytes = new byte[30000];
+
+        // => 회원 이름 읽기
+        int len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        member.setName(new String(bytes, 0, len, "UTF-8"));
+
+        // => 회원 이메일 읽기
+        len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        member.setEmail(new String(bytes, 0, len, "UTF-8"));
+
+        // => 회원 암호 읽기
+        len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        member.setPassword(new String(bytes, 0, len, "UTF-8"));
+
+        // => 회원 사진 읽기
+        len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        member.setPhoto(new String(bytes, 0, len, "UTF-8"));
+
+        // => 회원 전화 읽기
+        len = in.read() << 8 | in.read();
+        in.read(bytes, 0, len);
+        member.setTel(new String(bytes, 0, len, "UTF-8"));
+
+        // => 회원 등록일 읽기
+        in.read(bytes, 0, 10);
+        member.setRegisteredDate(Date.valueOf(new String(bytes, 0, 10, "UTF-8")));
+
+        memberList.add(member);
       }
-      System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", count);
+      System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", memberList.size());
 
-    } catch (FileNotFoundException e) {
+    } catch (Exception e) {
       System.out.println("회원 파일 읽기 중 오류 발생! - " + e.getMessage());
     } finally {
-      try {
-        dataScan.close();
-      } catch (Exception e) {
-      }
       try {
         in.close();
       } catch (Exception e) {
       }
     }
   }
+
+
 }
