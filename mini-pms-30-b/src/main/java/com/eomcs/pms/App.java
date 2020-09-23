@@ -1,7 +1,5 @@
 package com.eomcs.pms;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -172,10 +170,7 @@ public class App {
 
     try {
       // 기존의 스트림 객체에 데코레이터를 꼽아서 사용한다.
-      out = new DataOutputStream(
-          new BufferedOutputStream(
-              new FileOutputStream(boardFile)));
-      long start = System.currentTimeMillis();
+      out = new DataOutputStream(new FileOutputStream(boardFile));
 
       // 데이터의 개수를 먼저 출력한다.
       out.writeInt(boardList.size());
@@ -200,10 +195,6 @@ public class App {
         // => 게시글 조회수 출력
         out.writeInt(board.getViewCount());
       }
-
-      long end = System.currentTimeMillis();
-      System.out.printf("총 걸린시간: %d 밀리초\n", end - start);
-
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
     } catch (IOException e) {
@@ -223,10 +214,7 @@ public class App {
 
     try {
       // 기존의 스트림 객체에 데코레이터를 꼽아서 사용한다.
-      in = new DataInputStream(
-          new BufferedInputStream(
-              new FileInputStream(boardFile)));
-      long start = System.currentTimeMillis();
+      in = new DataInputStream(new FileInputStream(boardFile));
 
       // 데이터의 개수를 먼저 읽는다.
       int size = in.readInt();
@@ -242,10 +230,6 @@ public class App {
 
         boardList.add(board);
       }
-
-      long end = System.currentTimeMillis();
-      System.out.printf("총 걸린시간: %d 밀리초\n", end - start);
-
       System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
 
     } catch (Exception e) {

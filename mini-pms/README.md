@@ -1,32 +1,29 @@
-# 30-b. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : DataInputStream/DataOutputStream
+# 30-c. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : BufferedInputStream/BufferedOutputStream
 
-이번 훈련에서는 **Data Processing Stream Class** 를 활용하여 입출력할 데이터를 가공하는 방법을 연습할 것이다.
+이번 훈련에서는 **버퍼** 를 활용하여 일정 크기의 데이터를 모았다가 한 번에 출력하는 방식으로 입출력 속도를 개선할 것이다.
 
+**BufferedInputStream** / **BufferedOutputStream** 은,
 
-**Data Processing Stream Class** 는,
-- **Decorator 패턴** 에서 데코레이터 역할을 수행하는 클래스다.
-- **Data Sink Stream Class**에 연결하거나 다른 데코레이터에 연결하여 중간에서 데이터를 가공하는 일을 한다. 
-
-**DataInputStream** / **DataOutputStream** 은,
-
-- 문자열이나 자바 원시 타입의 값들 입출력하는 메서드를 구비하고 있다.
-- 이 클래스를 입출력 스트림에 연결하면, 데이터를 읽고 쓰기 편하다.
+- 내부에 바이트 배열을 사용하여 입출력 데이터를 보관한다.
+- 버퍼가 꽉차면 연결된 출력 스트림으로 내보낸다.
+- 데이터를 읽을 때도 일단 버퍼로 왕창 읽어들인 다음에 1바이트씩 리턴한다.
 
 ## 훈련 목표
 
-- **Data Processing Stream Class**의 역할을 이해한다.
-- 데코레이터 패턴에서 각 객체의 역할을 이해한다.
+- **BufferedInputStream/BufferedOutputStream**의 역할을 이해한다.
+- 버퍼를 이용해 입출력 속도를 개선한다.
 
 
 ## 훈련 내용
 
-- FileInputStream/FileOutputStream 에 DataInputStream/DataOutputStream을 연결하여 데이터를 저장하고 읽는다.
+- FileInputStream/FileOutputStream 에 BufferedInputStream/BufferedOutputStream을 연결한다.
+- DataInputStream/DataOutputStream은 BufferedInputStream/BufferedOutputStream에 연결한다.
 
 
 ## 실습
 
 
-### 1단계 - 파일에 데이터를 쓰거나 파일에서 데이터를 읽을 때 DataOutputStream과 DataInputStream을 사용하여 처리한다.
+### 1단계 - FileInputStream/FileOutputStream과 DataInputStream/DataOutputStream 사이에 BufferedInputStream/BufferedOutputStream 연결한다.
 
 - App 클래스
   - 기존의 `saveXxx()` 와 `loadXxx()`를 변경한다.
