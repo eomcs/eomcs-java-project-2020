@@ -1,29 +1,45 @@
-# 30-c. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : BufferedInputStream/BufferedOutputStream
+# 30-d. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : ObjectInputStream/ObjectOutputStream
 
-이번 훈련에서는 **버퍼** 를 활용하여 일정 크기의 데이터를 모았다가 한 번에 출력하는 방식으로 입출력 속도를 개선할 것이다.
+이번 훈련에서는 **ObjectInputStream/ObjectOutputStream** 을 활용하여 객체를 직렬화하고 복원하는 것을 연습해 볼 것이다.
 
-**BufferedInputStream** / **BufferedOutputStream** 은,
+**직렬화(serialize; marshaling)** 은,
 
-- 내부에 바이트 배열을 사용하여 입출력 데이터를 보관한다.
-- 버퍼가 꽉차면 연결된 출력 스트림으로 내보낸다.
-- 데이터를 읽을 때도 일단 버퍼로 왕창 읽어들인 다음에 1바이트씩 리턴한다.
+- 인스턴스의 필드 값을 바이트 배열로 변환하여 출력하는 것이다.
+- 클래스 정보 및 필드의 타입 정보도 포함한다.
+
+**복원(deserialize; unmarshaling)** 은,
+
+- 직렬화를 통해 저장된 바이트 배열을 자바 객체로 변환하는 것이다.
+- 클래스 정보와 필드 정보를 바탕으로 인스턴스를 자동 생성한다.
+- 생성자 호출 없이 인스턴스의 필드 값을 설정한다.
 
 ## 훈련 목표
 
-- **BufferedInputStream/BufferedOutputStream**의 역할을 이해한다.
-- 버퍼를 이용해 입출력 속도를 개선한다.
+- **ObjectInputStream/ObjectOutputStream**의 동작 원리를 이해한다.
+- 직렬화를 수행하기 위해 필요한 조건을 이해한다.
 
 
 ## 훈련 내용
 
-- FileInputStream/FileOutputStream 에 BufferedInputStream/BufferedOutputStream을 연결한다.
-- DataInputStream/DataOutputStream은 BufferedInputStream/BufferedOutputStream에 연결한다.
+- DataInputStream/DataOutputStream 대신에 ObjectInputStream/ObjectOutputStream을 사용하여 객체를 저장한다.
 
 
 ## 실습
 
 
-### 1단계 - FileInputStream/FileOutputStream과 DataInputStream/DataOutputStream 사이에 BufferedInputStream/BufferedOutputStream 연결한다.
+### 1단계 - 자바 도메인 클래스를 직렬화 할 수 있도록 설정한다.
+
+- Board, Member, Project, Task 클래스
+  - java.io.Serializable 인터페이스를 구현한다.
+  - private static final int serialVersionUID 값을 설정한다.
+
+#### 작업 파일
+
+- com.eomcs.pms.domain.Board 변경
+- com.eomcs.pms.domain.Member 변경
+- com.eomcs.pms.domain.Project 변경
+- com.eomcs.pms.domain.Task 변경
+
 
 - App 클래스
   - 기존의 `saveXxx()` 와 `loadXxx()`를 변경한다.

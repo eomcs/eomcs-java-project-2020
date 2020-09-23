@@ -175,7 +175,6 @@ public class App {
       out = new DataOutputStream(
           new BufferedOutputStream(
               new FileOutputStream(boardFile)));
-      long start = System.currentTimeMillis();
 
       // 데이터의 개수를 먼저 출력한다.
       out.writeInt(boardList.size());
@@ -201,9 +200,6 @@ public class App {
         out.writeInt(board.getViewCount());
       }
 
-      long end = System.currentTimeMillis();
-      System.out.printf("총 걸린시간: %d 밀리초\n", end - start);
-
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
     } catch (IOException e) {
@@ -226,7 +222,6 @@ public class App {
       in = new DataInputStream(
           new BufferedInputStream(
               new FileInputStream(boardFile)));
-      long start = System.currentTimeMillis();
 
       // 데이터의 개수를 먼저 읽는다.
       int size = in.readInt();
@@ -242,9 +237,6 @@ public class App {
 
         boardList.add(board);
       }
-
-      long end = System.currentTimeMillis();
-      System.out.printf("총 걸린시간: %d 밀리초\n", end - start);
 
       System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
 
@@ -263,7 +255,9 @@ public class App {
     DataOutputStream out = null;
 
     try {
-      out = new DataOutputStream(new FileOutputStream(memberFile));
+      out = new DataOutputStream(
+          new BufferedOutputStream(
+              new FileOutputStream(memberFile)));
 
       // 데이터의 개수를 먼저 출력한다.
       out.writeInt(memberList.size());
@@ -308,7 +302,9 @@ public class App {
     DataInputStream in = null;
 
     try {
-      in = new DataInputStream(new FileInputStream(memberFile));
+      in = new DataInputStream(
+          new BufferedInputStream(
+              new FileInputStream(memberFile)));
 
       // 데이터의 개수를 먼저 읽는다. (4바이트)
       int size = in.readInt();
@@ -342,7 +338,9 @@ public class App {
     DataOutputStream out = null;
 
     try {
-      out = new DataOutputStream(new FileOutputStream(projectFile));
+      out = new DataOutputStream(
+          new BufferedOutputStream(
+              new FileOutputStream(projectFile)));
 
       // 데이터의 개수를 먼저 출력한다.
       out.writeInt(projectList.size());
@@ -388,7 +386,9 @@ public class App {
     DataInputStream in = null;
 
     try {
-      in = new DataInputStream(new FileInputStream(projectFile));
+      in = new DataInputStream(
+          new BufferedInputStream(
+              new FileInputStream(projectFile)));
 
       // 데이터의 개수를 먼저 읽는다. (4바이트)
       int size = in.readInt();
@@ -422,7 +422,9 @@ public class App {
     DataOutputStream out = null;
 
     try {
-      out = new DataOutputStream(new FileOutputStream(taskFile));
+      out = new DataOutputStream(
+          new BufferedOutputStream(
+              new FileOutputStream(taskFile)));
 
       // 데이터의 개수를 먼저 출력한다.
       out.writeInt(taskList.size());
@@ -461,7 +463,9 @@ public class App {
     DataInputStream in = null;
 
     try {
-      in = new DataInputStream(new FileInputStream(taskFile));
+      in = new DataInputStream(
+          new BufferedInputStream(
+              new FileInputStream(taskFile)));
 
       // 데이터의 개수를 먼저 읽는다.
       int size = in.readInt();
