@@ -1,6 +1,7 @@
 package com.eomcs.pms;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -180,15 +181,14 @@ public class App {
         out.write(bytes);
 
         // => 게시글 작성자 출력
+        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
         bytes = board.getWriter().getBytes("UTF-8");
         out.write(bytes.length >> 8);
         out.write(bytes.length);
         out.write(bytes);
 
-        // => 게시글 등록일 출력
+        // => 게시글 등록일 출력 (10바이트)
         bytes = board.getRegisteredDate().toString().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
         out.write(bytes);
 
         // => 게시글 조회수 출력
@@ -214,38 +214,54 @@ public class App {
   }
 
   private static void loadBoards() {
-    FileReader in = null;
-    Scanner dataScan = null;
+    FileInputStream in = null;
 
     try {
       // 파일을 읽을 때 사용할 도구를 준비한다.
-      in = new FileReader(boardFile);
+      in = new FileInputStream(boardFile);
 
-      // .csv 파일에서 한 줄 단위로 문자열을 읽는 기능이 필요한데,
-      // FileReader에는 그런 기능이 없다.
-      // 그래서 FileReader를 그대로 사용할 수 없고,
-      // 이 객체에 다른 도구를 연결하여 사용할 것이다.
-      //
-      dataScan = new Scanner(in);
       int count = 0;
 
       while (true) {
         try {
-          // 파일에서 한 줄을 읽는다.
-          String line = dataScan.nextLine();
-
-          // 한 줄을 콤마(,)로 나눈다.
-          String[] data = line.split(",");
-
-          // 한 줄에 들어 있던 데이터를 추출하여 Board 객체에 담는다.
-          // // => 번호, 제목, 내용, 작성자, 등록일, 조회수
           Board board = new Board();
-          board.setNo(Integer.parseInt(data[0]));
-          board.setTitle(data[1]);
-          board.setContent(data[2]);
-          board.setWriter(data[3]);
-          board.setRegisteredDate(Date.valueOf(data[4]));
-          board.setViewCount(Integer.parseInt(data[5]));
+
+          // 출력 형식에 맞춰서 파일에서 데이터를 읽는다.
+          // => 게시글 번호 읽기
+          int value = in.read() << 24;
+          value += in.read() << 16;
+          value += in.read() << 8;
+          value += in.read();
+          board.setNo(value);
+
+          // 문자열을 읽을 바이트 배열을 준비한다.
+          byte[] bytes = new byte[30000];
+
+          // => 게시글 제목 읽기
+          int len = in.read() << 8 | in.read();
+          in.read(bytes, 0, len);
+          board.setTitle(new String(bytes, 0, len, "UTF-8"));
+
+          // => 게시글 내용 읽기
+          len = in.read() << 8 | in.read();
+          in.read(bytes, 0, len);
+          board.setContent(new String(bytes, 0, len, "UTF-8"));
+
+          // => 게시글 작성자 읽기
+          len = in.read() << 8 | in.read();
+          in.read(bytes, 0, len);
+          board.setWriter(new String(bytes, 0, len, "UTF-8"));
+
+          // => 게시글 등록일 읽기
+          in.read(bytes, 0, 10);
+          board.setRegisteredDate(Date.valueOf(new String(bytes, 0, 10, "UTF-8")));
+
+          // => 게시글 조회수 읽기
+          value = in.read() << 24;
+          value += in.read() << 16;
+          value += in.read() << 8;
+          value += in.read();
+          board.setViewCount(value);
 
           // 게시글 객체를 Command가 사용하는 목록에 저장한다.
           boardList.add(board);
@@ -263,12 +279,6 @@ public class App {
       // 시스템을 멈추지 않고 계속 실행하게 한다.
       // 이것이 예외처리를 하는 이유이다!!!
     } finally {
-      // 자원이 서로 연결된 경우에는 다른 자원을 이용하는 객체부터 닫는다.
-      try {
-        dataScan.close();
-      } catch (Exception e) {
-        // Scanner 객체 닫다가 오류가 발생하더라도 무시한다.
-      }
       try {
         in.close();
       } catch (Exception e) {
