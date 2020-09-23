@@ -1,5 +1,7 @@
 package com.eomcs.pms;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -164,56 +166,34 @@ public class App {
   }
 
   private static void saveBoards() {
-    FileOutputStream out = null;
+    DataOutputStream out = null;
 
     try {
-      // 파일로 데이터를 출력할 때 사용할 도구를 준비한다.
-      out = new FileOutputStream(boardFile);
+      // 기존의 스트림 객체에 데코레이터를 꼽아서 사용한다.
+      out = new DataOutputStream(new FileOutputStream(boardFile));
 
-      // 데이터의 개수를 먼저 출력한다.(4바이트)
-      out.write(boardList.size() >> 24);
-      out.write(boardList.size() >> 16);
-      out.write(boardList.size() >> 8);
-      out.write(boardList.size());
+      // 데이터의 개수를 먼저 출력한다.
+      out.writeInt(boardList.size());
 
       for (Board board : boardList) {
         // 게시글 목록에서 게시글 데이터를 꺼내 바이너리 형식으로 출력한다.
-        // => 게시글 번호 출력 (4바이트)
-        out.write(board.getNo() >> 24);
-        out.write(board.getNo() >> 16);
-        out.write(board.getNo() >> 8);
-        out.write(board.getNo());
+        // => 게시글 번호 출력 
+        out.writeInt(board.getNo());
 
         // => 게시글 제목 출력 
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        byte[] bytes = board.getTitle().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
+        out.writeUTF(board.getTitle());
 
         // => 게시글 내용 출력
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = board.getContent().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
+        out.writeUTF(board.getContent());
 
         // => 게시글 작성자 출력
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = board.getWriter().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
+        out.writeUTF(board.getWriter());
 
-        // => 게시글 등록일 출력 (10바이트)
-        bytes = board.getRegisteredDate().toString().getBytes("UTF-8");
-        out.write(bytes);
+        // => 게시글 등록일 출력 
+        out.writeUTF(board.getRegisteredDate().toString());
 
         // => 게시글 조회수 출력
-        out.write(board.getViewCount() >> 24);
-        out.write(board.getViewCount() >> 16);
-        out.write(board.getViewCount() >> 8);
-        out.write(board.getViewCount());
+        out.writeInt(board.getViewCount());
       }
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
@@ -230,74 +210,34 @@ public class App {
   }
 
   private static void loadBoards() {
-    FileInputStream in = null;
+    DataInputStream in = null;
 
     try {
-      // 파일을 읽을 때 사용할 도구를 준비한다.
-      in = new FileInputStream(boardFile);
+      // 기존의 스트림 객체에 데코레이터를 꼽아서 사용한다.
+      in = new DataInputStream(new FileInputStream(boardFile));
 
-      // 데이터의 개수를 먼저 읽는다. (4바이트)
-      int size = in.read() << 24;
-      size += in.read() << 16;
-      size += in.read() << 8;
-      size += in.read();
+      // 데이터의 개수를 먼저 읽는다.
+      int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
         Board board = new Board();
+        board.setNo(in.readInt());
+        board.setTitle(in.readUTF());
+        board.setContent(in.readUTF());
+        board.setWriter(in.readUTF());
+        board.setRegisteredDate(Date.valueOf(in.readUTF()));
+        board.setViewCount(in.readInt());
 
-        // 출력 형식에 맞춰서 파일에서 데이터를 읽는다.
-        // => 게시글 번호 읽기
-        int value = in.read() << 24;
-        value += in.read() << 16;
-        value += in.read() << 8;
-        value += in.read();
-        board.setNo(value);
-
-        // 문자열을 읽을 바이트 배열을 준비한다.
-        byte[] bytes = new byte[30000];
-
-        // => 게시글 제목 읽기
-        int len = in.read() << 8 | in.read();
-        in.read(bytes, 0, len);
-        board.setTitle(new String(bytes, 0, len, "UTF-8"));
-
-        // => 게시글 내용 읽기
-        len = in.read() << 8 | in.read();
-        in.read(bytes, 0, len);
-        board.setContent(new String(bytes, 0, len, "UTF-8"));
-
-        // => 게시글 작성자 읽기
-        len = in.read() << 8 | in.read();
-        in.read(bytes, 0, len);
-        board.setWriter(new String(bytes, 0, len, "UTF-8"));
-
-        // => 게시글 등록일 읽기
-        in.read(bytes, 0, 10);
-        board.setRegisteredDate(Date.valueOf(new String(bytes, 0, 10, "UTF-8")));
-
-        // => 게시글 조회수 읽기
-        value = in.read() << 24;
-        value += in.read() << 16;
-        value += in.read() << 8;
-        value += in.read();
-        board.setViewCount(value);
-
-        // 게시글 객체를 Command가 사용하는 목록에 저장한다.
         boardList.add(board);
       }
       System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
 
     } catch (Exception e) {
       System.out.println("게시글 파일 읽기 중 오류 발생! - " + e.getMessage());
-      // 파일에서 데이터를 읽다가 오류가 발생하더라도
-      // 시스템을 멈추지 않고 계속 실행하게 한다.
-      // 이것이 예외처리를 하는 이유이다!!!
     } finally {
       try {
         in.close();
       } catch (Exception e) {
-        // close() 실행하다가 오류가 발생한 경우 무시한다.
-        // 왜? 닫다가 발생한 오류는 특별히 처리할 게 없다.
       }
     }
   }
