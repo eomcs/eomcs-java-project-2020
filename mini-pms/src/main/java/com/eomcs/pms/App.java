@@ -2,15 +2,12 @@ package com.eomcs.pms;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -230,10 +227,10 @@ public class App {
 
 
   private static void saveMembers() {
-    DataOutputStream out = null;
+    ObjectOutputStream out = null;
 
     try {
-      out = new DataOutputStream(
+      out = new ObjectOutputStream(
           new BufferedOutputStream(
               new FileOutputStream(memberFile)));
 
@@ -241,27 +238,8 @@ public class App {
       out.writeInt(memberList.size());
 
       for (Member member : memberList) {
-        // 회원 목록에서 회원 데이터를 꺼내 바이너리 형식으로 출력한다.
-        // => 회원 번호 출력 
-        out.writeInt(member.getNo());
-
-        // => 회원 이름 
-        out.writeUTF(member.getName());
-
-        // => 회원 이메일 
-        out.writeUTF(member.getEmail());
-
-        // => 회원 암호 
-        out.writeUTF(member.getPassword());
-
-        // => 회원 사진 
-        out.writeUTF(member.getPhoto());
-
-        // => 회원 전화 
-        out.writeUTF(member.getTel());
-
-        // => 회원 등록일
-        out.writeUTF(member.getRegisteredDate().toString());
+        // 회원 목록에서 회원 데이터를 꺼내 직렬화 하여 출력한다.
+        out.writeObject(member);
       }
       System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", memberList.size());
 
@@ -277,10 +255,10 @@ public class App {
   }
 
   private static void loadMembers() {
-    DataInputStream in = null;
+    ObjectInputStream in = null;
 
     try {
-      in = new DataInputStream(
+      in = new ObjectInputStream(
           new BufferedInputStream(
               new FileInputStream(memberFile)));
 
@@ -288,17 +266,7 @@ public class App {
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
-        // 데이터를 담을 객체 준비
-        Member member = new Member();
-        member.setNo(in.readInt());
-        member.setName(in.readUTF());
-        member.setEmail(in.readUTF());
-        member.setPassword(in.readUTF());
-        member.setPhoto(in.readUTF());
-        member.setTel(in.readUTF());
-        member.setRegisteredDate(Date.valueOf(in.readUTF()));
-
-        memberList.add(member);
+        memberList.add((Member) in.readObject());
       }
       System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", memberList.size());
 
@@ -313,10 +281,10 @@ public class App {
   }
 
   private static void saveProjects() {
-    DataOutputStream out = null;
+    ObjectOutputStream out = null;
 
     try {
-      out = new DataOutputStream(
+      out = new ObjectOutputStream(
           new BufferedOutputStream(
               new FileOutputStream(projectFile)));
 
@@ -324,28 +292,8 @@ public class App {
       out.writeInt(projectList.size());
 
       for (Project project : projectList) {
-        // 프로젝트 목록에서 프로젝트 데이터를 꺼내 바이너리 형식으로 출력한다.
-        // => 프로젝트 번호 출력
-        out.writeInt(project.getNo());
-
-        // => 프로젝트 제목 
-        out.writeUTF(project.getTitle());
-
-        // => 프로젝트 내용
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        out.writeUTF(project.getContent());
-
-        // => 프로젝트 시작일(10바이트)
-        out.writeUTF(project.getStartDate().toString());
-
-        // => 프로젝트 종료일(10바이트) 
-        out.writeUTF(project.getEndDate().toString());
-
-        // => 프로젝트 소유주
-        out.writeUTF(project.getOwner());
-
-        // => 프로젝트 멤버들
-        out.writeUTF(project.getMembers());
+        // 프로젝트 목록에서 프로젝트 데이터를 꺼내 직렬화 하여 출력한다.
+        out.writeObject(project);
       }
       System.out.printf("총 %d 개의 프로젝트 데이터를 저장했습니다.\n", projectList.size());
 
@@ -361,10 +309,10 @@ public class App {
   }
 
   private static void loadProjects() {
-    DataInputStream in = null;
+    ObjectInputStream in = null;
 
     try {
-      in = new DataInputStream(
+      in = new ObjectInputStream(
           new BufferedInputStream(
               new FileInputStream(projectFile)));
 
@@ -372,17 +320,7 @@ public class App {
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
-        // 데이터를 담을 객체 준비
-        Project project = new Project();
-        project.setNo(in.readInt());
-        project.setTitle(in.readUTF());
-        project.setContent(in.readUTF());
-        project.setStartDate(Date.valueOf(in.readUTF()));
-        project.setEndDate(Date.valueOf(in.readUTF()));
-        project.setOwner(in.readUTF());
-        project.setMembers(in.readUTF());
-
-        projectList.add(project);
+        projectList.add((Project) in.readObject());
       }
       System.out.printf("총 %d 개의 프로젝트 데이터를 로딩했습니다.\n", projectList.size());
 
@@ -397,10 +335,10 @@ public class App {
   }
 
   private static void saveTasks() {
-    DataOutputStream out = null;
+    ObjectOutputStream out = null;
 
     try {
-      out = new DataOutputStream(
+      out = new ObjectOutputStream(
           new BufferedOutputStream(
               new FileOutputStream(taskFile)));
 
@@ -408,21 +346,8 @@ public class App {
       out.writeInt(taskList.size());
 
       for (Task task : taskList) {
-        // 작업 목록에서 작업 데이터를 꺼내 바이너리 형식으로 출력한다.
-        // => 작업 번호 출력
-        out.writeInt(task.getNo());
-
-        // => 작업 내용 
-        out.writeUTF(task.getContent());
-
-        // => 작업 종료일
-        out.writeUTF(task.getDeadline().toString());
-
-        // => 작업 상태 출력
-        out.writeInt(task.getStatus());
-
-        // => 작업 소유주
-        out.writeUTF(task.getOwner());
+        // 작업 목록에서 작업 데이터를 꺼내 직렬화 하여 출력한다.
+        out.writeObject(task);
       }
       System.out.printf("총 %d 개의 작업 데이터를 저장했습니다.\n", taskList.size());
 
@@ -438,10 +363,10 @@ public class App {
   }
 
   private static void loadTasks() {
-    DataInputStream in = null;
+    ObjectInputStream in = null;
 
     try {
-      in = new DataInputStream(
+      in = new ObjectInputStream(
           new BufferedInputStream(
               new FileInputStream(taskFile)));
 
@@ -449,15 +374,7 @@ public class App {
       int size = in.readInt();
 
       for (int i = 0; i < size; i++) {
-        // 데이터를 담을 객체 준비
-        Task task = new Task();
-        task.setNo(in.readInt());
-        task.setContent(in.readUTF());
-        task.setDeadline(Date.valueOf(in.readUTF()));
-        task.setStatus(in.readInt());
-        task.setOwner(in.readUTF());
-
-        taskList.add(task);
+        taskList.add((Task) in.readObject());
       }
       System.out.printf("총 %d 개의 작업 데이터를 로딩했습니다.\n", taskList.size());
 
