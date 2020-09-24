@@ -169,30 +169,14 @@ public class App {
     BufferedWriter out = null;
 
     try {
-      // 파일로 데이터를 출력할 때 사용할 도구를 준비한다.
       out = new BufferedWriter(new FileWriter(boardFile));
 
       for (Board board : boardList) {
-        // 게시글 목록에서 게시글 데이터를 꺼내 CSV 형식으로 출력한다.
-        String record = String.format("%d,%s,%s,%s,%s,%d\n", 
-            board.getNo(),
-            board.getTitle(),
-            board.getContent(),
-            board.getWriter(),
-            board.getRegisteredDate(),
-            board.getViewCount());
-        out.write(record);
-        // 출력한 내용을 버퍼에 저장된다.
-        // 버퍼가 꽉차면 FileWriter를 이용하여 출력한다.
+        out.write(board.toCsvString());
+        out.write("\n");
       }
 
       out.flush();
-      // close()를 호출하면 이 메서드에서 flush()를 호출할 것이다.
-      // 그러나 가능한 버퍼를 사용하는 경우에는 출력이 끝난 후 
-      // 잔여 데이터를 출력하도록  flush() 호출을 습관 들여라.
-      // 네트워크 통신에서 데이터 출력할 때 flush()를 안해서 
-      // 데이터가 상대편에게 넘어가지 않는 경우가 있다.
-      // 이런 상황을 고려해서 flush() 호출을 습관들여라.
 
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
@@ -218,17 +202,7 @@ public class App {
         if (record == null) {
           break;
         }
-        String[] fields = record.split(",");
-
-        Board board = new Board();
-        board.setNo(Integer.parseInt(fields[0]));
-        board.setTitle(fields[1]);
-        board.setContent(fields[2]);
-        board.setWriter(fields[3]);
-        board.setRegisteredDate(Date.valueOf(fields[4]));
-        board.setViewCount(Integer.parseInt(fields[5]));
-
-        boardList.add(board);
+        boardList.add(Board.valueOfCsv(record));
       }
       System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
 
