@@ -146,7 +146,7 @@
 
 ### 31-a. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : FileReader/FileWriter + CSV 파일 포맷
 
-
+### 31-b. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : BufferedReader/BufferedWriter
 
 ### 30-b. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : 리팩터링 I
 

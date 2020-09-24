@@ -1,7 +1,5 @@
 package com.eomcs.pms;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -15,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Scanner;
 import com.eomcs.pms.domain.Board;
@@ -167,11 +166,11 @@ public class App {
   }
 
   private static void saveBoards() {
-    BufferedWriter out = null;
+    FileWriter out = null;
 
     try {
       // 파일로 데이터를 출력할 때 사용할 도구를 준비한다.
-      out = new BufferedWriter(new FileWriter(boardFile));
+      out = new FileWriter(boardFile);
 
       for (Board board : boardList) {
         // 게시글 목록에서 게시글 데이터를 꺼내 CSV 형식으로 출력한다.
@@ -183,18 +182,19 @@ public class App {
             board.getRegisteredDate(),
             board.getViewCount());
         out.write(record);
-        // 출력한 내용을 버퍼에 저장된다.
-        // 버퍼가 꽉차면 FileWriter를 이용하여 출력한다.
+        // 주의!
+        // - write() 는 String 을 출력할 때, 
+        // - JVM 환경 변수 'file.encoding' 에 설정된 문자집합으로 
+        //   인코딩하여 바이트 배열을 출력한다.
+        // - JVM을 실행할 때 다음과 같이 실행하면 이 환경 변수의 값을 설정할 수 있다.
+        //      $ java -d bin/main -Dfile.encoding=UTF-8 ...
+        // - 이클립스에서 자바 프로그램을 실행하면 위와 같이 JVM 환경 변수가 자동으로 추가된다.
+        // - 만약 CLI(command line interface; 콘솔, 명령창, 파워셀) 에서 저 옵션없이 실행한다면
+        //   운영체제에 따라 다음과 같이 자동으로 문자집합이 설정된다.
+        //      Windows: MS949
+        //      Linux/macOS/Unix: UTF-8
+        //
       }
-
-      out.flush();
-      // close()를 호출하면 이 메서드에서 flush()를 호출할 것이다.
-      // 그러나 가능한 버퍼를 사용하는 경우에는 출력이 끝난 후 
-      // 잔여 데이터를 출력하도록  flush() 호출을 습관 들여라.
-      // 네트워크 통신에서 데이터 출력할 때 flush()를 안해서 
-      // 데이터가 상대편에게 넘어가지 않는 경우가 있다.
-      // 이런 상황을 고려해서 flush() 호출을 습관들여라.
-
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
     } catch (IOException e) {
@@ -210,32 +210,34 @@ public class App {
   }
 
   private static void loadBoards() {
-    BufferedReader in = null;
+    Scanner in = null;
 
     try {
       // 파일을 읽을 때 사용할 도구를 준비한다.
-      in = new BufferedReader(new FileReader(boardFile));
+      in = new Scanner(new FileReader(boardFile));
 
       while (true) {
-        // 파일에서 한 줄 읽는다.
-        String record = in.readLine();
-        if (record == null) {
+        try {
+          // 파일에서 한 줄 읽는다.
+          String record = in.nextLine();
+
+          // 콤마로 각 데이터를 분리한다.
+          String[] fields = record.split(",");
+
+          // 데이터가 저장된 순서대로 읽어서 객체에 저장한다.
+          Board board = new Board();
+          board.setNo(Integer.parseInt(fields[0]));
+          board.setTitle(fields[1]);
+          board.setContent(fields[2]);
+          board.setWriter(fields[3]);
+          board.setRegisteredDate(Date.valueOf(fields[4]));
+          board.setViewCount(Integer.parseInt(fields[5]));
+
+          // 게시글 객체를 Command가 사용하는 목록에 저장한다.
+          boardList.add(board);
+        } catch (NoSuchElementException e) {
           break;
         }
-        // 콤마로 각 데이터를 분리한다.
-        String[] fields = record.split(",");
-
-        // 데이터가 저장된 순서대로 읽어서 객체에 저장한다.
-        Board board = new Board();
-        board.setNo(Integer.parseInt(fields[0]));
-        board.setTitle(fields[1]);
-        board.setContent(fields[2]);
-        board.setWriter(fields[3]);
-        board.setRegisteredDate(Date.valueOf(fields[4]));
-        board.setViewCount(Integer.parseInt(fields[5]));
-
-        // 게시글 객체를 Command가 사용하는 목록에 저장한다.
-        boardList.add(board);
       }
       System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
 
