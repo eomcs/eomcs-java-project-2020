@@ -1,0 +1,11 @@
+<? xml version="1.0"?>
+<boards>
+    <board>
+        <no>1</no>
+        <title>aaa</title>
+        <content>aaaaa</content>
+        <writer>okok</writer>
+        <registered-date>2020-1-1</registered-date>
+        <view-count>11</view-count>
+    </board>
+</boards>
