@@ -61,13 +61,16 @@ CSV 문자열 추출을 규칙으로 정의해두면 규칙에 따라 일관성�
 #### 작업 파일
 - com.eomcs.pms.App 변경
 
-### 4단계 - CSV 형식의 문자열을 객체로 변환하는 메서드를 규칙으로 정의한다.
+### 4단계 - CSV 형식의 문자열을 객체로 변환하는 것을 인터페이스를 이용해 규칙으로 정의한다.
 
-- com.eomcs.util.CsvObjectFactory 인터페이스 생성
+이렇게 규칙으로 정의해두면,
+CSV 문자열을 객체로 바꿀 때 일관성 있게 코딩할 수 있다.
+
+- com.eomcs.util.ObjectFactory 인터페이스 생성
   - create() 메서드를 규칙으로 정의한다.
 
 #### 작업 파일
-- com.eomcs.util.CsvObjectFactory 생성
+- com.eomcs.util.ObjectFactory 생성
 
 ### 5단계 - 파일의 데이터를 로딩하는 메서드를 통합한다.
 

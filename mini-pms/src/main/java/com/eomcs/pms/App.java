@@ -43,6 +43,7 @@ import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.CsvObject;
+import com.eomcs.util.ObjectFactory;
 import com.eomcs.util.Prompt;
 
 public class App {
@@ -67,10 +68,22 @@ public class App {
   public static void main(String[] args) {
 
     // 파일에서 데이터 로딩
-    loadBoards();
-    loadMembers();
-    loadProjects();
-    loadTasks();
+    // => loadObjects(Collection<T>, File, ObjectFactory<T>)
+    // => 첫 번째 파라미터: ObjectFactory.create()가 만든 객체를 보관하는 컬렉션이다.
+    // => 두 번째 파라미터: CSV 문자열이 저장된 파일 정보이다.
+    // => 세 번재 파라미터: CSV 문자열을 객체로 만들어주는 create() 메서드를 가진 ObjectFactory 구현체이다.
+    // ObjectFactory의 구현체는 따로 만들지 말고 
+    // 메서드 레퍼런스를 통해 기존에 존재하는 메서드를 전달한다.
+    // 즉 '메서드 레퍼런스' 문법을 이용하여 
+    // 기존 도메인 객체에 있던 정의되어 있던 valueOfCsv() 메서드를 전달한다.
+    // 단 ObjectFactory.create() 메서드와 
+    // valueOfCsv() 메서드의 파라미터와 리턴 타입이 같다는 전제하에서다.
+    //
+    //class MyBoardFactory implements ObjectFactory
+    loadObjects(boardList, boardFile, Board::valueOfCsv);
+    loadObjects(memberList, memberFile, Member::valueOfCsv);
+    loadObjects(projectList, projectFile, Project::valueOfCsv);
+    loadObjects(taskList, taskFile, Task::valueOfCsv);
 
     Map<String,Command> commandMap = new HashMap<>();
 
@@ -194,101 +207,31 @@ public class App {
     }
   }
 
-  private static void loadBoards() {
+  // 파일에서 CSV 문자열을 읽어  객체를 생성한 후 컬렉션에 저장한다.
+  private static <T> void loadObjects(
+      Collection<T> list, // 객체를 담을 컬렉션 
+      File file, // CSV 문자열이 저장된 파일
+      ObjectFactory<T> factory // CSV 문자열을 받아, T 타입의 객체를 생성해주는 공장
+      ) {
     BufferedReader in = null;
 
     try {
-      in = new BufferedReader(new FileReader(boardFile));
+      in = new BufferedReader(new FileReader(file));
 
       while (true) {
         String record = in.readLine();
         if (record == null) {
           break;
         }
-        boardList.add(Board.valueOfCsv(record));
+        list.add(factory.create(record));
       }
-      System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
+      System.out.printf("'%s' 파일에서 총 %d 개의 객체를 로딩했습니다.\n", 
+          file.getName(), list.size());
 
     } catch (Exception e) {
-      System.out.println("게시글 파일 읽기 중 오류 발생! - " + e.getMessage());
-    } finally {
-      try {
-        in.close();
-      } catch (Exception e) {
-      }
-    }
-  }
+      System.out.printf("'%s' 파일 읽기 중 오류 발생! - %s\n",
+          file.getName(), e.getMessage());
 
-
-  private static void loadMembers() {
-    BufferedReader in = null;
-
-    try {
-      in = new BufferedReader(new FileReader(memberFile));
-
-      while (true) {
-        String record = in.readLine();
-        if (record == null) {
-          break;
-        }
-        memberList.add(Member.valueOfCsv(record));
-      }
-      System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", memberList.size());
-
-    } catch (Exception e) {
-      System.out.println("회원 파일 읽기 중 오류 발생! - " + e.getMessage());
-    } finally {
-      try {
-        in.close();
-      } catch (Exception e) {
-      }
-    }
-  }
-
-
-  private static void loadProjects() {
-    BufferedReader in = null;
-
-    try {
-      in = new BufferedReader(new FileReader(projectFile));
-
-      while (true) {
-        String record = in.readLine();
-        if (record == null) {
-          break;
-        }
-        projectList.add(Project.valueOfCsv(record));
-      }
-      System.out.printf("총 %d 개의 프로젝트 데이터를 로딩했습니다.\n", projectList.size());
-
-    } catch (Exception e) {
-      System.out.println("프로젝트 파일 읽기 중 오류 발생! - " + e.getMessage());
-    } finally {
-      try {
-        in.close();
-      } catch (Exception e) {
-      }
-    }
-  }
-
-
-  private static void loadTasks() {
-    BufferedReader in = null;
-
-    try {
-      in = new BufferedReader(new FileReader(taskFile));
-
-      while (true) {
-        String record = in.readLine();
-        if (record == null) {
-          break;
-        }
-        taskList.add(Task.valueOfCsv(record));
-      }
-      System.out.printf("총 %d 개의 작업 데이터를 로딩했습니다.\n", taskList.size());
-
-    } catch (Exception e) {
-      System.out.println("작업 파일 읽기 중 오류 발생! - " + e.getMessage());
     } finally {
       try {
         in.close();
