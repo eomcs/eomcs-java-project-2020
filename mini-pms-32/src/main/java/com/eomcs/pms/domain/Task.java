@@ -1,8 +1,9 @@
 package com.eomcs.pms.domain;
 
 import java.sql.Date;
+import com.eomcs.util.CsvData;
 
-public class Task {
+public class Task implements CsvData {
   private int no;
   private String content;
   private Date deadline;
@@ -53,6 +54,7 @@ public class Task {
     return task;
   }
 
+  @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%d,%s\n", 
         this.getNo(),

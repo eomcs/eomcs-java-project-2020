@@ -1,8 +1,9 @@
 package com.eomcs.pms.domain;
 
 import java.sql.Date;
+import com.eomcs.util.CsvData;
 
-public class Member {
+public class Member implements CsvData {
   private int no;
   private String name;
   private String email;
@@ -69,6 +70,7 @@ public class Member {
     return member;
   }
 
+  @Override
   public String toCsvString() {
     return String.format("%d,%s,%s,%s,%s,%s,%s\n", 
         this.getNo(),
