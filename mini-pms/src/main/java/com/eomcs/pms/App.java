@@ -3,6 +3,7 @@ package com.eomcs.pms;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
@@ -15,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Scanner;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
@@ -209,57 +211,27 @@ public class App {
   }
 
   private static void loadBoards() {
-    FileInputStream in = null;
+    Scanner in = null;
 
     try {
       // 파일을 읽을 때 사용할 도구를 준비한다.
-      in = new FileInputStream(boardFile);
+      in = new Scanner(new FileReader(boardFile));
 
-      // 데이터의 개수를 먼저 읽는다. (4바이트)
-      int size = in.read() << 24;
-      size += in.read() << 16;
-      size += in.read() << 8;
-      size += in.read();
+      while (true) {
+        // 파일에서 한 줄 읽는다.
+        String line = in.nextLine();
 
-      for (int i = 0; i < size; i++) {
+        // 콤마로 각 데이터를 분리한다.
+        String[] fields = line.split(",");
+
+        // 데이터가 저장된 순서대로 읽어서 객체에 저장한다.
         Board board = new Board();
-
-        // 출력 형식에 맞춰서 파일에서 데이터를 읽는다.
-        // => 게시글 번호 읽기
-        int value = in.read() << 24;
-        value += in.read() << 16;
-        value += in.read() << 8;
-        value += in.read();
-        board.setNo(value);
-
-        // 문자열을 읽을 바이트 배열을 준비한다.
-        byte[] bytes = new byte[30000];
-
-        // => 게시글 제목 읽기
-        int len = in.read() << 8 | in.read();
-        in.read(bytes, 0, len);
-        board.setTitle(new String(bytes, 0, len, "UTF-8"));
-
-        // => 게시글 내용 읽기
-        len = in.read() << 8 | in.read();
-        in.read(bytes, 0, len);
-        board.setContent(new String(bytes, 0, len, "UTF-8"));
-
-        // => 게시글 작성자 읽기
-        len = in.read() << 8 | in.read();
-        in.read(bytes, 0, len);
-        board.setWriter(new String(bytes, 0, len, "UTF-8"));
-
-        // => 게시글 등록일 읽기
-        in.read(bytes, 0, 10);
-        board.setRegisteredDate(Date.valueOf(new String(bytes, 0, 10, "UTF-8")));
-
-        // => 게시글 조회수 읽기
-        value = in.read() << 24;
-        value += in.read() << 16;
-        value += in.read() << 8;
-        value += in.read();
-        board.setViewCount(value);
+        board.setNo(Integer.parseInt(fields[0]));
+        board.setTitle(fields[1]);
+        board.setContent(fields[2]);
+        board.setWriter(fields[3]);
+        board.setRegisteredDate(Date.valueOf(fields[4]));
+        board.setViewCount(Integer.parseInt(fields[5]));
 
         // 게시글 객체를 Command가 사용하는 목록에 저장한다.
         boardList.add(board);
