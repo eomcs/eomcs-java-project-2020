@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Scanner;
 import com.eomcs.pms.domain.Board;
@@ -218,23 +219,27 @@ public class App {
       in = new Scanner(new FileReader(boardFile));
 
       while (true) {
-        // 파일에서 한 줄 읽는다.
-        String line = in.nextLine();
+        try {
+          // 파일에서 한 줄 읽는다.
+          String line = in.nextLine();
 
-        // 콤마로 각 데이터를 분리한다.
-        String[] fields = line.split(",");
+          // 콤마로 각 데이터를 분리한다.
+          String[] fields = line.split(",");
 
-        // 데이터가 저장된 순서대로 읽어서 객체에 저장한다.
-        Board board = new Board();
-        board.setNo(Integer.parseInt(fields[0]));
-        board.setTitle(fields[1]);
-        board.setContent(fields[2]);
-        board.setWriter(fields[3]);
-        board.setRegisteredDate(Date.valueOf(fields[4]));
-        board.setViewCount(Integer.parseInt(fields[5]));
+          // 데이터가 저장된 순서대로 읽어서 객체에 저장한다.
+          Board board = new Board();
+          board.setNo(Integer.parseInt(fields[0]));
+          board.setTitle(fields[1]);
+          board.setContent(fields[2]);
+          board.setWriter(fields[3]);
+          board.setRegisteredDate(Date.valueOf(fields[4]));
+          board.setViewCount(Integer.parseInt(fields[5]));
 
-        // 게시글 객체를 Command가 사용하는 목록에 저장한다.
-        boardList.add(board);
+          // 게시글 객체를 Command가 사용하는 목록에 저장한다.
+          boardList.add(board);
+        } catch (NoSuchElementException e) {
+          break;
+        }
       }
       System.out.printf("총 %d 개의 게시글 데이터를 로딩했습니다.\n", boardList.size());
 
