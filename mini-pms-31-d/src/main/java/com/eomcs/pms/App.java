@@ -1,11 +1,14 @@
 package com.eomcs.pms;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Scanner;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
@@ -41,34 +43,36 @@ import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.CsvObject;
-import com.eomcs.util.CsvObjectFactory;
+import com.eomcs.util.ObjectFactory;
 import com.eomcs.util.Prompt;
 
 public class App {
 
-  // main(), saveBoards(), loadBoards() 가 공유하는 필드 
-  static List<Board> boardList = new ArrayList<>();
-  static File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
-
-  // main(), saveMembers(), loadMembers() 가 공유하는 필드 
-  static List<Member> memberList = new LinkedList<>();
-  static File memberFile = new File("./member.csv"); // 회원을 저장할 파일 정보
-
-  // main(), saveProjects(), loadProjects() 가 공유하는 필드 
-  static List<Project> projectList = new LinkedList<>();
-  static File projectFile = new File("./project.csv"); // 프로젝트를 저장할 파일 정보
-
-  // main(), saveTasks(), loadTasks() 가 공유하는 필드 
-  static List<Task> taskList = new ArrayList<>();
-  static File taskFile = new File("./task.csv"); // 작업을 저장할 파일 정보
-
   public static void main(String[] args) {
+    // 스태틱 멤버들이 공유하는 변수가 아니라면 로컬 변수로 만들라.
+    List<Board> boardList = new ArrayList<>();
+    File boardFile = new File("./board.csv"); // 게시글을 저장할 파일 정보
+
+    List<Member> memberList = new LinkedList<>();
+    File memberFile = new File("./member.csv"); // 회원을 저장할 파일 정보
+
+    List<Project> projectList = new LinkedList<>();
+    File projectFile = new File("./project.csv"); // 프로젝트를 저장할 파일 정보
+
+    List<Task> taskList = new ArrayList<>();
+    File taskFile = new File("./task.csv"); // 작업을 저장할 파일 정보
 
     // 파일에서 데이터 로딩
-    loadObjects(boardFile, boardList, Board::new);
-    loadObjects(memberFile, memberList, Member::new);
-    loadObjects(projectFile, projectList, Project::new);
-    loadObjects(taskFile, taskList, Task::new);
+    // => loadObjects(Collection<T>, File, ObjectFactory<T>)
+    // => 첫 번째 파라미터: ObjectFactory.create()가 만든 객체를 보관하는 컬렉션이다.
+    // => 두 번째 파라미터: CSV 문자열이 저장된 파일 정보이다.
+    // => 세 번재 파라미터: CSV 문자열을 객체로 만들어주는 create() 메서드를 가진 ObjectFactory 구현체이다.
+    // ObjectFactory의 구현체는 따로 만들지 말고 생성자를 전달한다.
+    //
+    loadObjects(boardList, boardFile, Board::new);
+    loadObjects(memberList, memberFile, Member::new);
+    loadObjects(projectList, projectFile, Project::new);
+    loadObjects(taskList, taskFile, Task::new);
 
     Map<String,Command> commandMap = new HashMap<>();
 
@@ -142,10 +146,10 @@ public class App {
     Prompt.close();
 
     // 데이터를 파일에 저장
-    saveObjects(boardFile, boardList);
-    saveObjects(memberFile, memberList);
-    saveObjects(projectFile, projectList);
-    saveObjects(taskFile, taskList);
+    saveObjects(boardList, boardFile);
+    saveObjects(memberList, memberFile);
+    saveObjects(projectList, projectFile);
+    saveObjects(taskList, taskFile);
   }
 
   static void printCommandHistory(Iterator<String> iterator) {
@@ -164,27 +168,25 @@ public class App {
     }
   }
 
-  //CsvObject 구현체 목록을 파일에 저장하는 메서드이다.
-  // 이전에 각 도메인 별로 만들었던 메서드를 다음과 같이 한 메서드로 통합한다.
-  private static <T extends CsvObject> void saveObjects(File file, List<T> list) {
-    FileWriter out = null;
+  private static <T extends CsvObject> void saveObjects(Collection<T> list, File file) {
+    BufferedWriter out = null;
 
     try {
-      out = new FileWriter(file);
-      int count = 0;
+      out = new BufferedWriter(new FileWriter(file));
 
-      for (CsvObject csvData : list) {
-        out.write(csvData.toCsvString());
-        count++;
+      for (T csvObject : list) {
+        out.write(csvObject.toCsvString());
+        out.write("\n");
       }
-      System.out.printf("%s => 총 %d 개의 데이터를 저장했습니다.\n", 
-          file.getName(), 
-          count);
+
+      out.flush();
+
+      System.out.printf("총 %d 개의 객체를 '%s' 파일에 저장했습니다.\n", 
+          list.size(), file.getName());
 
     } catch (IOException e) {
-      System.out.printf("%s => 데이터의 파일 쓰기 중 오류 발생! - %s\n", 
-          file.getName(), 
-          e.getMessage());
+      System.out.printf("객체를 '%s' 파일에  쓰는 중 오류 발생! - %s\n", 
+          file.getName(), e.getMessage());
 
     } finally {
       try {
@@ -194,33 +196,32 @@ public class App {
     }
   }
 
-
-  private static <T> void loadObjects(File file, List<T> list, CsvObjectFactory<T> factory) {
-    FileReader in = null;
-    Scanner dataScan = null;
+  // 파일에서 CSV 문자열을 읽어  객체를 생성한 후 컬렉션에 저장한다.
+  private static <T> void loadObjects(
+      Collection<T> list, // 객체를 담을 컬렉션 
+      File file, // CSV 문자열이 저장된 파일
+      ObjectFactory<T> factory // CSV 문자열을 받아, T 타입의 객체를 생성해주는 공장
+      ) {
+    BufferedReader in = null;
 
     try {
-      in = new FileReader(file);
-      dataScan = new Scanner(in);
-      int count = 0;
+      in = new BufferedReader(new FileReader(file));
 
       while (true) {
-        try {
-          list.add(factory.create(dataScan.nextLine()));
-          count++;
-        } catch (Exception e) {
+        String record = in.readLine();
+        if (record == null) {
           break;
         }
+        list.add(factory.create(record));
       }
-      System.out.printf("%s => 총 %d 개의 데이터를 로딩했습니다.\n", file.getName(), count);
+      System.out.printf("'%s' 파일에서 총 %d 개의 객체를 로딩했습니다.\n", 
+          file.getName(), list.size());
 
     } catch (Exception e) {
-      System.out.printf("%s => 파일 읽기 중 오류 발생! - %s\n", file.getName(), e.getMessage());
+      System.out.printf("'%s' 파일 읽기 중 오류 발생! - %s\n",
+          file.getName(), e.getMessage());
+
     } finally {
-      try {
-        dataScan.close();
-      } catch (Exception e) {
-      }
       try {
         in.close();
       } catch (Exception e) {

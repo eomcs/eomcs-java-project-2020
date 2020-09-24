@@ -46,7 +46,7 @@ import com.eomcs.util.CsvObject;
 import com.eomcs.util.ObjectFactory;
 import com.eomcs.util.Prompt;
 
-public class App {
+public class App01 {
 
   public static void main(String[] args) {
     // 스태틱 멤버들이 공유하는 변수가 아니라면 로컬 변수로 만들라.
@@ -67,12 +67,17 @@ public class App {
     // => 첫 번째 파라미터: ObjectFactory.create()가 만든 객체를 보관하는 컬렉션이다.
     // => 두 번째 파라미터: CSV 문자열이 저장된 파일 정보이다.
     // => 세 번재 파라미터: CSV 문자열을 객체로 만들어주는 create() 메서드를 가진 ObjectFactory 구현체이다.
-    // ObjectFactory의 구현체는 따로 만들지 말고 생성자를 전달한다.
+    // ObjectFactory의 구현체는 따로 만들지 말고 
+    // 메서드 레퍼런스를 통해 기존에 존재하는 메서드를 전달한다.
+    // 즉 '메서드 레퍼런스' 문법을 이용하여 
+    // 기존 도메인 객체에 있던 정의되어 있던 valueOfCsv() 메서드를 전달한다.
+    // 단 ObjectFactory.create() 메서드와 
+    // valueOfCsv() 메서드의 파라미터와 리턴 타입이 같다는 전제하에서다.
     //
-    loadObjects(boardList, boardFile, Board::new);
-    loadObjects(memberList, memberFile, Member::new);
-    loadObjects(projectList, projectFile, Project::new);
-    loadObjects(taskList, taskFile, Task::new);
+    loadObjects(boardList, boardFile, Board::valueOfCsv);
+    loadObjects(memberList, memberFile, Member::valueOfCsv);
+    loadObjects(projectList, projectFile, Project::valueOfCsv);
+    loadObjects(taskList, taskFile, Task::valueOfCsv);
 
     Map<String,Command> commandMap = new HashMap<>();
 
