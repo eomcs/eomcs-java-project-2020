@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import com.eomcs.pms.handler.TaskDeleteCommand;
 import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
+import com.eomcs.util.CsvObject;
 import com.eomcs.util.Prompt;
 
 public class App {
@@ -142,10 +144,10 @@ public class App {
     Prompt.close();
 
     // 데이터를 파일에 저장
-    saveBoards();
-    saveMembers();
-    saveProjects();
-    saveTasks();
+    saveObjects(boardList, boardFile);
+    saveObjects(memberList, memberFile);
+    saveObjects(projectList, projectFile);
+    saveObjects(taskList, taskFile);
   }
 
   static void printCommandHistory(Iterator<String> iterator) {
@@ -164,23 +166,25 @@ public class App {
     }
   }
 
-  private static void saveBoards() {
+  private static <T extends CsvObject> void saveObjects(Collection<T> list, File file) {
     BufferedWriter out = null;
 
     try {
-      out = new BufferedWriter(new FileWriter(boardFile));
+      out = new BufferedWriter(new FileWriter(file));
 
-      for (Board board : boardList) {
-        out.write(board.toCsvString());
+      for (T csvObject : list) {
+        out.write(csvObject.toCsvString());
         out.write("\n");
       }
 
       out.flush();
 
-      System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
+      System.out.printf("총 %d 개의 객체를 '%s' 파일에 저장했습니다.\n", 
+          list.size(), file.getName());
 
     } catch (IOException e) {
-      System.out.println("게시글 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
+      System.out.printf("객체를 '%s' 파일에  쓰는 중 오류 발생! - %s\n", 
+          file.getName(), e.getMessage());
 
     } finally {
       try {
@@ -216,32 +220,6 @@ public class App {
   }
 
 
-  private static void saveMembers() {
-    BufferedWriter out = null;
-
-    try {
-      out = new BufferedWriter(new FileWriter(memberFile));
-
-      for (Member member : memberList) {
-        out.write(member.toCsvString());
-        out.write("\n");
-      }
-
-      out.flush();
-
-      System.out.printf("총 %d 개의 회원 데이터를 저장했습니다.\n", memberList.size());
-
-    } catch (IOException e) {
-      System.out.println("회원 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
-
-    } finally {
-      try {
-        out.close();
-      } catch (IOException e) {
-      }
-    }
-  }
-
   private static void loadMembers() {
     BufferedReader in = null;
 
@@ -267,31 +245,6 @@ public class App {
     }
   }
 
-  private static void saveProjects() {
-    BufferedWriter out = null;
-
-    try {
-      out = new BufferedWriter(new FileWriter(projectFile));
-
-      for (Project project : projectList) {
-        out.write(project.toCsvString());
-        out.write("\n");
-      }
-
-      out.flush();
-
-      System.out.printf("총 %d 개의 프로젝트 데이터를 저장했습니다.\n", projectList.size());
-
-    } catch (IOException e) {
-      System.out.println("프로젝트 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
-
-    } finally {
-      try {
-        out.close();
-      } catch (IOException e) {
-      }
-    }
-  }
 
   private static void loadProjects() {
     BufferedReader in = null;
@@ -318,31 +271,6 @@ public class App {
     }
   }
 
-  private static void saveTasks() {
-    BufferedWriter out = null;
-
-    try {
-      out = new BufferedWriter(new FileWriter(taskFile));
-
-      for (Task task : taskList) {
-        out.write(task.toCsvString());
-        out.write("\n");
-      }
-
-      out.flush();
-
-      System.out.printf("총 %d 개의 작업 데이터를 저장했습니다.\n", taskList.size());
-
-    } catch (IOException e) {
-      System.out.println("작업 데이터의 파일 쓰기 중 오류 발생! - " + e.getMessage());
-
-    } finally {
-      try {
-        out.close();
-      } catch (IOException e) {
-      }
-    }
-  }
 
   private static void loadTasks() {
     BufferedReader in = null;

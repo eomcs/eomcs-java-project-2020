@@ -1,8 +1,14 @@
 package com.eomcs.pms.domain;
 
 import java.sql.Date;
+import com.eomcs.util.CsvObject;
 
-public class Task {
+//Task 클래스는 CsvObject 규칙에 따라 구현했기 때문에 
+//이 클래스는 toCsvString() 메서드가 있음을 보장한다.
+//따라서 이 클래스의 객체를 사용하는 측에서는 
+//확실하고 일관되게 메서드를 호출하여 CSV 문자열을 추출할 수 있다.
+//
+public class Task implements CsvObject {
   private int no;
   private String content;
   private Date deadline;
@@ -40,10 +46,8 @@ public class Task {
     this.owner = owner;
   }
 
-  // 객체의 필드 값을 CSV 형식의 문자열로 만들어 리턴한다.
+  @Override
   public String toCsvString() {
-    // CSV 문자열을 만들 때 줄 바꿈 코드를 붙이지 않는다.
-    // 줄바꿈 코드는 CSV 문자열을 받아서 사용하는 쪽에서 다룰 문제다. 
     return String.format("%d,%s,%s,%d,%s", 
         this.getNo(),
         this.getContent(),
