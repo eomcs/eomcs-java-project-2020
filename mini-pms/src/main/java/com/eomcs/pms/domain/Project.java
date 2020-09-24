@@ -54,5 +54,34 @@ public class Project {
     this.members = members;
   }
 
+  // 객체의 필드 값을 CSV 형식의 문자열로 만들어 리턴한다.
+  public String toCsvString() {
+    // CSV 문자열을 만들 때 줄 바꿈 코드를 붙이지 않는다.
+    // 줄바꿈 코드는 CSV 문자열을 받아서 사용하는 쪽에서 다룰 문제다. 
+    return String.format("%d,%s,%s,%s,%s,%s,%s", 
+        this.getNo(),
+        this.getTitle(),
+        this.getContent(),
+        this.getStartDate(),
+        this.getEndDate(),
+        this.getOwner(),
+        this.getMembers());
+  }
+
+  // CSV 문자열을 가지고 객체를 생성한다.
+  public static Project valueOfCsv(String csv) {
+    String[] fields = csv.split(",");
+
+    Project project = new Project();
+    project.setNo(Integer.parseInt(fields[0]));
+    project.setTitle(fields[1]);
+    project.setContent(fields[2]);
+    project.setStartDate(Date.valueOf(fields[3]));
+    project.setEndDate(Date.valueOf(fields[4]));
+    project.setOwner(fields[5]);
+    project.setMembers(fields[6]);
+
+    return project;
+  }
 
 }

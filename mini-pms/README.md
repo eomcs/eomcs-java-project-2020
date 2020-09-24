@@ -35,8 +35,7 @@
 
 - CSV 형식의 문자열을 다루는 코드를 valueOfCsv(), toCsvString() 메서드로 추출하여,
   그 값을 다루는 도메인 클래스에 둔다.
-- 인터페이스를 이용하여 객체 생성과 관련된 메서드를 규칙으로 정의하고,
-  그 규칙에 따라 valueOfCsv()와 toCsvString() 메서드를 구현한다.
+- CSV 데이터를 다룰 때는 도메인 클래스에 정의된 valueOfCsv()와 toCsvString() 메서드를 사용한다.
 
 ## 실습
 

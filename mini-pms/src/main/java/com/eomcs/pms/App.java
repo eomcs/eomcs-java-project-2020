@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -224,16 +223,8 @@ public class App {
       out = new BufferedWriter(new FileWriter(memberFile));
 
       for (Member member : memberList) {
-        String record = String.format("%d,%s,%s,%s,%s,%s,%s\n", 
-            member.getNo(),
-            member.getName(),
-            member.getEmail(),
-            member.getPassword(),
-            member.getPhoto(),
-            member.getTel(),
-            member.getRegisteredDate());
-
-        out.write(record);
+        out.write(member.toCsvString());
+        out.write("\n");
       }
 
       out.flush();
@@ -262,18 +253,7 @@ public class App {
         if (record == null) {
           break;
         }
-        String[] fields = record.split(",");
-
-        Member member = new Member();
-        member.setNo(Integer.parseInt(fields[0]));
-        member.setName(fields[1]);
-        member.setEmail(fields[2]);
-        member.setPassword(fields[3]);
-        member.setPhoto(fields[4]);
-        member.setTel(fields[5]);
-        member.setRegisteredDate(Date.valueOf(fields[6]));
-
-        memberList.add(member);
+        memberList.add(Member.valueOfCsv(record));
       }
       System.out.printf("총 %d 개의 회원 데이터를 로딩했습니다.\n", memberList.size());
 
@@ -294,16 +274,8 @@ public class App {
       out = new BufferedWriter(new FileWriter(projectFile));
 
       for (Project project : projectList) {
-        String record = String.format("%d,%s,%s,%s,%s,%s,%s\n", 
-            project.getNo(),
-            project.getTitle(),
-            project.getContent(),
-            project.getStartDate(),
-            project.getEndDate(),
-            project.getOwner(),
-            project.getMembers());
-
-        out.write(record);
+        out.write(project.toCsvString());
+        out.write("\n");
       }
 
       out.flush();
@@ -332,18 +304,7 @@ public class App {
         if (record == null) {
           break;
         }
-        String[] fields = record.split(",");
-
-        Project project = new Project();
-        project.setNo(Integer.parseInt(fields[0]));
-        project.setTitle(fields[1]);
-        project.setContent(fields[2]);
-        project.setStartDate(Date.valueOf(fields[3]));
-        project.setEndDate(Date.valueOf(fields[4]));
-        project.setOwner(fields[5]);
-        project.setMembers(fields[6]);
-
-        projectList.add(project);
+        projectList.add(Project.valueOfCsv(record));
       }
       System.out.printf("총 %d 개의 프로젝트 데이터를 로딩했습니다.\n", projectList.size());
 
@@ -364,14 +325,8 @@ public class App {
       out = new BufferedWriter(new FileWriter(taskFile));
 
       for (Task task : taskList) {
-        String record = String.format("%d,%s,%s,%d,%s\n", 
-            task.getNo(),
-            task.getContent(),
-            task.getDeadline(),
-            task.getStatus(),
-            task.getOwner());
-
-        out.write(record);
+        out.write(task.toCsvString());
+        out.write("\n");
       }
 
       out.flush();
@@ -400,16 +355,7 @@ public class App {
         if (record == null) {
           break;
         }
-        String[] data = record.split(",");
-
-        Task task = new Task();
-        task.setNo(Integer.parseInt(data[0]));
-        task.setContent(data[1]);
-        task.setDeadline(Date.valueOf(data[2]));
-        task.setStatus(Integer.parseInt(data[3]));
-        task.setOwner(data[4]);
-
-        taskList.add(task);
+        taskList.add(Task.valueOfCsv(record));
       }
       System.out.printf("총 %d 개의 작업 데이터를 로딩했습니다.\n", taskList.size());
 
