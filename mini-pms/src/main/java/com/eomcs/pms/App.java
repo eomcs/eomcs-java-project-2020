@@ -3,6 +3,7 @@ package com.eomcs.pms;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayDeque;
@@ -164,56 +165,34 @@ public class App {
   }
 
   private static void saveBoards() {
-    FileOutputStream out = null;
+    FileWriter out = null;
 
     try {
       // 파일로 데이터를 출력할 때 사용할 도구를 준비한다.
-      out = new FileOutputStream(boardFile);
-
-      // 데이터의 개수를 먼저 출력한다.(4바이트)
-      out.write(boardList.size() >> 24);
-      out.write(boardList.size() >> 16);
-      out.write(boardList.size() >> 8);
-      out.write(boardList.size());
+      out = new FileWriter(boardFile);
 
       for (Board board : boardList) {
-        // 게시글 목록에서 게시글 데이터를 꺼내 바이너리 형식으로 출력한다.
-        // => 게시글 번호 출력 (4바이트)
-        out.write(board.getNo() >> 24);
-        out.write(board.getNo() >> 16);
-        out.write(board.getNo() >> 8);
-        out.write(board.getNo());
-
-        // => 게시글 제목 출력 
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        byte[] bytes = board.getTitle().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 게시글 내용 출력
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = board.getContent().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 게시글 작성자 출력
-        //    문자열의 바이트 길이(2바이트) + 문자열의 바이트 배열
-        bytes = board.getWriter().getBytes("UTF-8");
-        out.write(bytes.length >> 8);
-        out.write(bytes.length);
-        out.write(bytes);
-
-        // => 게시글 등록일 출력 (10바이트)
-        bytes = board.getRegisteredDate().toString().getBytes("UTF-8");
-        out.write(bytes);
-
-        // => 게시글 조회수 출력
-        out.write(board.getViewCount() >> 24);
-        out.write(board.getViewCount() >> 16);
-        out.write(board.getViewCount() >> 8);
-        out.write(board.getViewCount());
+        // 게시글 목록에서 게시글 데이터를 꺼내 CSV 형식으로 출력한다.
+        String line = String.format("%d,%s,%s,%s,%s,%d\n", 
+            board.getNo(),
+            board.getTitle(),
+            board.getContent(),
+            board.getWriter(),
+            board.getRegisteredDate(),
+            board.getViewCount());
+        out.write(line);
+        // 주의!
+        // - write() 는 String 을 출력할 때, 
+        // - JVM 환경 변수 'file.encoding' 에 설정된 문자집합으로 
+        //   인코딩하여 바이트 배열을 출력한다.
+        // - JVM을 실행할 때 다음과 같이 실행하면 이 환경 변수의 값을 설정할 수 있다.
+        //      $ java -d bin/main -Dfile.encoding=UTF-8 ...
+        // - 이클립스에서 자바 프로그램을 실행하면 위와 같이 JVM 환경 변수가 자동으로 추가된다.
+        // - 만약 CLI(command line interface; 콘솔, 명령창, 파워셀) 에서 저 옵션없이 실행한다면
+        //   운영체제에 따라 다음과 같이 자동으로 문자집합이 설정된다.
+        //      Windows: MS949
+        //      Linux/macOS/Unix: UTF-8
+        //
       }
       System.out.printf("총 %d 개의 게시글 데이터를 저장했습니다.\n", boardList.size());
 
