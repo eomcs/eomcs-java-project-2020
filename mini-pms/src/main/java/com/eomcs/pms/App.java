@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
@@ -201,20 +202,38 @@ public class App {
     try {
       in = new BufferedReader(new FileReader(file));
 
-      // 파일에서 모든 문자열을 읽어 StringBuilder에 담은 다음에 
-      // 최종적으로 String 객체를 꺼낸다.
-      StringBuilder strBuilder = new StringBuilder();
-      int b = 0;
-      while ((b = in.read()) != -1) {
-        strBuilder.append((char) b);
-      }
+      // 1) 직접 문자열을 읽어 Gson에게 전달하기
+      //      // 파일에서 모든 문자열을 읽어 StringBuilder에 담은 다음에 
+      //      // 최종적으로 String 객체를 꺼낸다.
+      //      StringBuilder strBuilder = new StringBuilder();
+      //      int b = 0;
+      //      while ((b = in.read()) != -1) {
+      //        strBuilder.append((char) b);
+      //      }
+      //
+      //      // JSON 문자열을 가지고 자바 객체를 생성한다.
+      //      Gson gson = new Gson();
+      //      T[] arr = gson.fromJson(strBuilder.toString(), clazz);
+      //      for (T obj : arr) {
+      //        list.add(obj);
+      //      }
 
-      // JSON 문자열을 가지고 자바 객체를 생성한다.
-      Gson gson = new Gson();
-      T[] arr = gson.fromJson(strBuilder.toString(), clazz);
-      for (T obj : arr) {
-        list.add(obj);
-      }
+      // 2) 입력 스트림을 직접 Gson에게 전달하기
+      //      Gson gson = new Gson();
+      //      T[] arr = gson.fromJson(in, clazz);
+      //      for (T obj : arr) {
+      //        list.add(obj);
+      //      }
+
+      // 3) 배열을 컬렉션에 바로 전달하기
+      // => 개발자가 반복문을 실행하는 대신 메서드 호출을 통해 목록에 넣는다.
+      //      Gson gson = new Gson();
+      //      T[] arr = gson.fromJson(in, clazz);
+      //      // 배열 => 컬렉션 객체 => list에 추가하기
+      //      list.addAll(Arrays.asList(arr));
+
+      // 4) 코드 정리
+      list.addAll(Arrays.asList(new Gson().fromJson(in, clazz)));
 
       System.out.printf("'%s' 파일에서 총 %d 개의 객체를 로딩했습니다.\n", 
           file.getName(), list.size());
