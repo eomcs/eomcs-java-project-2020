@@ -43,7 +43,6 @@ import com.eomcs.pms.handler.TaskDeleteCommand;
 import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
-import com.eomcs.util.CsvObject;
 import com.eomcs.util.Prompt;
 import com.google.gson.Gson;
 
@@ -163,7 +162,9 @@ public class App {
     }
   }
 
-  private static <T extends CsvObject> void saveObjects(Collection<T> list, File file) {
+  // 이제 더이상 저장할 객체를 CsvObject로 제한할 필요가 없다.
+  // 어떤 타입의 객체든지 JSON 형식으로 변환할 수 있기 때문이다.
+  private static void saveObjects(Collection<?> list, File file) {
     BufferedWriter out = null;
 
     try {
@@ -176,11 +177,11 @@ public class App {
 
       out.flush();
 
-      System.out.printf("총 %d 개의 객체를 '%s' 파일에 저장했습니다.\n", 
+      System.out.printf("총 %d 개의 객체를 '%s' 파일에 저장했습니다.\n",
           list.size(), file.getName());
 
     } catch (IOException e) {
-      System.out.printf("객체를 '%s' 파일에  쓰는 중 오류 발생! - %s\n", 
+      System.out.printf("객체를 '%s' 파일에  쓰는 중 오류 발생! - %s\n",
           file.getName(), e.getMessage());
 
     } finally {
@@ -191,9 +192,9 @@ public class App {
     }
   }
 
-  // 파일에서 CSV 문자열을 읽어  객체를 생성한 후 컬렉션에 저장한다.
+  // 파일에서 JSON 문자열을 읽어 지정한 타입의 객체를 생성한 후 컬렉션에 저장한다.
   private static <T> void loadObjects(
-      Collection<T> list, // 객체를 담을 컬렉션 
+      Collection<T> list, // 객체를 담을 컬렉션
       File file, // JSON 문자열이 저장된 파일
       Class<T[]> clazz // JSON 문자열을 어떤 타입의 배열로 만들 것인지 알려주는 클래스 정보
       ) {
@@ -203,7 +204,7 @@ public class App {
       in = new BufferedReader(new FileReader(file));
 
       // 1) 직접 문자열을 읽어 Gson에게 전달하기
-      //      // 파일에서 모든 문자열을 읽어 StringBuilder에 담은 다음에 
+      //      // 파일에서 모든 문자열을 읽어 StringBuilder에 담은 다음에
       //      // 최종적으로 String 객체를 꺼낸다.
       //      StringBuilder strBuilder = new StringBuilder();
       //      int b = 0;
@@ -235,7 +236,7 @@ public class App {
       // 4) 코드 정리
       list.addAll(Arrays.asList(new Gson().fromJson(in, clazz)));
 
-      System.out.printf("'%s' 파일에서 총 %d 개의 객체를 로딩했습니다.\n", 
+      System.out.printf("'%s' 파일에서 총 %d 개의 객체를 로딩했습니다.\n",
           file.getName(), list.size());
 
     } catch (Exception e) {
