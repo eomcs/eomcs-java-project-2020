@@ -30,8 +30,8 @@
 ### 1단계 - 자바 도메인 클래스를 직렬화 할 수 있도록 설정한다.
 
 - Board, Member, Project, Task 클래스
-  - java.io.Serializable 인터페이스를 구현한다.
-  - private static final int serialVersionUID 값을 설정한다.
+  - `java.io.Serializable` 인터페이스를 구현한다.
+  - `private static final int serialVersionUID` 값을 설정한다.
 
 #### 작업 파일
 
