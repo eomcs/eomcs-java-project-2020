@@ -47,7 +47,7 @@ import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.Prompt;
 import com.google.gson.Gson;
 
-public class App {
+public class App02 {
 
   // 옵저버를 보관할 컬렉션 객체
   List<ApplicationContextListener> listeners = new ArrayList<>();
@@ -62,35 +62,12 @@ public class App {
     listeners.remove(listener);
   }
 
-  // service() 실행 전에 옵저버에게 통지한다.
-  private void notifyApplicationContextListenerOnServiceStarted() {
-    for (ApplicationContextListener listener : listeners) {
-      // 곧 서비스를 시작할테니 준비하라고,
-      // 서비스 시작에 관심있는 각 옵저버에게 통지한다.
-      listener.contextInitialized();
-    }
-  }
-
-  // service() 실행 후에 옵저버에게 통지한다.
-  private void notifyApplicationContextListenerOnServiceStopped() {
-    for (ApplicationContextListener listener : listeners) {
-      // 서비스가 종료되었으니 마무리 작업하라고, 
-      // 마무리 작업에 관심있는 각 옵저버에게 통지한다.
-      listener.contextDestroyed();
-    }
-  }
-
-
   public static void main(String[] args) throws Exception {
-    App app = new App();
+    App02 app = new App02();
     app.service();
   }
 
   public void service() throws Exception {
-
-    // 옵저버에게 통지한다.
-    notifyApplicationContextListenerOnServiceStarted();
-
     // 스태틱 멤버들이 공유하는 변수가 아니라면 로컬 변수로 만들라.
     List<Board> boardList = new ArrayList<>();
     File boardFile = new File("./board.json"); // 게시글을 저장할 파일 정보
@@ -186,9 +163,6 @@ public class App {
     saveObjects(memberList, memberFile);
     saveObjects(projectList, projectFile);
     saveObjects(taskList, taskFile);
-
-    // 옵저버에게 통지한다.
-    notifyApplicationContextListenerOnServiceStopped();
   }
 
   void printCommandHistory(Iterator<String> iterator) {

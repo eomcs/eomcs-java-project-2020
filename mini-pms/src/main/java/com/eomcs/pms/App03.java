@@ -47,7 +47,7 @@ import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.Prompt;
 import com.google.gson.Gson;
 
-public class App {
+public class App03 {
 
   // 옵저버를 보관할 컬렉션 객체
   List<ApplicationContextListener> listeners = new ArrayList<>();
@@ -82,7 +82,7 @@ public class App {
 
 
   public static void main(String[] args) throws Exception {
-    App app = new App();
+    App03 app = new App03();
     app.service();
   }
 
