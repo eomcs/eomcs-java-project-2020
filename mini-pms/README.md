@@ -74,25 +74,28 @@
 
 이번 단계에서는 옵저버 디자인 패턴을 적용한 후 그 사용법을 간단히 실험한다.
 
-- ApplicationInitializerListener 생성
+- AppInitListener 생성
   - ApplicationContextListener를 구현한다.
   - 애플리케이션을 시작할 때 다음과 같이 간단한 안내 메시지를 출력한다.
     - "프로젝트 관리 시스템(PMS)에 오신 걸 환영합니다!"
   - 애플리케이션을 종료할 때 다음과 같이 간단한 안내 메시지를 출력한다.
-    - "프로젝트 관리 시스템(PMS)를 종료합니다!"
+    - "프로젝트 관리 시스템(PMS)을 종료합니다!"
+- App 변경
+  - service() 호출 전에 옵저버를 등록한다.
+
+#### 작업 파일
+- com.eomcs.pms.listener.AppInitListener 클래스 생성
+- com.eomcs.pms.App 변경
+  - 백업: App04.java
+
+
 
 
 
   - 애플리케이션을 시작할 때 옵저버를 호출한다.
   - 애플리케이션을 종료할 때 옵저버를 호출한다.
 
-#### 작업 파일
-- com.eomcs.pms.domain.Board 변경
-- com.eomcs.pms.domain.Member 변경
-- com.eomcs.pms.domain.Project 변경
-- com.eomcs.pms.domain.Task 변경
-- com.eomcs.pms.App 변경
-- com.eomcs.pms.util.ObjectFactory 삭제
+
 
 
 ### 4단계 - `Arrays.asList()` 를 사용하여 배열을 데이터 목록에 바로 추가한다.
