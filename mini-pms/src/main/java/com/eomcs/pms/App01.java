@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import com.eomcs.context.ApplicationContextListener;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
@@ -47,23 +46,10 @@ import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.util.Prompt;
 import com.google.gson.Gson;
 
-public class App {
-
-  // 옵저버를 보관할 컬렉션 객체
-  List<ApplicationContextListener> listeners = new ArrayList<>();
-
-  // 옵저버를 등록하는 메서드
-  public void addApplicationContextListener(ApplicationContextListener listener) {
-    listeners.add(listener);
-  }
-
-  // 옵저버를 제거하는 메서드
-  public void removeApplicationContextListener(ApplicationContextListener listener) {
-    listeners.remove(listener);
-  }
+public class App01 {
 
   public static void main(String[] args) throws Exception {
-    App app = new App();
+    App01 app = new App01();
     app.service();
   }
 
