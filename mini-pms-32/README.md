@@ -70,7 +70,7 @@
   - 객체를 JSON 문자열로 변환하여 저장하기 때문에 이 인터페이스를 삭제한다.
 
 #### 작업 파일
-- com.eomcs.pms.util.CsvObject 삭제
+- com.eomcs.util.CsvObject 삭제
 - com.eomcs.pms.domain.Board 변경
 - com.eomcs.pms.domain.Member 변경
 - com.eomcs.pms.domain.Project 변경
@@ -95,7 +95,7 @@
 - com.eomcs.pms.domain.Project 변경
 - com.eomcs.pms.domain.Task 변경
 - com.eomcs.pms.App 변경
-- com.eomcs.pms.util.ObjectFactory 삭제
+- com.eomcs.util.ObjectFactory 삭제
 
 
 ### 4단계 - `Arrays.asList()` 를 사용하여 배열을 데이터 목록에 바로 추가한다.
@@ -112,4 +112,10 @@
 
 ## 실습 결과
 - build.gradle 변경
+- src/main/java/com/eomcs/pms/domain/Board.java 변경
+- src/main/java/com/eomcs/pms/domain/Member.java 변경
+- src/main/java/com/eomcs/pms/domain/Project.java 변경
+- src/main/java/com/eomcs/pms/domain/Task.java 변경
 - src/main/java/com/eomcs/pms/App.java 변경
+- src/main/java/com/eomcs/util/CsvObject.java 삭제
+- src/main/java/com/eomcs/util/ObjectFactory.java 삭제

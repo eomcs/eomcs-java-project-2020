@@ -6,7 +6,7 @@
 - 옵저버 호출 규칙을 정의할 수 있다.
 - 옵저버 구현체를 등록하고 제거하는 메서드를 추가할 수 있다.
 - 특정 상태에서 옵저버를 호출할 수 있다.
-
+ 
 ## 실습 소스 및 결과
 
 - src/main/java/com/eomcs/context/ApplicationContextListener.java 추가
