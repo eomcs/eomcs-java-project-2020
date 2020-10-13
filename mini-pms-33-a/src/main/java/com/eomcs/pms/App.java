@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,9 +50,6 @@ import com.google.gson.Gson;
 
 public class App {
 
-  // 옵저버와 공유할 맵 객체
-  Map<String,Object> context = new Hashtable<>();
-
   // 옵저버를 보관할 컬렉션 객체
   List<ApplicationContextListener> listeners = new ArrayList<>();
 
@@ -72,9 +68,7 @@ public class App {
     for (ApplicationContextListener listener : listeners) {
       // 곧 서비스를 시작할테니 준비하라고,
       // 서비스 시작에 관심있는 각 옵저버에게 통지한다.
-      // => 옵저버에게 맵 객체를 넘겨준다.
-      // => 옵저버는 작업 결과를 파라미터로 넘겨준 맵 객체에 담아 줄 것이다.
-      listener.contextInitialized(context);
+      listener.contextInitialized();
     }
   }
 
@@ -83,9 +77,7 @@ public class App {
     for (ApplicationContextListener listener : listeners) {
       // 서비스가 종료되었으니 마무리 작업하라고,
       // 마무리 작업에 관심있는 각 옵저버에게 통지한다.
-      // => 옵저버에게 맵 객체를 넘겨준다.
-      // => 옵저버는 작업 결과를 파라미터로 넘겨준 맵 객체에 담아 줄 것이다.
-      listener.contextDestroyed(context);
+      listener.contextDestroyed();
     }
   }
 

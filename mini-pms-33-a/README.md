@@ -1,40 +1,48 @@
-# 33-b. `Observer` 디자인 패턴을 적용하여 클래스 구조를 변경 : 발행자와 구독자 간의 데이터 공유하기
+# 33-a. `Observer` 디자인 패턴을 적용하여 클래스 구조를 변경 : 기본 구조 구현
 
 이번 훈련에서는,
-- **Observer 디자인 패턴** 에서 발행자와 구독자 간에 데이터를 공유하는 방법을 연습할 것이다.
+- **Observer 디자인 패턴** 을 프로젝트에 적용하는 것을 연습할 것이다.
+
+**Observer 디자인 패턴**은,
+- 특정 객체의 상태 변화에 따라 수행해야 하는 작업이 있을 경우,
+  기존 코드를 손대지 않고 손쉽게 기능을 추가하거나 제거할 수 있는 설계 기법이다.
+- **발행(publish)/구독(subscribe) 모델** 이라고 부르기도 한다.
+- 발행 측(publisher)에서는 구독 객체(subscriber)의 목록을 유지할 컬렉션을 가지고 있다.
+- 또한 구독 객체를 등록하거나 제거하는 메서드가 있다.
+- 구독 객체를 **리스너(listener)** 또는 **관찰자(observer)** 라 부르기도 한다.
 
 ## 훈련 목표
-- 객체 간의 데이터를 공유하는 방법을 연습한다.
+- `Observer` 디자인 패턴의 용도와 이점을 이해한다.
+- Observer 디자인 패턴으로 구조를 바꾸는 것을 연습한다.
 
 ## 훈련 내용
-- 옵저버의 메서드를 호출할 때 파라미터로 옵저버와 발행자 간의 공유할 객체를 넘긴다.
+- 인터페이스를 활용하여 옵저버 호출 규칙을 정의한다.
+- 옵저버 구현체를 등록하고 제거하는 메서드와 컬렉션을 추가한다.
+- 특정 상태가 되면 옵저버에게 통지하게 한다.
 
 
 ## 실습
 
-### 1단계 - 발행자와 옵저버(구독자) 간의 데이터를 공유할 수 있도록 규칙에 파라미터를 추가한다.
+### 1단계 - App 클래스의 스태틱 멤버(필드와 메서드)를 인스턴스 멤버로 전환한다.
 
-- `ApplicationContextListener` 인터페이스 변경
-  - contextInitialized(), contextDestroyed() 메서드에 Map 타입의 파라미터 추가한다.
-- `AppInitListener` 클래스 변경
-  - 변경된 규칙에 따라 구현 메서드에 파라미터 추가한다.
 - `App` 클래스 변경
-  - 옵저버를 호출할 때 맵 객체를 넘겨준다.
+  - 스태틱 필드와 스태틱 메서드를 인스턴스 필드와 인스턴스 메서드로 전환한다.
+  - 보통 실무에서는 클래스의 일반적인 구조로 인스턴스 필드와 메서드를 사용한다.
 
 #### 작업 파일
-- com.eomcs.context.ApplicationContext 변경
-- com.eomcs.context.AppInitContext 변경
 - com.eomcs.pms.App 변경
+  - 백업: App01.java
 
 
-### 2단계 - 파일에서 데이터를 로딩하고 저장하는 기능을 옵저버를 추가한다.
+### 2단계 - 애플리케이션을 시작하거나 종료할 때 실행할 옵저버의 메서드 호출 규칙을 정의한다.
 
-- `DataHandlerListener` 인터페이스 생성
-  - 게시글, 회원, 프로젝트, 작업 데이터를 파일에서 로딩하고 저장하는 기능을 
-    App 클래스에서 이 클래로 옮긴다. 
+- `ApplicationContextListener` 인터페이스 생성
+  - Observer가 갖춰야 할 규칙을 정의한다.
+  - 애플리케이션이 시작할 때 자동으로 호출할 메서드의 규칙을 정의한다.
+  - 애플리케이션을 종료하기 전에 자동으로 호출할 메서드의 규칙을 정의한다.
 
 #### 작업 파일
-- com.eomcs.pms.listener.DataHandlerListener 생성
+- com.eomcs.context.ApplicationContextListener 생성
 
 
 
@@ -83,27 +91,4 @@
 ## 실습 결과
 - src/main/java/com/eomcs/context/ApplicationContextListener.java 생성
 - src/main/java/com/eomcs/pms/listener/AppInitListener.java 생성
-- src/main/java/com/eomcs/pms/App.java 변경
-
-
-  - 애플리케이션을 시작할 때 옵저버를 호출한다.
-  - 애플리케이션을 종료할 때 옵저버를 호출한다.
-
-
-
-
-### 4단계 - `Arrays.asList()` 를 사용하여 배열을 데이터 목록에 바로 추가한다.
-
-- App 변경
-  - loadObjects() 메서드를 변경한다.
-  - `Arrays.asList()` 를 사용하면 배열을 `List` 구현체로 만들 수 있다.
-  - `List.addAll()` 을 이용하면 `List` 객체를 통째로 추가할 수 있다.
-  - 반복문을 사용하는 것 보다 간결하다.
-
-#### 작업 파일
-- com.eomcs.pms.App 변경
-
-
-## 실습 결과
-- build.gradle 변경
 - src/main/java/com/eomcs/pms/App.java 변경
