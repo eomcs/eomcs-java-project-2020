@@ -14,6 +14,10 @@ import com.eomcs.context.ApplicationContextListener;
 
 public class ServerApp {
 
+  // 클라이언트가 "stop" 명령을 보내면 이 값이 true로 변경된다.
+  // - 이 값이 true 이면 다음 클라이언트 접속할 때 서버를 종료한다.
+  static boolean stop = false;
+
   // 옵저버와 공유할 맵 객체
   Map<String,Object> context = new Hashtable<>();
 
@@ -45,11 +49,18 @@ public class ServerApp {
   }
 
   public void service(int port) {
+
+    notifyApplicationContextListenerOnServiceStarted();
+
     try (ServerSocket serverSocket = new ServerSocket(port)) {
       System.out.println("서버 실행 중...");
 
       while (true) {
         Socket clientSocket = serverSocket.accept();
+
+        if (stop) {
+          break;
+        }
         // 람다 문법 사용
         new Thread(() -> handleClient(clientSocket)).start();
       }
@@ -57,6 +68,8 @@ public class ServerApp {
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+    notifyApplicationContextListenerOnServiceStopped();
   }
 
   public static void main(String[] args) {
@@ -78,6 +91,10 @@ public class ServerApp {
         sendResponse(out, request);
         if (request.equalsIgnoreCase("quit"))
           break;
+        else if (request.equalsIgnoreCase("stop")) {
+          stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
+          break;
+        }
       }
 
     } catch (Exception e) {
