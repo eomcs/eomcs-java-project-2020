@@ -11,6 +11,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import com.eomcs.context.ApplicationContextListener;
+import com.eomcs.pms.handler.Command;
+import com.eomcs.pms.listener.AppInitListener;
+import com.eomcs.pms.listener.DataHandlerListener;
+import com.eomcs.pms.listener.RequestMappingListener;
 
 public class ServerApp {
 
@@ -19,7 +23,7 @@ public class ServerApp {
   static boolean stop = false;
 
   // 옵저버와 공유할 맵 객체
-  Map<String,Object> context = new Hashtable<>();
+  static Map<String,Object> context = new Hashtable<>();
 
   // 옵저버를 보관할 컬렉션 객체
   List<ApplicationContextListener> listeners = new ArrayList<>();
@@ -74,6 +78,12 @@ public class ServerApp {
 
   public static void main(String[] args) {
     ServerApp server = new ServerApp();
+
+    // 리스너(옵저버/구독자) 등록
+    server.addApplicationContextListener(new AppInitListener());
+    server.addApplicationContextListener(new DataHandlerListener());
+    server.addApplicationContextListener(new RequestMappingListener());
+
     server.service(8888);
   }
 
@@ -88,7 +98,14 @@ public class ServerApp {
 
       while (true) {
         String request = in.readLine();
-        sendResponse(out, request);
+
+        Command command = (Command) context.get(request);
+        if (command != null) {
+          command.execute();
+        } else {
+          sendResponse(out, "해당 명령을 처리할 수 없습니다!");
+        }
+
         if (request.equalsIgnoreCase("quit"))
           break;
         else if (request.equalsIgnoreCase("stop")) {

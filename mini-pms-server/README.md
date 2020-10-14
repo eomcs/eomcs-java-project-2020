@@ -45,6 +45,36 @@
 #### 작업 파일
 - com.eomcs.pms.ServerApp 변경
 
+### 4단계 - 파일에서 JSON 데이터를 로딩하고 파일로 저장하는 옵저버를 등록한다.
+
+- `ServerApp` 변경
+  - AppInitListener 를 등록한다.
+  - DataHandlerListener 를 등록한다.
+
+#### 작업 파일
+- com.eomcs.pms.ServerApp 변경
+
+
+### 5단계 - 클라이언트의 요청을 처리하는 Command 객체를 준비한다.
+
+- `RequestMappingListener` 생성
+  - `DataHandlerListener` 가 준비한 데이터를 가지고 Command 객체를 생성한다.
+- `ServerApp` 변경
+  - `RequestMappingListener` 를 등록한다.
+
+#### 작업 파일
+- com.eomcs.pms.listener.RequestMappingListener 생성
+- com.eomcs.pms.ServerApp 변경
+
+### 6단계 - 클라이언트 명령이 들어오면 커맨드 객체를 찾아 실행한다.
+
+- `ServerApp` 변경
+  - `handleClient()` 에 커맨드 객체를 실행하는 코드를 추가한다.
+- `Command` 구현체 변경
+
+#### 작업 파일
+- com.eomcs.pms.ServerApp 변경
+
 
   
 ## 실습 결과
