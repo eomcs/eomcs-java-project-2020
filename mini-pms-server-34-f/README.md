@@ -1,4 +1,4 @@
-# 34-g. 네트워크 API를 활용하여 C/S 구조로 전환하기 :  PMS 코드를 C/S로 분리
+# 34-f. 네트워크 API를 활용하여 C/S 구조로 전환하기 :  다중 클라이언트의 동시 접속 처리
 
 이번 훈련에서는,
 - **자바 네트워크 API** 를 사용하여 클라이언트/서버 통신 애플리케이션을 만든다. 
@@ -14,23 +14,19 @@
 
 ## 실습
 
-### 1단계 - JSON 데이터 포맷을 다룰 Gson 라이브러리를 추가한다.
+### 1단계 - 클라이언트의 요청 처리 부분을 별도의 스레드로 분리하여 처리한다.
 
-- **build.gradle** 파일에 gson 라이브러리 정보를 추가한다.
-- `$ gradle eclipse` 를 실행하여 라이브러리를 프로젝트에 추가한다.
-- 이클립스 IDE에서 프로젝트를 `refresh` 한다.
-
-### 2단계 - 기존 애플리케이션에서 관련된 패키지 및 클래스를 가져온다.
-
-- com.eomcs.pms.domain 패키지 및 그 하위 클래스를 가져온다.
-- com.eomcs.pms.handler 패키지 및 그 하위 클래스를 가져온다.
-- com.eomcs.context 패키지 및 그 하위 클래스를 가져온다.
-- com.eomcs.pms.listener 패키지 및 그 하위 클래스를 가져온다.
-- com.eomcs.pms.App 클래스에서 옵저버 패턴과 관련된 코드를 가져온다.
-
+- `ClientHandler` 클래스 추가
+  - Runnable 인터페이스를 구현한다.
+  - 클라이언트의 요청 처리를 담당한다. 
+  - ServerApp 에서 해당 코드를 가져온다.
+- `ServerApp` 클래스 변경
+  - 클라이언트 요청 처리를 ClientHandler에게 맡긴다.
+  
 #### 작업 파일
-- com.eomcs.pms.domain.* 추가
-- com.eomcs.pms.handler.* 추가
+- com.eomcs.pms.ClientHandler 추가
+- com.eomcs.pms.ServerApp 변경
+  - 백업: ServerApp01.java
 
 
 ### 2단계 - `ClientHandler` 를 `ServerApp` 의 중첩 클래스로 만든다.

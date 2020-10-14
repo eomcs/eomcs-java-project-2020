@@ -6,46 +6,26 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import com.eomcs.context.ApplicationContextListener;
 
+//Stateful 통신
+//=> 클라이언트가 연결되면 클라이언트가 보낸 메시지를 그대로 리턴해 준다.
+//=> 클라이언트의 요청을 반복해서 처리한다.
+//=> 클라이언트가 quit 명령을 보내면 응답한 후 연결을 끊는다.
+//=> 응답의 끝에는 빈 줄을 보내도록 응답 프로토콜을 정의한다.
+//   - 프로토콜이란? 클라이언트/서버 간의 데이터를 주고 받는 형식이다.
+//=> 클라이언트 연결이 끊어지면 다음 클라이언트와 연결하는 것을 반복한다.
+//=> 클라이언트가 접속하거나 연결을 끊으면 로그를 남긴다.
+//=> 다중 클라이언트의 동시 접속을 처리한다.
+//=> ClientHandler 클래스를 ServerApp의 스태틱 중첩 클래스로 선언한다.
+//=> ClientHandler 클래스를 main()의 익명 클래스로 정의한다.
+//=> main()의 익명 클래스의 코드를 바깥 클래스의 멤버로 만든 후
+//   그 바깥 클래스의 멤버를 호출한다.
+//   왜? 중첩이 줄어들기 때문에 코드를 읽기 쉽다.
+//
 public class ServerApp {
 
-  // 옵저버와 공유할 맵 객체
-  Map<String,Object> context = new Hashtable<>();
-
-  // 옵저버를 보관할 컬렉션 객체
-  List<ApplicationContextListener> listeners = new ArrayList<>();
-
-  // 옵저버를 등록하는 메서드
-  public void addApplicationContextListener(ApplicationContextListener listener) {
-    listeners.add(listener);
-  }
-
-  // 옵저버를 제거하는 메서드
-  public void removeApplicationContextListener(ApplicationContextListener listener) {
-    listeners.remove(listener);
-  }
-
-  // 옵저버에게 통지한다.
-  private void notifyApplicationContextListenerOnServiceStarted() {
-    for (ApplicationContextListener listener : listeners) {
-      listener.contextInitialized(context);
-    }
-  }
-
-  // 옵저버에게 통지한다.
-  private void notifyApplicationContextListenerOnServiceStopped() {
-    for (ApplicationContextListener listener : listeners) {
-      listener.contextDestroyed(context);
-    }
-  }
-
-  public void service(int port) {
-    try (ServerSocket serverSocket = new ServerSocket(port)) {
+  public static void main(String[] args) {
+    try (ServerSocket serverSocket = new ServerSocket(8888)) {
       System.out.println("서버 실행 중...");
 
       while (true) {
@@ -57,11 +37,6 @@ public class ServerApp {
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
-
-  public static void main(String[] args) {
-    ServerApp server = new ServerApp();
-    server.service(8888);
   }
 
   private static void handleClient(Socket clientSocket) {
