@@ -1,4 +1,4 @@
-# 34-g. 네트워크 API를 활용하여 C/S 구조로 전환하기 :  PMS 코드를 C/S로 분리
+# 34-g. 네트워크 API를 활용하여 C/S 구조로 전환하기 : PMS 코드를 C/S로 분리
 
 이번 훈련에서는,
 - **자바 네트워크 API** 를 사용하여 클라이언트/서버 통신 애플리케이션을 만든다. 
@@ -31,47 +31,21 @@
 #### 작업 파일
 - com.eomcs.pms.domain.* 추가
 - com.eomcs.pms.handler.* 추가
+- com.eomcs.context.* 추가
+- com.eomcs.pms.listener.* 추가
+- com.eomcs.pms.ServerApp 변경
 
 
-### 2단계 - `ClientHandler` 를 `ServerApp` 의 중첩 클래스로 만든다.
+### 3단계 - 클라이언트의 "stop" 명령을 처리한다.
 
-- `ServerApp` 클래스 변경
-  - `ClientHandler` 클래스를 중첩 클래스(static nested class)로 만든다.
+- `ServerApp` 변경
+  - stop 변수 추가
+  - 클라이언트와 연결할 때 "stop"의 상태가 true 이면 서버를 멈춘다.
 
 #### 작업 파일
 - com.eomcs.pms.ServerApp 변경
-  - 백업: ServerApp02.java
 
-### 3단계 - `ClientHandler` 를 `ServerApp.main()` 의 익명 클래스로 만든다.
 
-- `ServerApp` 클래스 변경
-  - `ClientHandler` 스태틱 중첩 클래스를 main()의 익명 클래스로 만든다.
-
-#### 작업 파일
-- com.eomcs.pms.ServerApp 변경
-  - 백업: ServerApp03.java
-
-### 4단계 - `ClientHandler` 를 `ServerApp.main()` 의 익명 클래스로 만든다. II
-
-- `ServerApp` 클래스 변경
-  - 익명 클래스의 코드를 밖깥 클래스의 멤버로 만들어 놓고 사용한다.
-  - 왜? 코드를 읽기 쉽도록 하기 위함이다.
-  - 코드가 여러 블록에 중접되면 될 수록 들여쓰기 하면서 
-    코드를 읽기가 불편해진다.
-
-#### 작업 파일
-- com.eomcs.pms.ServerApp 변경
-  - 백업: ServerApp04.java
-
-### 5단계 - 익명 클래스를 람다(lambda) 문법으로 정의한다.
-
-- `ServerApp` 클래스 변경
-  - 익명 클래스가 메서드 한 개짜리 인터페이스를 구현하고,
-    그 코드도 간단하다면, 
-    람다 문법으로 표현하는 것이 편하다.
-
-#### 작업 파일
-- com.eomcs.pms.ServerApp 변경
   
 ## 실습 결과
 - src/main/java/com/eomcs/pms/ClientHandler.java 추가
