@@ -1,0 +1,18 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'eclipse' 
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation 'com.google.guava:guava:29.0-jre'
+    testImplementation 'junit:junit:4.13'
+}
+
+application {
+    mainClassName = 'com.eomcs.pms.ClientApp'
+}
