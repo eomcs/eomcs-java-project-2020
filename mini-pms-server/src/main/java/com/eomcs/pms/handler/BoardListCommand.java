@@ -1,5 +1,6 @@
 package com.eomcs.pms.handler;
 
+import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +16,7 @@ public class BoardListCommand implements Command {
 
 
   @Override
-  public void execute(PrintWriter out) {
+  public void execute(PrintWriter out, BufferedReader in) {
     out.println("[게시물 목록]");
 
     // 전체 목록을 조회할 때 `Iterator` 객체를 사용한다.

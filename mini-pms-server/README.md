@@ -71,6 +71,43 @@
 - `Command` 인터페이스 변경
   - 커맨드 객체가 클라이언트에게 응답할 수 있도록 출력 스트림 객체를 넘겨준다.
   - `execute()` 를 `execute(PrintWriter)` 로 변경한다. 
+- XxxListCommand 구현체를 변경
+  - `Command` 인터페이스 변경에 따라 execute() 메서드의 코드를 수정한다.
+- `ServerApp` 변경
+  - 커맨드 객체의 execute()를 호출할 때 클라이언트 출력 스트림을 제공한다.
+  - `sendResponse()` 메서드는 제거한다.
+
+#### 작업 파일
+- com.eomcs.pms.handler.Command 변경
+- com.eomcs.pms.handler.XxxListCommand 변경
+- com.eomcs.pms.ServerApp 변경
+
+### 7단계 - 클라이언트에게 입력 값을 요구할 수 있도록 프로토콜을 변경한다.
+
+```
+[클라이언트]              [서버]
+명령         -----------> 작업 수행
+출력         <----------- 출력 문자열
+사용자 입력  <----------- !{}!
+입력값       -----------> 작업 수행
+출력         <----------- 출력 문자열
+사용자 입력  <----------- !{}!
+입력값       -----------> 작업 수행
+출력         <----------- 출력 문자열
+완료         <----------- "" 빈 문자열 
+```
+
+- `Command` 인터페이스 변경
+  - 클라이언트 입력 값을 읽을 수 있도록 파라미터에 입력 스트림을 추가한다.
+  - `execute(PrintWriter)` 를 `execute(PrintWriter out, BufferedReader in)` 로 바꾼다.
+- XxxListCommand 구현체를 변경
+  - `Command` 인터페이스 변경에 따라 execute() 메서드의 코드를 수정한다.
+- `Prompt` 클래스 변경
+  - 파라미터로 받은 출력 스트림으로 프롬프트 제목을 출력하고,
+    파라미터로 받은 입력 스트림에서 값을 읽어 리턴하는 메서드를 추가한다. 
+- `Xxx[Add|Detail|Update|Delete]Command` 구현체 변경
+  - 커맨드 객체가 클라이언트에게 응답할 수 있도록 출력 스트림 객체를 넘겨준다.
+  - `execute()` 를 `execute(PrintWriter)` 로 변경한다. 
 - XxxCommand 구현체를 변경
   - `Command` 인터페이스 변경에 따라 execute() 메서드의 코드를 수정한다.
 - `ServerApp` 변경
@@ -79,7 +116,7 @@
 
 #### 작업 파일
 - com.eomcs.pms.handler.Command 변경
-- com.eomcs.pms.handler.XxxCommand 변경
+- com.eomcs.pms.handler.XxxListCommand 변경
 - com.eomcs.pms.ServerApp 변경
 
 
