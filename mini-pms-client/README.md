@@ -1,4 +1,4 @@
-# 34-g. 네트워크 API를 활용한 C/S 아키텍처 : PMS 코드를 C/S로 분리
+# 35. 동일한 자원으로 더 많은 클라이언트 요청을 처리하는 방법 : Stateful을 Stateless로 전환하기
 
 이번 훈련에서는,
 - **자바 네트워크 API** 를 사용하여 클라이언트/서버 통신 애플리케이션을 만든다. 
@@ -13,26 +13,19 @@
 
 ## 실습
 
-### 1단계 - 서버에 stop 명령을 보내면 클라이언트를 즉시 종료한다.
+### 1단계 - 서버에 연결할 때 한 번만 요청/응답하도록 변경한다.
+
+서버에 연결하면 quit 명령을 보낼 때까지 계속 연결되어 있는 
+기존의 stateful 통신 방법을,
+서버에 연결했을 때 한 번만 요청하고 응답하는 stateless 통신 방법으로 변경한다.
 
 - com.eomcs.pms.ClientApp 변경
 
 #### 작업 파일
 - com.eomcs.pms.ClientApp 변경
-
-### 2단계 - 서버가 입력 값을 요구하면 사용자로부터 입력 값을 받아 보낸다.
-
-- com.eomcs.pms.ClientApp 변경
-  - 서버에서 입력 값을 요구할 경우, 
-    Prompt를 통해 사용자로부터 값을 입력 받아 서버에 보낸다.
-#### 작업 파일
-- com.eomcs.pms.ClientApp 변경
-
 
 ## 실습 결과
 - src/main/java/com/eomcs/pms/ClientApp.java 변경
-
-
 
 
 
