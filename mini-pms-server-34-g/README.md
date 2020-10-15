@@ -142,6 +142,17 @@
 - com.eomcs.pms.handler.CalculatorCommand 추가
 - com.eomcs.pms.listener.RequestMappingListener 변경
 
+### 9단계 - "quit", "stop" 명령어를 처리한다.
+
+stop 명령,
+- 클라이언트에게 안내 메시지를 보낸 후 서버를 종료해야 하는 상태로 만든다.
+
+quit 명령,
+- 클라이언트에게 안내 메시지를 보낸 후 클라이언트와 연결을 끊는다.
+
+#### 작업 파일
+- com.eomcs.pms.ServerApp 변경
+
 
 ## 실습 결과
 - build.gradle 변경
