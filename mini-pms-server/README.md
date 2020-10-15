@@ -68,11 +68,18 @@
 
 ### 6단계 - 클라이언트 명령이 들어오면 커맨드 객체를 찾아 실행한다.
 
+- `Command` 인터페이스 변경
+  - 커맨드 객체가 클라이언트에게 응답할 수 있도록 출력 스트림 객체를 넘겨준다.
+  - `execute()` 를 `execute(PrintWriter)` 로 변경한다. 
+- XxxCommand 구현체를 변경
+  - `Command` 인터페이스 변경에 따라 execute() 메서드의 코드를 수정한다.
 - `ServerApp` 변경
-  - `handleClient()` 에 커맨드 객체를 실행하는 코드를 추가한다.
-- `Command` 구현체 변경
+  - 커맨드 객체의 execute()를 호출할 때 클라이언트 출력 스트림을 제공한다.
+  - `sendResponse()` 메서드는 제거한다.
 
 #### 작업 파일
+- com.eomcs.pms.handler.Command 변경
+- com.eomcs.pms.handler.XxxCommand 변경
 - com.eomcs.pms.ServerApp 변경
 
 

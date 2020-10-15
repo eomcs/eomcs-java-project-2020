@@ -101,10 +101,14 @@ public class ServerApp {
 
         Command command = (Command) context.get(request);
         if (command != null) {
-          command.execute();
+          command.execute(out);
         } else {
-          sendResponse(out, "해당 명령을 처리할 수 없습니다!");
+          out.println("해당 명령을 처리할 수 없습니다!");
         }
+
+        // 응답의 끝을 알리는 빈 문자열을 보낸다.
+        out.println();
+        out.flush();
 
         if (request.equalsIgnoreCase("quit"))
           break;
@@ -120,11 +124,5 @@ public class ServerApp {
 
     System.out.printf("클라이언트(%s)와의 연결을 끊었습니다.\n",
         address.getHostAddress());
-  }
-
-  private static void sendResponse(PrintWriter out, String message) {
-    out.println(message);
-    out.println(); // 응답이 끝났음을 알리는 빈 줄을 보낸다.
-    out.flush();
   }
 }
