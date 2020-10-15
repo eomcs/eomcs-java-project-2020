@@ -1,4 +1,4 @@
-# 31-d. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : 리팩터링 II
+# 31-d. 파일 입출력 API : 리팩터링 II
 
 이번 훈련에서는,
 - **인터페이스** 를 활용하여 코드를 통합하는 것을 연습할 것이다.
@@ -54,7 +54,7 @@ CSV 문자열 추출을 규칙으로 정의해두면 규칙에 따라 일관성�
 - com.eomcs.pms.domain.Task 변경
 
 ### 3단계 - Board, Member, Project, Task 의 파일 저장 메서드를 통합한다.
- 
+
 - App 변경
   - saveBoards(), saveMembers(), saveProjects(), saveTasks() 메서드를
     saveObjects() 메서드로 통합한다.

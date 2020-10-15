@@ -1,9 +1,9 @@
-# 31-c. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : 리팩터링 I
+# 31-c. 파일 입출력 API : 리팩터링 I
 
 이번 훈련에서는,
 - 좀 더 유지보수하기 좋은 구조로 소스 코드를 **리팩터링** 해보자.
 - 객체 생성에 **팩토리 메서드(factory method) 패턴** 을 응용해보자.
-- 객체지향 설계 기법 중에서 **GRASP 패턴** 의 하나인 **Information Expert** 를 적용해본다. 
+- 객체지향 설계 기법 중에서 **GRASP 패턴** 의 하나인 **Information Expert** 를 적용해본다.
 
 **리팩터링(refactoring)** 은, (마틴 파울러의 '리팩터링'에서 발췌)
 - 소프트웨어를 보다 쉽게 이해할 수 있고, 적은 비용으로 수정할 수 있도록
@@ -43,7 +43,7 @@
 
 ## 훈련 내용
 
-- **Information Expert 원칙**에 따라 
+- **Information Expert 원칙**에 따라
   CSV 형식의 문자열을 다루는 코드를 valueOfCsv(), toCsvString() 메서드로 추출하여,
   그 값을 다루는 도메인 클래스에 둔다.
 - CSV 데이터를 다룰 때는 도메인 클래스에 정의된 valueOfCsv()와 toCsvString() 메서드를 사용한다.

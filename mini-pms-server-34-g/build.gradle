@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'eclipse'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // JSON 라이브러리
+    implementation 'com.google.code.gson:gson:2.8.6'
+    
+    implementation 'com.google.guava:guava:29.0-jre'
+    testImplementation 'junit:junit:4.13'
+}
+
+application {
+    mainClassName = 'com.eomcs.pms.ServerApp'
+}

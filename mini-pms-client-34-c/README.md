@@ -1,7 +1,7 @@
-# 34-c. 네트워크 API를 활용하여 C/S 구조로 전환하기 : 사용자가 입력한 명령처리
+# 34-c. 네트워크 API를 활용한 C/S 아키텍처 : 사용자가 입력한 명령처리
 
 이번 훈련에서는,
-- **자바 네트워크 API** 를 사용하여 클라이언트/서버 통신 애플리케이션을 만든다. 
+- **자바 네트워크 API** 를 사용하여 클라이언트/서버 통신 애플리케이션을 만든다.
 
 ## 훈련 목표
 - 네트워크 API를 사용하여 간단한 메시지를 주고 받는 Client 만들기를 연습한다.
@@ -19,7 +19,7 @@
 - com.eomcs.pms.ClientApp 변경
 
 #### 작업 파일
-- com.eomcs.util.Prompt 이전 프로젝트(v33-b)에서 가져온다. 
+- com.eomcs.util.Prompt 이전 프로젝트(v33-b)에서 가져온다.
 - com.eomcs.pms.ClientApp 변경
   - 백업: ClientApp01.java
 
@@ -27,7 +27,7 @@
 ### 2단계 - 사용자가 quit 명령을 입력할 때까지 반복한다.
 
 - com.eomcs.pms.ClientApp 변경
-  
+
 #### 작업 파일
 - com.eomcs.pms.ClientApp 변경
 

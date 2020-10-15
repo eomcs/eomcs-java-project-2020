@@ -1,4 +1,4 @@
-# 30-b. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : DataInputStream/DataOutputStream
+# 30-b. 파일 입출력 API : 데코레이터 객체 활용하기(DataInputStream/DataOutputStream)
 
 이번 훈련에서는,
 - **파일 입출력 API** 에 적용되어 있는 **데코레이터(decorator) 패턴** 을 활용하여
@@ -14,7 +14,7 @@
 
 **Data Processing Stream Class** 는,
 - **Decorator 패턴** 에서 데코레이터 역할을 수행하는 클래스다.
-- **Data Sink Stream Class**에 연결하거나 다른 데코레이터에 연결하여 중간에서 데이터를 가공하는 일을 한다. 
+- **Data Sink Stream Class**에 연결하거나 다른 데코레이터에 연결하여 중간에서 데이터를 가공하는 일을 한다.
 
 **DataInputStream** / **DataOutputStream** 은,
 

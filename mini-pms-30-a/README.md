@@ -1,4 +1,4 @@
-# 30-a. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : FileInputStream/FileOutputStream
+# 30-a. 파일 입출력 API : 바이너리 형식으로 데이터를 읽고 쓰기(FileInputStream/FileOutputStream)
 
 지금까지,
 - 사용자가 입력한 데이터를 컬렉션 객체에 저장했다.

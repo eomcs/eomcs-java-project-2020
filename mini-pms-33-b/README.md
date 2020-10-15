@@ -1,4 +1,4 @@
-# 33-b. `Observer` 객체를 통해 데이터를 로딩하고 저장하기
+# 33-b. `Observer` 디자인 패턴 : `Observer` 객체를 통해 파일 다루기
 
 이번 훈련에서는,
 - **Observer 디자인 패턴** 의 활용을 연습할 것이다.
@@ -35,10 +35,10 @@
   - 옵저버의 규칙인 ApplicationContextListener 를 구현한다.
   - contextInitialized()에서 게시글, 회원, 프로젝트, 작업 데이터를 파일에서 로딩한다.
   - contextDestroyed()에서 그 데이터를 파일에 JSON 형식으로 저장한다.
-  - App 클래스에서 파일 데이터를 로딩하고 저장하는 코드를 이 클래로 옮긴다. 
+  - App 클래스에서 파일 데이터를 로딩하고 저장하는 코드를 이 클래로 옮긴다.
 - `App` 클래스 변경
   - `DataHandlerListener` 옵저버를 등록한다.
-  
+
 #### 작업 파일
 - com.eomcs.pms.listener.DataHandlerListener 생성
 - com.eomcs.pms.App 변경

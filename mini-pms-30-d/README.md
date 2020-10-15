@@ -1,4 +1,4 @@
-# 30-d. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : ObjectInputStream/ObjectOutputStream
+# 30-d. 파일 입출력 API : 객체 읽고 쓰기(ObjectInputStream/ObjectOutputStream)
 
 이번 훈련에서는 **ObjectInputStream/ObjectOutputStream** 을 활용하여 객체를 직렬화하고 복원하는 것을 연습해 볼 것이다.
 

@@ -1,4 +1,4 @@
-# 30-c. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : BufferedInputStream/BufferedOutputStream
+# 30-c. 파일 입출력 API : 버퍼 사용하기(BufferedInputStream/BufferedOutputStream)
 
 이번 훈련에서는 **버퍼** 를 활용하여 일정 크기의 데이터를 모았다가 한 번에 출력하는 방식으로 입출력 속도를 개선할 것이다.
 

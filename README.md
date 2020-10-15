@@ -67,7 +67,6 @@
 ### 01. Gradle 빌드 도구를 활용하여 자바 애플리케이션 프로젝트 만들기
 
 ### 01-a. 프로젝트를 `이클립스 IDE`로 임포트하기
-
 ### 01-b. 프로젝트에 버전 관리 시스템 Git을 적용하기
 
 ### 02. 리터럴과 콘솔 출력 다루기
@@ -119,58 +118,44 @@
 ### 25. `Iterator` 디자인 패턴
 
 ### 26-a. 중첩 클래스 : 스태틱 중첩 클래스(static nested class)
-
 ### 26-b. 중첩 클래스 : 논스태틱 중첩 클래스(inner class)
-
 ### 26-c. 중첩 클래스 : 로컬 클래스(local class)
-
 ### 26-d. 중첩 클래스 : 익명 클래스(anonymous class)
 
 ### 27. 자바 컬렉션 API 사용하기
 
-### 28-a. 커맨드 디자인 패턴을 적용하기 : 메서드를 객체로 분리하기
-
-### 28-b. 커맨드 디자인 패턴을 적용하기 : Map 을 이용한 커맨드 객체 관리
+### 28-a. 'Command' 디자인 패턴을 적용하기 : 메서드를 객체로 분리하기
+### 28-b. 'Command' 디자인 패턴을 적용하기 : Map 을 이용한 커맨드 객체 관리
 
 ### 29. 예외가 발생했을 때 시스템을 멈추지 않게 하는 방법
 
-### 30-a. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : FileInputStream/FileOutputStream
+### 30-a. 파일 입출력 API : 바이너리 형식으로 데이터를 읽고 쓰기(FileInputStream/FileOutputStream)
+### 30-b. 파일 입출력 API : 데코레이터 객체 활용하기(DataInputStream/DataOutputStream)
+### 30-c. 파일 입출력 API : 버퍼 사용하기(BufferedInputStream/BufferedOutputStream)
+### 30-d. 파일 입출력 API : 객체 읽고 쓰기(ObjectInputStream/ObjectOutputStream)
+### 30-e. 파일 입출력 API : 리팩터링 I
 
-### 30-b. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : DataInputStream/DataOutputStream
-
-### 30-c. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : BufferedInputStream/BufferedOutputStream
-
-### 30-d. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : ObjectInputStream/ObjectOutputStream
-
-### 30-e. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 : 리팩터링
-
-### 31-a. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : FileReader/FileWriter + CSV 파일 포맷
-
-### 31-b. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : BufferedReader/BufferedWriter
-
-### 31-c. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : 리팩터링 I
-
-### 31-d. 파일 입출력 API를 활용하여 데이터를 읽고 쓰기 II : 리팩터링 II
+### 31-a. 파일 입출력 API : 텍스트 형식(CSV 파일 포맷)으로 데이터를 읽고 쓰기(FileReader/FileWriter)
+### 31-b. 파일 입출력 API : 버퍼 사용하기(BufferedReader/BufferedWriter)
+### 31-c. 파일 입출력 API : 리팩터링 I
+### 31-d. 파일 입출력 API : 리팩터링 II
 
 ### 32. JSON 형식으로 객체를 읽고 쓰기 : Gson 라이브러리 활용
 
-### 33-a. `Observer` 디자인 패턴을 적용하기
+### 33-a. `Observer` 디자인 패턴 : 프로젝트에 적용하기
+### 33-b. `Observer` 디자인 패턴 : `Observer` 객체를 통해 파일 다루기
 
-### 33-b. `Observer` 객체를 통해 데이터를 로딩하고 저장하기
+### 34-a. 네트워크 API를 활용한 C/S 아키텍처 : 클라이언트/서버 프로젝트 준비
+### 34-b. 네트워크 API를 활용한 C/S 아키텍처 : 간단한 메시지 송수신
+### 34-c. 네트워크 API를 활용한 C/S 아키텍처 : 사용자가 입력한 명령처리
+### 34-d. 네트워크 API를 활용한 C/S 아키텍처 : 요청/응답 프로토콜 정의
+### 34-e. 네트워크 API를 활용한 C/S 아키텍처 : 다중 클라이언트의 요청 처리
+### 34-f. 네트워크 API를 활용한 C/S 아키텍처 : 다중 클라이언트의 동시 접속 처리
+### 34-g. 네트워크 API를 활용한 C/S 아키텍처 : PMS 코드를 C/S로 분리
 
-### 34-a. 네트워크 API를 활용하여 C/S 구조로 전환하기 : 클라이언트/서버 프로젝트 준비
-### 34-b. 네트워크 API를 활용하여 C/S 구조로 전환하기 : 간단한 메시지 송수신
-### 34-c. 네트워크 API를 활용하여 C/S 구조로 전환하기 : 사용자가 입력한 명령처리
-### 34-d. 네트워크 API를 활용하여 C/S 구조로 전환하기 : 요청/응답 프로토콜 정의
-### 34-e. 네트워크 API를 활용하여 C/S 구조로 전환하기 : 다중 클라이언트의 요청 처리
-### 34-f. 네트워크 API를 활용하여 C/S 구조로 전환하기 : 다중 클라이언트의 동시 접속 처리
-### 34-g. 네트워크 API를 활용하여 C/S 구조로 전환하기 : PMS 코드를 C/S로 분리
+### 35 - 동일한 자원으로 더 많은 클라이언트 요청을 처리하는 방법 : Stateful을 Stateless로 전환하기
 
-### 35 - 동일한 자원으로 더 많은 클라이언트의 요청을 처리하는 방법
-
-### 36 - 여러 클라이언트의 요청을 동시에 처리하는 방법
-
-### 37 - 스레드풀을 이용하여 스레드를 재사용하기
+### 36 - 스레드풀을 이용하여 스레드를 재사용하기
 
 
 
