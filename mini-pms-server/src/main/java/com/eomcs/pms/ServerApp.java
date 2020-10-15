@@ -101,7 +101,7 @@ public class ServerApp {
 
         Command command = (Command) context.get(request);
         if (command != null) {
-          command.execute(out);
+          command.execute(out, in);
         } else {
           out.println("해당 명령을 처리할 수 없습니다!");
         }

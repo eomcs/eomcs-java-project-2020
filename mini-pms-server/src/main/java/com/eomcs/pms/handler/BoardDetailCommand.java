@@ -17,22 +17,23 @@ public class BoardDetailCommand implements Command {
   @Override
   public void execute(PrintWriter out, BufferedReader in) {
     try {
-      System.out.println("[게시물 상세보기]");
+      out.println("[게시물 상세보기]");
       int no = Prompt.inputInt("번호? ", out, in);
       Board board = findByNo(no);
 
       if (board == null) {
-        System.out.println("해당 번호의 게시글이 없습니다.");
+        out.println("해당 번호의 게시글이 없습니다.");
         return;
       }
 
       board.setViewCount(board.getViewCount() + 1);
 
-      System.out.printf("제목: %s\n", board.getTitle());
-      System.out.printf("내용: %s\n", board.getContent());
-      System.out.printf("작성자: %s\n", board.getWriter());
-      System.out.printf("등록일: %s\n", board.getRegisteredDate());
-      System.out.printf("조회수: %d\n", board.getViewCount());
+      out.printf("제목: %s\n", board.getTitle());
+      out.printf("내용: %s\n", board.getContent());
+      out.printf("작성자: %s\n", board.getWriter());
+      out.printf("등록일: %s\n", board.getRegisteredDate());
+      out.printf("조회수: %d\n", board.getViewCount());
+
     } catch (Exception e) {
       out.printf("작업 처리 중 오류 발생! - %s\n", e.getMessage());
     }

@@ -26,7 +26,7 @@ public class ClientApp {
         out.println(input);
         out.flush();
 
-        receiveResponse(in);
+        receiveResponse(out, in);
 
         if (input.equalsIgnoreCase("quit")) {
           break;
@@ -51,12 +51,18 @@ public class ClientApp {
     }
   }
 
-  private static void receiveResponse(BufferedReader in) throws Exception {
+  private static void receiveResponse(PrintWriter out, BufferedReader in) throws Exception {
     while (true) {
       String response = in.readLine();
-      if (response.length() == 0)
+      if (response.length() == 0) {
         break;
-      System.out.println(response);
+      } else if (response.equals("!{}!")) {
+        // 사용자로부터 값을 입력을 받아서 서버에 보낸다.
+        out.println(Prompt.inputString(""));
+        out.flush(); // 주의! 출력하면 버퍼에 쌓인다. 서버로 보내고 싶다면 flush()를 호출하라!
+      } else {
+        System.out.println(response);
+      }
     }
   }
 }

@@ -20,6 +20,14 @@
 #### 작업 파일
 - com.eomcs.pms.ClientApp 변경
 
+### 2단계 - 서버가 입력 값을 요구하면 사용자로부터 입력 값을 받아 보낸다.
+
+- com.eomcs.pms.ClientApp 변경
+  - 서버에서 입력 값을 요구할 경우, 
+    Prompt를 통해 사용자로부터 값을 입력 받아 서버에 보낸다.
+#### 작업 파일
+- com.eomcs.pms.ClientApp 변경
+
 
 ## 실습 결과
 - src/main/java/com/eomcs/pms/ClientApp.java 변경
