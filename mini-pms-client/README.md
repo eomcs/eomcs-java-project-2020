@@ -76,9 +76,37 @@ alter table pms_board
   - 데이터를 조회할 때 JDBC API를 사용한다.
 - com.eomcs.pms.handler.BoardUpdateCommand 변경
   - 데이터를 변경할 때 JDBC API를 사용한다.
+- com.eomcs.pms.handler.BoardDeleteCommand 변경
+  - 데이터를 삭제할 때 JDBC API를 사용한다.
 - com.eomcs.pms.App 변경
-  - BoardAddCommand 변경에 맞춰 소스 코드를 정리한다.
+  - BoardXxxCommand 변경에 맞춰 소스 코드를 정리한다.
 
+### 4단계 - DBMS에 회원 정보를 저장할 테이블을 만들고, 이 테이블을 사용하여 회원 정보를 관리한다.
 
+```
+create table pms_member(
+  no int not null,
+  name varchar(30) not null,
+  email varchar(50) not null,
+  password varchar(50) not null,
+  photo varchar(255),
+  tel varchar(20),
+  cdt datetime default now()
+);
+
+alter table pms_member
+  add constraint pms_member_pk primary key(no);
+
+alter table pms_member
+  modify column no int not null auto_increment;
+```
+
+- com.eomcs.pms.listener.DataHandlerListener 변경
+  - 회원 관련 데이터를 파일에서 로딩하고 파일로 저장하는 코드를 제거한다.
+- com.eomcs.pms.handler.MemberXxxCommand 변경
+  - 데이터를 저장하고 조회, 변경, 삭제할 때 JDBC API를 사용한다.
+- com.eomcs.pms.App 변경
+  - MemberXxxCommand 변경에 맞춰 소스 코드를 정리한다.
+  -
 ## 실습 결과
 - src/main/java/com/eomcs/pms/ClientApp.java 변경

@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import com.eomcs.context.ApplicationContextListener;
-import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
@@ -98,7 +97,6 @@ public class App {
     notifyApplicationContextListenerOnServiceStarted();
 
     // 옵저버가 작업한 결과를 맵에서 꺼낸다.
-    List<Board> boardList = (List<Board>) context.get("boardList");
     List<Member> memberList = (List<Member>) context.get("memberList");
     List<Project> projectList = (List<Project>) context.get("projectList");
     List<Task> taskList = (List<Task>) context.get("taskList");
@@ -109,7 +107,7 @@ public class App {
     commandMap.put("/board/list", new BoardListCommand());
     commandMap.put("/board/detail", new BoardDetailCommand());
     commandMap.put("/board/update", new BoardUpdateCommand());
-    commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
+    commandMap.put("/board/delete", new BoardDeleteCommand());
 
     MemberListCommand memberListCommand = new MemberListCommand(memberList);
     commandMap.put("/member/add", new MemberAddCommand(memberList));
