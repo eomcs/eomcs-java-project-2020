@@ -108,7 +108,7 @@ public class App {
     commandMap.put("/board/add", new BoardAddCommand());
     commandMap.put("/board/list", new BoardListCommand());
     commandMap.put("/board/detail", new BoardDetailCommand());
-    commandMap.put("/board/update", new BoardUpdateCommand(boardList));
+    commandMap.put("/board/update", new BoardUpdateCommand());
     commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
 
     MemberListCommand memberListCommand = new MemberListCommand(memberList);

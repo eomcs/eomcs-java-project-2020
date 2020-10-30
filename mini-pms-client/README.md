@@ -74,6 +74,8 @@ alter table pms_board
   - 데이터를 조회할 때 JDBC API를 사용한다.
 - com.eomcs.pms.handler.BoardDetailCommand 변경
   - 데이터를 조회할 때 JDBC API를 사용한다.
+- com.eomcs.pms.handler.BoardUpdateCommand 변경
+  - 데이터를 변경할 때 JDBC API를 사용한다.
 - com.eomcs.pms.App 변경
   - BoardAddCommand 변경에 맞춰 소스 코드를 정리한다.
 
