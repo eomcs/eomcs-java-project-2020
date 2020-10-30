@@ -9,8 +9,14 @@ repositories {
 }
 
 dependencies {
+    // MariaDB JDBC 드라이버
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.0'
+    
+    // JSON 라이브러리
+    implementation 'com.google.code.gson:gson:2.8.6'
+    
     implementation 'com.google.guava:guava:29.0-jre'
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
 }
 
 application {

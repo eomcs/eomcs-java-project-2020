@@ -1,4 +1,4 @@
-# 35. 동일한 자원으로 더 많은 클라이언트 요청을 처리하는 방법 : Stateful을 Stateless로 전환하기
+# 37. 데이터 관리를 전문 프로그램인 DBMS에게 맡기기
 
 이번 훈련에서는,
 - **Stateful 통신 방식** 과 **Stateless 통신 방식** 의 차이를 이해한다.
@@ -32,12 +32,46 @@
 
 ## 실습
 
-### 1단계 - 서버에 연결할 때 한 번만 요청/응답하도록 변경한다.
+### 1단계 - 프로젝트에 JDBC 드라이버를 설정한다.
 
-- `com.eomcs.pms.ClientApp` 변경
-  - 서버에 연결하면 quit 명령을 보낼 때까지 계속 연결되어 있는
-    기존의 stateful 통신 방법을,
-    서버에 연결했을 때 한 번만 요청하고 응답하는 stateless 통신 방법으로 변경한다.
+- build.gradle 변경
+  - mvnrepository.com 또는 search.maven.org에서 mariadb jdbc driver를 검색한다.
+  - 라이브러리 정보를 build.gradle 파일에 설정한다.
+  - gradle을 이용하여 eclipse 설정 파일을 갱신한다.
+    - `$ gradle eclipse`
+    - 다운로드 받지 않은 라이브러리가 있다면 자동으로 서버에서 받을 것이다.
+    - 라이브러리 정보가 변경되었다면 해당 라이브러리를 서버에서 받을 것이다.
+  - 이클립스 프로젝트를 리프래시 한다.
+    - 프로젝트에 mariadb jdbc driver 라이브러리가 추가되었는지 확인한다.
+
+### 2단계 - DBMS에 게시글을 저장할 테이블을 생성한다.
+
+```
+create table pms_board(
+  no int not null,
+  title varchar(255) not null,
+  content text not null,
+  writer varchar(30) not null,
+  cdt datetime default now(),
+  vw_cnt int default 0
+);
+
+alter table pms_board
+  add constraint pms_board_pk primary key(no);
+
+alter table pms_board
+  modify column no int not null auto_increment;
+
+```
+
+### 3단계 - DBMS를 이용하여 게시글을 저장하고 로딩한다.
+
+- com.eomcs.pms.listener.DataHandlerListener 변경
+  - 게시글 관련 데이터를 파일에서 로딩하고 파일로 저장하는 코드를 제거한다.
+- com.eomcs.pms.handler.BoardAddCommand 변경
+  - 데이터를 저장할 때 JDBC API를 사용한다.
+- com.eomcs.pms.App 변경
+  - BoardAddCommand 변경에 맞춰 소스 코드를 정리한다.
 
 
 ## 실습 결과
