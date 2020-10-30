@@ -70,6 +70,10 @@ alter table pms_board
   - 게시글 관련 데이터를 파일에서 로딩하고 파일로 저장하는 코드를 제거한다.
 - com.eomcs.pms.handler.BoardAddCommand 변경
   - 데이터를 저장할 때 JDBC API를 사용한다.
+- com.eomcs.pms.handler.BoardListCommand 변경
+  - 데이터를 조회할 때 JDBC API를 사용한다.
+- com.eomcs.pms.handler.BoardDetailCommand 변경
+  - 데이터를 조회할 때 JDBC API를 사용한다.
 - com.eomcs.pms.App 변경
   - BoardAddCommand 변경에 맞춰 소스 코드를 정리한다.
 

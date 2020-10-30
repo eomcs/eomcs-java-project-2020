@@ -106,8 +106,8 @@ public class App {
     Map<String,Command> commandMap = new HashMap<>();
 
     commandMap.put("/board/add", new BoardAddCommand());
-    commandMap.put("/board/list", new BoardListCommand(boardList));
-    commandMap.put("/board/detail", new BoardDetailCommand(boardList));
+    commandMap.put("/board/list", new BoardListCommand());
+    commandMap.put("/board/detail", new BoardDetailCommand());
     commandMap.put("/board/update", new BoardUpdateCommand(boardList));
     commandMap.put("/board/delete", new BoardDeleteCommand(boardList));
 

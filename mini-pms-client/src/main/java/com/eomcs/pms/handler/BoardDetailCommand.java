@@ -1,44 +1,44 @@
 package com.eomcs.pms.handler;
 
-import java.util.List;
-import com.eomcs.pms.domain.Board;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import com.eomcs.util.Prompt;
 
 public class BoardDetailCommand implements Command {
-
-  List<Board> boardList;
-
-  public BoardDetailCommand(List<Board> list) {
-    this.boardList = list;
-  }
 
   @Override
   public void execute() {
     System.out.println("[게시물 상세보기]");
     int no = Prompt.inputInt("번호? ");
-    Board board = findByNo(no);
 
-    if (board == null) {
-      System.out.println("해당 번호의 게시글이 없습니다.");
-      return;
-    }
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select no, title, content, writer, cdt, vw_cnt"
+                + " from pms_board"
+                + " where no = " + no);
+        PreparedStatement stmt2 = con.prepareStatement(
+            "update pms_board set vw_cnt = vw_cnt + 1"
+                + " where no = " + no);
+        ResultSet rs = stmt.executeQuery()) {
 
-    board.setViewCount(board.getViewCount() + 1);
+      if (rs.next()) {
+        System.out.printf("제목: %s\n", rs.getString("title"));
+        System.out.printf("내용: %s\n", rs.getString("content"));
+        System.out.printf("작성자: %s\n", rs.getString("writer"));
+        System.out.printf("등록일: %s\n", rs.getDate("cdt"));
+        System.out.printf("조회수: %d\n", rs.getInt("vw_cnt") + 1);
 
-    System.out.printf("제목: %s\n", board.getTitle());
-    System.out.printf("내용: %s\n", board.getContent());
-    System.out.printf("작성자: %s\n", board.getWriter());
-    System.out.printf("등록일: %s\n", board.getRegisteredDate());
-    System.out.printf("조회수: %d\n", board.getViewCount());
-  }
+        stmt2.executeUpdate(); // 조회수 증가
 
-  private Board findByNo(int no) {
-    for (int i = 0; i < boardList.size(); i++) {
-      Board board = boardList.get(i);
-      if (board.getNo() == no) {
-        return board;
+      } else {
+        System.out.println("해당 번호의 게시물이 존재하지 않습니다.");
       }
+    } catch (Exception e) {
+      System.out.println("게시글 조회 중 오류 발생!");
+      e.printStackTrace();
     }
-    return null;
   }
 }
