@@ -135,7 +135,7 @@ alter table pms_project
 - com.eomcs.pms.App 변경
   - ProjectXxxCommand 변경에 맞춰 소스 코드를 정리한다.
 
-### 5단계 - DBMS에 작업 정보를 저장할 테이블을 만들고, 이 테이블을 사용하여 작업 정보를 관리한다.
+### 6단계 - DBMS에 작업 정보를 저장할 테이블을 만들고, 이 테이블을 사용하여 작업 정보를 관리한다.
 
 ```
 create table pms_task(
