@@ -107,6 +107,64 @@ alter table pms_member
   - 데이터를 저장하고 조회, 변경, 삭제할 때 JDBC API를 사용한다.
 - com.eomcs.pms.App 변경
   - MemberXxxCommand 변경에 맞춰 소스 코드를 정리한다.
-  -
+
+### 5단계 - DBMS에 프로젝트 정보를 저장할 테이블을 만들고, 이 테이블을 사용하여 프로젝트 정보를 관리한다.
+
+```
+create table pms_project(
+  no int not null,
+  title varchar(255) not null,
+  content text not null,
+  sdt date not null,
+  edt date not null,
+  owner varchar(30) not null,
+  members varchar(255) not null
+);
+
+alter table pms_project
+  add constraint pms_project_pk primary key(no);
+
+alter table pms_project
+  modify column no int not null auto_increment;
+```
+
+- com.eomcs.pms.listener.DataHandlerListener 변경
+  - 프로젝트 관련 데이터를 파일에서 로딩하고 파일로 저장하는 코드를 제거한다.
+- com.eomcs.pms.handler.ProjectXxxCommand 변경
+  - 데이터를 저장하고 조회, 변경, 삭제할 때 JDBC API를 사용한다.
+- com.eomcs.pms.App 변경
+  - ProjectXxxCommand 변경에 맞춰 소스 코드를 정리한다.
+
+### 5단계 - DBMS에 작업 정보를 저장할 테이블을 만들고, 이 테이블을 사용하여 작업 정보를 관리한다.
+
+```
+create table pms_task(
+  no int not null,
+  content text not null,
+  deadline date not null,
+  owner varchar(30) not null,
+  status int default 0
+);
+
+alter table pms_task
+  add constraint pms_task_pk primary key(no);
+
+alter table pms_task
+  modify column no int not null auto_increment;
+```
+
+- com.eomcs.pms.listener.DataHandlerListener 변경
+  - 작업 관련 데이터를 파일에서 로딩하고 파일로 저장하는 코드를 제거한다.
+- com.eomcs.pms.handler.TaskXxxCommand 변경
+  - 데이터를 저장하고 조회, 변경, 삭제할 때 JDBC API를 사용한다.
+- com.eomcs.pms.App 변경
+  - TaskXxxCommand 변경에 맞춰 소스 코드를 정리한다.
+
+
 ## 실습 결과
-- src/main/java/com/eomcs/pms/ClientApp.java 변경
+- src/main/java/com/eomcs/pms/listener/DataHandlerListener.java 삭제
+- src/main/java/com/eomcs/pms/handler/BoardXxxCommand.java 변경
+- src/main/java/com/eomcs/pms/handler/MemberXxxCommand.java 변경
+- src/main/java/com/eomcs/pms/handler/ProjectXxxCommand.java 변경
+- src/main/java/com/eomcs/pms/handler/TaskXxxCommand.java 변경
+- src/main/java/com/eomcs/pms/App.java 변경
