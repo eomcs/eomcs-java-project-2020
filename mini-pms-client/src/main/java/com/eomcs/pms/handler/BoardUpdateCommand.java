@@ -2,7 +2,6 @@ package com.eomcs.pms.handler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import com.eomcs.util.Prompt;
@@ -53,13 +52,13 @@ public class BoardUpdateCommand implements Command {
 
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "update pms_board set title = ?, content = ? where no = ?")) {
+        Statement stmt = con.createStatement()) {
 
-      stmt.setString(1, title);
-      stmt.setString(2, content);
-      stmt.setInt(3, no);
-      int count = stmt.executeUpdate();
+      String sql = String.format(
+          "update pms_board set title = '%s', content = '%s' where no = %d",
+          title, content, no);
+
+      int count = stmt.executeUpdate(sql);
 
       if (count == 0) {
         System.out.println("해당 번호의 게시물이 존재하지 않습니다.");
