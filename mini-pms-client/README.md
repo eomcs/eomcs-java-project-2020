@@ -1,18 +1,23 @@
 # 37-c. 데이터 관리를 DBMS에게 맡기기 : 무결성 제약 조건 다루기
 
 이번 훈련에서는,
-- **무결성 제약 조건(integrity constraints)** 중에서 외부 키를 사용하는 방법을 배울 것이다.
-- **관계 테이블** 을 만들고 사용하는 것을 배울 것이다.
+- **무결성 제약 조건(integrity constraints)** 을 이용하여
+  무효한 데이터가 존재하지 않도록 하는 방법을 배울 것이다.
+- 테이블 간의 다대다 관계를 해소하기 위해 **관계 테이블** 을 다루는 방법을 배울 것이다.
 
 
 ## 훈련 목표
 - **무결성 제약 조건** 의 의미를 이해한다.
-- **외부 키** 를 설정하는 방법과 활용하는 방법을 연습한다.
-- **다대다 관계** 의 문제점을 이해하고 해소하는 방법을 연습한다.
-- **관계 테이블** 의 의미를 이해한다.
+- **외부 키** 를 설정하는 방법과 활용하는 것을 배운다.
+- **다대다 관계** 의 문제를 이해하고 **관계 테이블** 을 이용하여 해소하는 것을 배운다.
+- **조인** 을 활용하여 여러 테이블에 걸쳐 있는 데이터를 가져오는 것을 배운다.
+- 테이블 간의 관계에 맞춰 객체 간의 포함 관계를 구현하는 것을 배운다.
 
 ## 훈련 내용
--
+- 프로젝트 테이블과 작업 테이블을 변경한다.
+  - 회원 이름을 저장하는 owner 컬럼을 회원 테이블에 존재하는 회원 번호를 저장하도록 외부 키(foreign key) 컬럼으로 변경한다.
+  - 프로젝트 팀원 정보를 저장할 관계 테이블을 정의한다.
+- 프로젝트 테이블과 작업 테이블의 변경에 맞춰 ProjectXxxCommand 클래스와 TaskXxxCommand 클래스를 변경한다.
 
 ## 실습
 
@@ -95,11 +100,11 @@ alter table pms_member_project
   add constraint pms_member_project_pk primary key(member_no, project_no);
 ```
 
-### 2단계 - 프로젝트를 등록하거나, 조회, 변경할 때 회원 번호(FK)를 사용한다.
+### 2단계 - `pms_project` 테이블의 변경에 맞춰 외부키를 다룰 수 있도록 ProjectXxxCommand 클래스를 변경한다.
 
 - com.eomcs.pms.handler.MemberListCommand 변경
-  - findByName() 에서 데이터베이스에서 가져온 회원 저장할 때,
-    회원 번호를 설정하는 코드를 추가한다.
+  - findByName() 를 변경한다.
+  - Member 객체를 리턴할 때 회원 번호를 추가한다.
 - com.eomcs.pms.domain.Project 변경
   - owner 필드를 관리자 회원 정보를 저장하도록 Member 타입으로 변경한다.
   - members 필드를 참여자 회원 목록을 저장하도록 List<Member> 타입으로 변경한다.
@@ -112,9 +117,22 @@ alter table pms_member_project
   - `pms_project` 와 `pms_member` 를 조인하여 프로젝트 관리자의 이름을 알아낸다.
   - `pms_member_project` 와 `pms_member` 를 조인하여 팀원 목록과 그 이름을 알아낸다.
 - com.eomcs.pms.handler.ProjectUpdateCommand 변경
-  
+  - 팀원 목록을 변경할 때 일단 기존 팀원들을 모두 지우고 새로 등록한다.
+- com.eomcs.pms.handler.ProjectDeleteCommand 변경
+  - `pms_member_project` 테이블에서 팀원 목록을 먼저 삭제한다.
+  - 그런 후 프로젝트 정보를 삭제한다.
+
+### 3단계 - `pms_task` 테이블의 변경에 맞춰 외부키를 다룰 수 있도록 TaskXxxCommand 클래스를 변경한다.
+
+- com.eomcs.pms.domain.Task 변경
+  - owner 필드를 담당자 회원 정보를 저장하도록 Member 타입으로 변경한다.
+- com.eomcs.pms.handler.TaskXxxCommand 변경
+  - 외부키를 고려하여 등록, 조회, 변경, 삭제를 처리한다.
+
+
 ## 실습 결과
-- src/main/java/com/eomcs/pms/handler/BoardXxxCommand.java 변경
-- src/main/java/com/eomcs/pms/handler/MemberXxxCommand.java 변경
+- src/main/java/com/eomcs/pms/domain/Project.java 변경
+- src/main/java/com/eomcs/pms/domain/Task.java 변경
+- src/main/java/com/eomcs/pms/handler/MemberListCommand.java 변경
 - src/main/java/com/eomcs/pms/handler/ProjectXxxCommand.java 변경
 - src/main/java/com/eomcs/pms/handler/TaskXxxCommand.java 변경
