@@ -49,6 +49,7 @@ public class MemberListCommand implements Command {
       try (ResultSet rs = stmt.executeQuery()) {
         if (rs.next()) {
           Member member = new Member();
+          member.setNo(rs.getInt("no"));
           member.setName(rs.getString("name"));
           member.setEmail(rs.getString("email"));
           member.setPhoto(rs.getString("photo"));
