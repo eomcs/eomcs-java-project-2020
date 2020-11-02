@@ -95,7 +95,7 @@ alter table pms_member_project
   add constraint pms_member_project_pk primary key(member_no, project_no);
 ```
 
-### 2단계 - 프로젝트를 등록하거나 변경할 때 프로젝트 번호를 저장한다.
+### 2단계 - 프로젝트를 등록하거나, 조회, 변경할 때 회원 번호(FK)를 사용한다.
 
 - com.eomcs.pms.handler.MemberListCommand 변경
   - findByName() 에서 데이터베이스에서 가져온 회원 저장할 때,
@@ -104,8 +104,15 @@ alter table pms_member_project
   - owner 필드를 관리자 회원 정보를 저장하도록 Member 타입으로 변경한다.
   - members 필드를 참여자 회원 목록을 저장하도록 List<Member> 타입으로 변경한다.
 - com.eomcs.pms.handler.ProjectAddCommand 변경
--
-
+  - `pms_project` 테이블에 프로젝트를 입력할 때 회원 이름 대신 번호를 저장한다.
+  - 프로젝트를 입력한 후 프로젝트의 멤버들은 `pms_member_project` 테이블에 입력한다.
+- com.eomcs.pms.handler.ProjectListCommand 변경
+  - `pms_project` 테이블과 `pms_member` 테이블을 조인하여 회원 이름을 알아낸다.
+- com.eomcs.pms.handler.ProjectDetailCommand 변경
+  - `pms_project` 와 `pms_member` 를 조인하여 프로젝트 관리자의 이름을 알아낸다.
+  - `pms_member_project` 와 `pms_member` 를 조인하여 팀원 목록과 그 이름을 알아낸다.
+- com.eomcs.pms.handler.ProjectUpdateCommand 변경
+  
 ## 실습 결과
 - src/main/java/com/eomcs/pms/handler/BoardXxxCommand.java 변경
 - src/main/java/com/eomcs/pms/handler/MemberXxxCommand.java 변경
