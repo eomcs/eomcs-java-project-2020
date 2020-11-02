@@ -11,7 +11,7 @@
   - 데이터 중복 최소화
   - 데이터 공유
   - 일관성, 무결성, 보안성 유지
-  - 데이터 접근 요이성
+  - 데이터 접근 용이성
   - 데이터 저장 공간 절약
 
 **데이터베이스 관리 시스템(Database Management System: DBMS)** 은,
@@ -35,7 +35,7 @@
   - **JRE(Java Runtime Environment)** 에 기본으로 포함되어 있다.
 - Type 2
   - *네이티브 드라이버(native driver)* 라 부른다.
-  - DBMS 제작자가 제공하는 *데이터베이스 API(C/C++)* 를 호출하여 DBMS와 연동한다.
+  - DBMS 제작자가 제공하는 *데이터베이스 API(C/C++) = Vendor API = Native API* 를 호출하여 DBMS와 연동한다.
   - 따라서 이 드라이버를 사용하는 컴퓨터에 *데이터베이스 API* 가 설치되어 있어야 한다.
   - DBMS 제작자가 별도의 써드 파티 업체에서 제공한다.
 - Type 3
