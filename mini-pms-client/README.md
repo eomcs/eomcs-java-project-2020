@@ -147,7 +147,13 @@ alter table pms_board
   add constraint pms_board_fk foreign key(writer) references pms_member(no);
 ```
 
+- com.eomcs.pms.domain.Board 변경
+  - writer 필드를 String 대신 회원 정보를 저장하도록 Member 타입으로 변경한다.
+- com.eomcs.pms.handler.BoardXxxCommand 변경
+  - `pms_board` 테이블에 적용된 FK 컬럼에 맞춰 등록, 조회, 변경을 처리한다.
+
 ## 실습 결과
 - src/main/java/com/eomcs/pms/domain/Task.java 변경
+- src/main/java/com/eomcs/pms/domain/Board.java 변경
 - src/main/java/com/eomcs/pms/handler/TaskXxxCommand.java 변경
--
+- src/main/java/com/eomcs/pms/handler/BoardXxxCommand.java 변경
