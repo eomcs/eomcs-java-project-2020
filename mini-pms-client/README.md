@@ -130,6 +130,32 @@ alter table pms_member_project
 - com.eomcs.pms.handler.TaskXxxCommand 변경
   - 외부키를 고려하여 등록, 조회, 변경, 삭제를 처리한다.
 
+### 4단계 - `pms_task` 테이블에 프로젝트를 참조하는 FK 컬럼을 추가한다.
+
+- 작업 테이블을 재정의한다.
+```
+create table pms_task(
+  no int not null,
+  content text not null,
+  deadline date not null,
+  owner int not null,   /* pms_member 의 PK 컬럼을 가리키는 외부키다*/
+  project_no int not null, /* pms_project 의 PK 컬럼을 가리키는 외부키다*/
+  status int default 0
+);
+
+alter table pms_task
+  add constraint pms_task_pk primary key(no);
+
+alter table pms_task
+  modify column no int not null auto_increment;
+
+alter table pms_task
+  add constraint pms_task_fk1 foreign key(owner) references pms_member(no);
+
+alter table pms_task
+  add constraint pms_task_fk2 foreign key(project_no) references pms_project(no);
+```
+
 
 ## 실습 결과
 - src/main/java/com/eomcs/pms/domain/Project.java 변경
