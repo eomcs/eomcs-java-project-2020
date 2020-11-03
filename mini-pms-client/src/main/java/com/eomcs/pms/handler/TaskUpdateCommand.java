@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
 
@@ -25,9 +26,9 @@ public class TaskUpdateCommand implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select content, deadline, owner, status"
-                + " from pms_task"
-                + " where no = ?")) {
+            "select t.content, t.deadline, t.owner, t.status, m.name owner_name"
+                + " from pms_task t inner join pms_member m on t.owner=m.no"
+                + " where t.no = ?")) {
 
       stmt.setInt(1, no);
 
@@ -35,7 +36,13 @@ public class TaskUpdateCommand implements Command {
         if (rs.next()) {
           task.setContent(rs.getString("content"));
           task.setDeadline(rs.getDate("deadline"));
-          task.setOwner(rs.getString("owner"));
+
+          Member member = new Member();
+          member.setNo(rs.getInt("owner"));
+          member.setName(rs.getString("owner_name"));
+
+          task.setOwner(member);
+
           task.setStatus(rs.getInt("status"));
         } else {
           System.out.println("해당 번호의 작업이 존재하지 않습니다.");
@@ -69,16 +76,20 @@ public class TaskUpdateCommand implements Command {
 
     while (true) {
       String name = Prompt.inputString(
-          String.format("담당자(%s)?(취소: 빈 문자열) ", task.getOwner()));
+          String.format("담당자(%s)?(취소: 빈 문자열) ", task.getOwner().getName()));
 
       if (name.length() == 0) {
-        System.out.println("작업 등록을 취소합니다.");
+        System.out.println("작업 변경을 취소합니다.");
         return;
-      } else if (memberListCommand.findByName(name) != null) {
-        task.setOwner(name);
+      } else {
+        Member member = memberListCommand.findByName(name);
+        if (member == null) {
+          System.out.println("등록된 회원이 아닙니다.");
+          continue;
+        }
+        task.setOwner(member);
         break;
       }
-      System.out.println("등록된 회원이 아닙니다.");
     }
 
     String response = Prompt.inputString("정말 변경하시겠습니까?(y/N) ");
@@ -99,7 +110,7 @@ public class TaskUpdateCommand implements Command {
 
       stmt.setString(1, task.getContent());
       stmt.setDate(2, task.getDeadline());
-      stmt.setString(3, task.getOwner());
+      stmt.setInt(3, task.getOwner().getNo());
       stmt.setInt(4, task.getStatus());
       stmt.setInt(5, no);
       int count = stmt.executeUpdate();

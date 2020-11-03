@@ -17,7 +17,8 @@
 - 프로젝트 테이블과 작업 테이블을 변경한다.
   - 회원 이름을 저장하는 owner 컬럼을 회원 테이블에 존재하는 회원 번호를 저장하도록 외부 키(foreign key) 컬럼으로 변경한다.
   - 프로젝트 팀원 정보를 저장할 관계 테이블을 정의한다.
-- 프로젝트 테이블과 작업 테이블의 변경에 맞춰 ProjectXxxCommand 클래스와 TaskXxxCommand 클래스를 변경한다.
+- 프로젝트 테이블과 작업 테이블의 변경에 맞춰 Command 구현체를 변경한다.
+  - ProjectXxxCommand 클래스와 TaskXxxCommand 클래스를 변경한다.
 
 ## 실습
 

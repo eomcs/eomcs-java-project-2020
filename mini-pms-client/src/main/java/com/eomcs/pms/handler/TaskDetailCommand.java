@@ -16,9 +16,9 @@ public class TaskDetailCommand implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select content, deadline, owner, status"
-                + " from pms_task"
-                + " where no = ?")) {
+            "select t.content, t.deadline, t.owner, t.status, m.name owner_name"
+                + " from pms_task t inner join pms_member m on t.owner=m.no"
+                + " where t.no = ?")) {
 
       stmt.setInt(1, no);
 
@@ -38,7 +38,7 @@ public class TaskDetailCommand implements Command {
               stateLabel = "신규";
           }
           System.out.printf("상태: %s\n", stateLabel);
-          System.out.printf("담당자: %s\n", rs.getString("owner"));
+          System.out.printf("담당자: %s\n", rs.getString("owner_name"));
 
         } else {
           System.out.println("해당 번호의 작업이 존재하지 않습니다.");
