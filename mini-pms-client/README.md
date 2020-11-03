@@ -67,13 +67,6 @@ alter table pms_task
 - com.eomcs.pms.handler.TaskXxxCommand 변경
   - 작업 정보를 등록하거나 조회, 변경할 때 프로젝트 번호도 함께 다룬다.
 
-
-select mp.member_no, m.name
-from pms_member_project mp inner join pms_member m
-on mp.member_no=m.no
-where mp.project_no=3
-order by m.name asc
-
 ```
 > /task/add
 프로젝트들:
@@ -99,11 +92,62 @@ order by m.name asc
 유효한 담당자 번호가 아닙니다.
 > 7
 작업을 등록하였습니다.
+
+> 명령> /task/update
+[작업 변경]
+번호? 9
+현재 프로젝트: p2
+프로젝트들:
+  4, p2
+  3, p1
+변경할 프로젝트 번호?(0: 취소) 5
+프로젝트 번호가 맞지 않습니다.
+변경할 프로젝트 번호?(0: 취소) 3
+내용(okok1)? xxxxx
+마감일(2020-01-01)? 2020-3-3
+상태(진행중)?
+0: 신규
+1: 진행중
+2: 완료
+> 2
+멤버들:
+  5, bbb
+  3, ccc
+변경할 멤버 번호?(0: 취소) 4
+멤버 번호가 맞지 않습니다.
+변경할 멤버 번호?(0: 취소) 1
+멤버 번호가 맞지 않습니다.
+변경할 멤버 번호?(0: 취소) 3
+정말 변경하시겠습니까?(y/N) y
+작업을 변경하였습니다.
+```
+
+### 2단계 - `pms_board` 테이블에 회원 테이블을 참조하는 FK 컬럼을 추가한다.
+
+게시글을 저장할 때 직접 회원 이름을 입력하는 대신에 존재하는 회원 번호를 입력한다.
+
+- 게시글 테이블을 재정의 한다.
+```
+create table pms_board(
+  no int not null,
+  title varchar(255) not null,
+  content text not null,
+  writer int not null,
+  cdt datetime default now(),
+  vw_cnt int default 0
+);
+
+alter table pms_board
+  add constraint pms_board_pk primary key(no);
+
+alter table pms_board
+  modify column no int not null auto_increment;
+
+alter table pms_board
+  add constraint pms_board_fk foreign key(writer) references pms_member(no);
 ```
 
 ## 실습 결과
-- src/main/java/com/eomcs/pms/domain/Project.java 변경
 - src/main/java/com/eomcs/pms/domain/Task.java 변경
-- src/main/java/com/eomcs/pms/handler/MemberListCommand.java 변경
-- src/main/java/com/eomcs/pms/handler/ProjectXxxCommand.java 변경
 - src/main/java/com/eomcs/pms/handler/TaskXxxCommand.java 변경
+-
