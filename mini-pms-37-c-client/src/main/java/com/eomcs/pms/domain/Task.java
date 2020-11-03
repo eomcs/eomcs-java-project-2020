@@ -8,7 +8,6 @@ public class Task {
   private Date deadline;
   private int status;
   private Member owner;
-  private int projectNo;
 
   public int getNo() {
     return no;
@@ -40,11 +39,4 @@ public class Task {
   public void setOwner(Member owner) {
     this.owner = owner;
   }
-  public int getProjectNo() {
-    return projectNo;
-  }
-  public void setProjectNo(int projectNo) {
-    this.projectNo = projectNo;
-  }
-
 }
