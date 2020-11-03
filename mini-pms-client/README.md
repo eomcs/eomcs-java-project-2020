@@ -55,11 +55,15 @@ alter table pms_task
 alter table pms_task
   add constraint pms_task_fk1 foreign key(owner, project_no)
       references pms_member_project(member_no, project_no);
-      
+
 ```
 
 - com.eomcs.pms.domain.Task 변경
   - 프로젝트 번호를 저장할 필드를 추가한다.
+  - 프로젝트 제목을 저장할 필드를 추가한다.
+    - 도메인 클래스는 입출력할 데이터를 임시 보관하는 용도로 사용된다.
+    - 따라서 테이블과 똑 같이 맞추려고 하지 말라.
+    - 필요하다면 필드를 추가하고 제거하는 것을 자유롭게 하라.
 - com.eomcs.pms.handler.TaskXxxCommand 변경
   - 작업 정보를 등록하거나 조회, 변경할 때 프로젝트 번호도 함께 다룬다.
 

@@ -63,11 +63,7 @@ public class TaskAddCommand implements Command {
           }
           System.out.println("프로젝트 번호가 맞지 않습니다.");
         }
-      } catch (Exception e) {
-        System.out.println("프로젝트 목록 조회 오류!");
-        return;
       }
-
 
       task.setContent(Prompt.inputString("내용? "));
       task.setDeadline(Prompt.inputDate("마감일? "));
@@ -112,9 +108,6 @@ public class TaskAddCommand implements Command {
           }
           System.out.println("멤버 번호가 맞지 않습니다.");
         }
-      } catch (Exception e) {
-        System.out.println("멤버 목록 조회 오류!");
-        return;
       }
 
       // 작업 정보를 입력한다.
