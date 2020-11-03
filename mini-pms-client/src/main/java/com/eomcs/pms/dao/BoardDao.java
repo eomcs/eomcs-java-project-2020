@@ -113,6 +113,19 @@ public class BoardDao {
       }
     }
   }
+
+  public int update(Board board) throws Exception {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "update pms_board set title = ?, content = ? where no = ?")) {
+
+      stmt.setString(1, board.getTitle());
+      stmt.setString(2, board.getContent());
+      stmt.setInt(3, board.getNo());
+      return stmt.executeUpdate();
+    }
+  }
 }
 
 

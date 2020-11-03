@@ -8,8 +8,8 @@ public class BoardListCommand implements Command {
 
   BoardDao boardDao;
 
-  public BoardListCommand() {
-    boardDao = new BoardDao();
+  public BoardListCommand(BoardDao boardDao) {
+    this.boardDao = boardDao;
   }
 
   @Override

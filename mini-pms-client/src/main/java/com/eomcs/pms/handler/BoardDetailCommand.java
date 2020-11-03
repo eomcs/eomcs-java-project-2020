@@ -7,8 +7,8 @@ import com.eomcs.util.Prompt;
 public class BoardDetailCommand implements Command {
   BoardDao boardDao;
 
-  public BoardDetailCommand() {
-    boardDao = new BoardDao();
+  public BoardDetailCommand(BoardDao boardDao) {
+    this.boardDao = boardDao;
   }
 
   @Override
