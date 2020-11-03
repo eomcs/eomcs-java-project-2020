@@ -16,16 +16,16 @@ public class BoardDetailCommand implements Command {
     try (Connection con = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
-            "select no, title, content, writer, cdt, vw_cnt"
-                + " from pms_board"
-                + " where no = ?")) {
+            "select b.no, b.title, b.content, b.cdt, b.vw_cnt, m.name"
+                + " from pms_board b inner join pms_member m on b.writer=m.no"
+                + " where b.no = ?")) {
 
       stmt.setInt(1, no);
       try (ResultSet rs = stmt.executeQuery()) {
         if (rs.next()) {
           System.out.printf("제목: %s\n", rs.getString("title"));
           System.out.printf("내용: %s\n", rs.getString("content"));
-          System.out.printf("작성자: %s\n", rs.getString("writer"));
+          System.out.printf("작성자: %s\n", rs.getString("name"));
           System.out.printf("등록일: %s\n", rs.getDate("cdt"));
           System.out.printf("조회수: %d\n", rs.getInt("vw_cnt") + 1);
 
