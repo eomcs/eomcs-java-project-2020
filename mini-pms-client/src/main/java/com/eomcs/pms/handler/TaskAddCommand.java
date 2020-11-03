@@ -110,47 +110,30 @@ public class TaskAddCommand implements Command {
             task.setOwner(member);
             break;
           }
-          System.out.println("프로젝트 번호가 맞지 않습니다.");
+          System.out.println("멤버 번호가 맞지 않습니다.");
         }
       } catch (Exception e) {
-        System.out.println("프로젝트 목록 조회 오류!");
+        System.out.println("멤버 목록 조회 오류!");
         return;
       }
 
-      while (true) {
-        String name = Prompt.inputString("담당자?(취소: 빈 문자열) ");
-
-        if (name.length() == 0) {
-          System.out.println("작업 등록을 취소합니다.");
-          return;
-        } else {
-          Member member = memberListCommand.findByName(name);
-          if (member == null) {
-            System.out.println("등록된 회원이 아닙니다.");
-            continue;
-          }
-          task.setOwner(member);
-          break;
-        }
-      }
-
-      try (Connection con = DriverManager.getConnection(
-          "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-          PreparedStatement stmt = con.prepareStatement(
-              "insert into pms_task(content,deadline,owner,status)"
-                  + " values(?,?,?,?)")) {
+      // 작업 정보를 입력한다.
+      try (PreparedStatement stmt = con.prepareStatement(
+          "insert into pms_task(content,deadline,owner,project_no,status)"
+              + " values(?,?,?,?,?)")) {
 
         stmt.setString(1, task.getContent());
         stmt.setDate(2, task.getDeadline());
         stmt.setInt(3, task.getOwner().getNo());
-        stmt.setInt(4, task.getStatus());
+        stmt.setInt(4, task.getProjectNo());
+        stmt.setInt(5, task.getStatus());
         stmt.executeUpdate();
 
         System.out.println("작업을 등록했습니다.");
-
-      } catch (Exception e) {
-        System.out.println("작업 등록 중 오류 발생!");
-        e.printStackTrace();
       }
+    } catch (Exception e) {
+      System.out.println("작업 등록 중 오류 발생!");
+      e.printStackTrace();
     }
   }
+}
