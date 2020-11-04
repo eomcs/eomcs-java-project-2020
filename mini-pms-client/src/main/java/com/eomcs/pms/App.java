@@ -16,7 +16,6 @@ import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.handler.BoardAddCommand;
 import com.eomcs.pms.handler.BoardDeleteCommand;
 import com.eomcs.pms.handler.BoardDetailCommand;
-import com.eomcs.pms.handler.BoardListCommand;
 import com.eomcs.pms.handler.BoardUpdateCommand;
 import com.eomcs.pms.handler.Command;
 import com.eomcs.pms.handler.HelloCommand;
@@ -94,22 +93,23 @@ public class App {
 
     Map<String,Command> commandMap = new HashMap<>();
 
-    MemberListCommand memberListCommand = new MemberListCommand();
 
     BoardDao boardDao = new BoardDao();
     MemberDao memberDao = new MemberDao();
 
+    MemberListCommand memberListCommand = new MemberListCommand(memberDao);
+
     commandMap.put("/board/add", new BoardAddCommand(boardDao, memberDao));
-    commandMap.put("/board/list", new BoardListCommand(boardDao));
+    commandMap.put("/board/list", memberListCommand);
     commandMap.put("/board/detail", new BoardDetailCommand(boardDao));
     commandMap.put("/board/update", new BoardUpdateCommand(boardDao));
     commandMap.put("/board/delete", new BoardDeleteCommand(boardDao));
 
-    commandMap.put("/member/add", new MemberAddCommand());
-    commandMap.put("/member/list", memberListCommand);
-    commandMap.put("/member/detail", new MemberDetailCommand());
-    commandMap.put("/member/update", new MemberUpdateCommand());
-    commandMap.put("/member/delete", new MemberDeleteCommand());
+    commandMap.put("/member/add", new MemberAddCommand(memberDao));
+    commandMap.put("/member/list", new MemberListCommand(memberDao));
+    commandMap.put("/member/detail", new MemberDetailCommand(memberDao));
+    commandMap.put("/member/update", new MemberUpdateCommand(memberDao));
+    commandMap.put("/member/delete", new MemberDeleteCommand(memberDao));
 
     commandMap.put("/project/add", new ProjectAddCommand(memberListCommand));
     commandMap.put("/project/list", new ProjectListCommand());
