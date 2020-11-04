@@ -18,6 +18,7 @@ import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.handler.BoardAddCommand;
 import com.eomcs.pms.handler.BoardDeleteCommand;
 import com.eomcs.pms.handler.BoardDetailCommand;
+import com.eomcs.pms.handler.BoardListCommand;
 import com.eomcs.pms.handler.BoardUpdateCommand;
 import com.eomcs.pms.handler.Command;
 import com.eomcs.pms.handler.HelloCommand;
@@ -101,16 +102,14 @@ public class App {
     ProjectDao projectDao = new ProjectDao();
     TaskDao taskDao = new TaskDao();
 
-    MemberListCommand memberListCommand = new MemberListCommand(memberDao);
-
     commandMap.put("/board/add", new BoardAddCommand(boardDao, memberDao));
-    commandMap.put("/board/list", memberListCommand);
+    commandMap.put("/board/list", new BoardListCommand(boardDao));
     commandMap.put("/board/detail", new BoardDetailCommand(boardDao));
     commandMap.put("/board/update", new BoardUpdateCommand(boardDao));
     commandMap.put("/board/delete", new BoardDeleteCommand(boardDao));
 
     commandMap.put("/member/add", new MemberAddCommand(memberDao));
-    commandMap.put("/member/list", memberListCommand);
+    commandMap.put("/member/list", new MemberListCommand(memberDao));
     commandMap.put("/member/detail", new MemberDetailCommand(memberDao));
     commandMap.put("/member/update", new MemberUpdateCommand(memberDao));
     commandMap.put("/member/delete", new MemberDeleteCommand(memberDao));
@@ -125,7 +124,7 @@ public class App {
     commandMap.put("/task/list", new TaskListCommand(taskDao));
     commandMap.put("/task/detail", new TaskDetailCommand(taskDao));
     commandMap.put("/task/update", new TaskUpdateCommand(taskDao, projectDao, memberDao));
-    commandMap.put("/task/delete", new TaskDeleteCommand());
+    commandMap.put("/task/delete", new TaskDeleteCommand(taskDao));
 
     commandMap.put("/hello", new HelloCommand());
 
