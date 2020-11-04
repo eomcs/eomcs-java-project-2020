@@ -117,10 +117,91 @@ public class ProjectDao {
   }
 
   public List<Project> findAll() throws Exception {
-    return null;
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select p.no, p.title, p.sdt, p.edt, m.no owner_no, m.name owner_name"
+                + " from pms_project p inner join pms_member m on p.owner=m.no"
+                + " order by p.no desc")) {
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        ArrayList<Project> projects = new ArrayList<>();
+        while (rs.next()) {
+          Project project = new Project();
+          project.setNo(rs.getInt("no"));
+          project.setTitle(rs.getString("title"));
+          project.setStartDate(rs.getDate("sdt"));
+          project.setEndDate(rs.getDate("edt"));
+
+          Member owner = new Member();
+          owner.setNo(rs.getInt("owner_no"));
+          owner.setName(rs.getString("owner_name"));
+          project.setOwner(owner);
+
+          ArrayList<Member> members = new ArrayList<>();
+          try (PreparedStatement stmt2 = con.prepareStatement(
+              "select mp.member_no, m.name"
+                  + " from pms_member_project mp"
+                  + " inner join pms_member m on mp.member_no=m.no"
+                  + " where mp.project_no=" + rs.getInt("no"));
+              ResultSet memberRs = stmt2.executeQuery()) {
+
+            while (memberRs.next()) {
+              Member member = new Member();
+              member.setNo(rs.getInt("member_no"));
+              member.setName(rs.getString("name"));
+              members.add(member);
+            }
+          }
+          project.setMembers(members);
+          projects.add(project);
+        }
+        return projects;
+      }
+    }
   }
 
   public int update(Project project) throws Exception {
-    return 0;
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "update pms_project set"
+                + " title = ?,"
+                + " content = ?,"
+                + " sdt = ?,"
+                + " edt = ?,"
+                + " owner = ?"
+                + " where no = ?")) {
+
+      stmt.setString(1, project.getTitle());
+      stmt.setString(2, project.getContent());
+      stmt.setDate(3, project.getStartDate());
+      stmt.setDate(4, project.getEndDate());
+      stmt.setInt(5, project.getOwner().getNo());
+      stmt.setInt(6, project.getNo());
+      int count = stmt.executeUpdate();
+
+      if (count == 0) {
+        return 0;
+      }
+
+      // 프로젝트 팀원 변경한다.
+      // => 기존에 설정된 모든 팀원을 삭제한다.
+      try (PreparedStatement stmt2 = con.prepareStatement(
+          "delete from pms_member_project where project_no=" + project.getNo())) {
+        stmt2.executeUpdate();
+      }
+
+      // => 새로 팀원을 입력한다.
+      try (PreparedStatement stmt2 = con.prepareStatement(
+          "insert into pms_member_project(member_no, project_no) values(?,?)")) {
+        for (Member member : project.getMembers()) {
+          stmt2.setInt(1, member.getNo());
+          stmt2.setInt(2, project.getNo());
+          stmt2.executeUpdate();
+        }
+      }
+      return 1;
+    }
   }
 }
