@@ -122,7 +122,7 @@ public class App {
     commandMap.put("/project/delete", new ProjectDeleteCommand(projectDao));
 
     commandMap.put("/task/add", new TaskAddCommand(taskDao, projectDao, memberDao));
-    commandMap.put("/task/list", new TaskListCommand());
+    commandMap.put("/task/list", new TaskListCommand(taskDao));
     commandMap.put("/task/detail", new TaskDetailCommand(taskDao));
     commandMap.put("/task/update", new TaskUpdateCommand(taskDao, projectDao, memberDao));
     commandMap.put("/task/delete", new TaskDeleteCommand());
