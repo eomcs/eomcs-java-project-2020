@@ -14,6 +14,7 @@ import com.eomcs.context.ApplicationContextListener;
 import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.dao.ProjectDao;
+import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.handler.BoardAddCommand;
 import com.eomcs.pms.handler.BoardDeleteCommand;
 import com.eomcs.pms.handler.BoardDetailCommand;
@@ -98,6 +99,7 @@ public class App {
     BoardDao boardDao = new BoardDao();
     MemberDao memberDao = new MemberDao();
     ProjectDao projectDao = new ProjectDao();
+    TaskDao taskDao = new TaskDao();
 
     MemberListCommand memberListCommand = new MemberListCommand(memberDao);
 
@@ -119,7 +121,7 @@ public class App {
     commandMap.put("/project/update", new ProjectUpdateCommand(projectDao, memberDao));
     commandMap.put("/project/delete", new ProjectDeleteCommand(projectDao));
 
-    commandMap.put("/task/add", new TaskAddCommand(memberListCommand));
+    commandMap.put("/task/add", new TaskAddCommand(taskDao, projectDao, memberDao));
     commandMap.put("/task/list", new TaskListCommand());
     commandMap.put("/task/detail", new TaskDetailCommand());
     commandMap.put("/task/update", new TaskUpdateCommand(memberListCommand));

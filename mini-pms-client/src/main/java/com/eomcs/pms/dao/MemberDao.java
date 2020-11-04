@@ -136,4 +136,26 @@ public class MemberDao {
       return stmt.executeUpdate();
     }
   }
+
+  public List<Member> findByProjectNo(int projectNo) throws Exception {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select mp.member_no, m.name"
+                + " from pms_member_project mp inner join pms_member m"
+                + " on mp.member_no=m.no"
+                + " where mp.project_no=" + projectNo
+                + " order by m.name asc");
+        ResultSet rs = stmt.executeQuery()) {
+
+      ArrayList<Member> members = new ArrayList<>();
+      while (rs.next()) {
+        Member member = new Member();
+        member.setNo(rs.getInt("member_no"));
+        member.setName(rs.getString("name"));
+        members.add(member);
+      }
+      return members;
+    }
+  }
 }
