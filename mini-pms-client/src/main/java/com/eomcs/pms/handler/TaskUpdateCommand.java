@@ -101,13 +101,13 @@ public class TaskUpdateCommand implements Command {
 
       // 사용자로부터 멤버 번호를 입력 받는다.
       while (true) {
-        int taskNo = Prompt.inputInt("담당자 번호?(0: 취소) ");
-        if (taskNo == 0) {
+        int memberNo = Prompt.inputInt("담당자 번호?(0: 취소) ");
+        if (memberNo == 0) {
           System.out.println("작업 등록을 취소합니다.");
           return;
-        } else if (memberNoList.contains(taskNo)) {
+        } else if (memberNoList.contains(memberNo)) {
           Member member = new Member();
-          member.setNo(taskNo);
+          member.setNo(memberNo);
           task.setOwner(member);
           break;
         }
