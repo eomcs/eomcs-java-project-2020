@@ -103,8 +103,8 @@ public class ProjectDao {
 
             while (memberRs.next()) {
               Member member = new Member();
-              member.setNo(rs.getInt("member_no"));
-              member.setName(rs.getString("name"));
+              member.setNo(memberRs.getInt("member_no"));
+              member.setName(memberRs.getString("name"));
               members.add(member);
             }
           }
@@ -148,8 +148,8 @@ public class ProjectDao {
 
             while (memberRs.next()) {
               Member member = new Member();
-              member.setNo(rs.getInt("member_no"));
-              member.setName(rs.getString("name"));
+              member.setNo(memberRs.getInt("member_no"));
+              member.setName(memberRs.getString("name"));
               members.add(member);
             }
           }
