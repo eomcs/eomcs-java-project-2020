@@ -15,7 +15,7 @@ public class MemberDao {
         "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
         PreparedStatement stmt = con.prepareStatement(
             "insert into pms_member(name,email,password,photo,tel)"
-                + " values(?,?,?,?,?)")) {
+                + " values(?,?,password(?),?,?)")) {
 
       stmt.setString(1, member.getName());
       stmt.setString(2, member.getEmail());
@@ -122,7 +122,7 @@ public class MemberDao {
             "update pms_member set"
                 + " name = ?,"
                 + " email = ?,"
-                + " password = ?,"
+                + " password = password(?),"
                 + " photo = ?,"
                 + " tel = ?"
                 + " where no = ?")) {

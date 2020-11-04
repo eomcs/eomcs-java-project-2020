@@ -106,7 +106,7 @@ public class App {
     commandMap.put("/board/delete", new BoardDeleteCommand(boardDao));
 
     commandMap.put("/member/add", new MemberAddCommand(memberDao));
-    commandMap.put("/member/list", new MemberListCommand(memberDao));
+    commandMap.put("/member/list", memberListCommand);
     commandMap.put("/member/detail", new MemberDetailCommand(memberDao));
     commandMap.put("/member/update", new MemberUpdateCommand(memberDao));
     commandMap.put("/member/delete", new MemberDeleteCommand(memberDao));
