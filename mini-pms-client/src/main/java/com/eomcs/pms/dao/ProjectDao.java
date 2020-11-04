@@ -13,23 +13,25 @@ import com.eomcs.pms.domain.Project;
 public class ProjectDao {
   public int insert(Project project) throws Exception {
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "insert into pms_project(title,content,sdt,edt,owner)"
-                + " values(?,?,?,?,?)",
-                Statement.RETURN_GENERATED_KEYS)) {
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
 
-      stmt.setString(1, project.getTitle());
-      stmt.setString(2, project.getContent());
-      stmt.setDate(3, project.getStartDate());
-      stmt.setDate(4, project.getEndDate());
-      stmt.setInt(5, project.getOwner().getNo());
-      stmt.executeUpdate();
+      try (PreparedStatement stmt = con.prepareStatement(
+          "insert into pms_project(title,content,sdt,edt,owner)"
+              + " values(?,?,?,?,?)",
+              Statement.RETURN_GENERATED_KEYS)) {
 
-      // 금방 입력한 프로젝트의 no 값을 가져오기
-      try (ResultSet keyRs = stmt.getGeneratedKeys()) {
-        keyRs.next();
-        project.setNo(keyRs.getInt(1));
+        stmt.setString(1, project.getTitle());
+        stmt.setString(2, project.getContent());
+        stmt.setDate(3, project.getStartDate());
+        stmt.setDate(4, project.getEndDate());
+        stmt.setInt(5, project.getOwner().getNo());
+        stmt.executeUpdate();
+
+        // 금방 입력한 프로젝트의 no 값을 가져오기
+        try (ResultSet keyRs = stmt.getGeneratedKeys()) {
+          keyRs.next();
+          project.setNo(keyRs.getInt(1));
+        }
       }
 
       // 프로젝트에 참여하는 멤버의 정보를 저장한다.
@@ -47,17 +49,26 @@ public class ProjectDao {
 
   public int delete(int no) throws Exception {
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "delete from pms_project where no=?")) {
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
+
+      // => 프로젝트의 작업을 지운다.
+      try (PreparedStatement stmt = con.prepareStatement(
+          "delete from pms_task where project_no=" + no)) {
+        stmt.executeUpdate();
+      }
 
       // => 프로젝트에 참여하는 모든 팀원을 삭제한다.
-      try (PreparedStatement stmt2 = con.prepareStatement(
+      try (PreparedStatement stmt = con.prepareStatement(
           "delete from pms_member_project where project_no=" + no)) {
-        stmt2.executeUpdate();
+        stmt.executeUpdate();
       }
-      stmt.setInt(1, no);
-      return stmt.executeUpdate();
+
+      // => 프로젝트를 삭제한다.
+      try (PreparedStatement stmt = con.prepareStatement(
+          "delete from pms_project where no=?")) {
+        stmt.setInt(1, no);
+        return stmt.executeUpdate();
+      }
     }
   }
 
@@ -163,44 +174,47 @@ public class ProjectDao {
 
   public int update(Project project) throws Exception {
     try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "update pms_project set"
-                + " title = ?,"
-                + " content = ?,"
-                + " sdt = ?,"
-                + " edt = ?,"
-                + " owner = ?"
-                + " where no = ?")) {
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
 
-      stmt.setString(1, project.getTitle());
-      stmt.setString(2, project.getContent());
-      stmt.setDate(3, project.getStartDate());
-      stmt.setDate(4, project.getEndDate());
-      stmt.setInt(5, project.getOwner().getNo());
-      stmt.setInt(6, project.getNo());
-      int count = stmt.executeUpdate();
+      try (PreparedStatement stmt = con.prepareStatement(
+          "update pms_project set"
+              + " title = ?,"
+              + " content = ?,"
+              + " sdt = ?,"
+              + " edt = ?,"
+              + " owner = ?"
+              + " where no = ?")) {
 
-      if (count == 0) {
-        return 0;
+        stmt.setString(1, project.getTitle());
+        stmt.setString(2, project.getContent());
+        stmt.setDate(3, project.getStartDate());
+        stmt.setDate(4, project.getEndDate());
+        stmt.setInt(5, project.getOwner().getNo());
+        stmt.setInt(6, project.getNo());
+        int count = stmt.executeUpdate();
+
+        if (count == 0) {
+          return 0;
+        }
       }
 
       // 프로젝트 팀원 변경한다.
       // => 기존에 설정된 모든 팀원을 삭제한다.
-      try (PreparedStatement stmt2 = con.prepareStatement(
+      try (PreparedStatement stmt = con.prepareStatement(
           "delete from pms_member_project where project_no=" + project.getNo())) {
-        stmt2.executeUpdate();
+        stmt.executeUpdate();
       }
 
       // => 새로 팀원을 입력한다.
-      try (PreparedStatement stmt2 = con.prepareStatement(
+      try (PreparedStatement stmt = con.prepareStatement(
           "insert into pms_member_project(member_no, project_no) values(?,?)")) {
         for (Member member : project.getMembers()) {
-          stmt2.setInt(1, member.getNo());
-          stmt2.setInt(2, project.getNo());
-          stmt2.executeUpdate();
+          stmt.setInt(1, member.getNo());
+          stmt.setInt(2, project.getNo());
+          stmt.executeUpdate();
         }
       }
+
       return 1;
     }
   }
