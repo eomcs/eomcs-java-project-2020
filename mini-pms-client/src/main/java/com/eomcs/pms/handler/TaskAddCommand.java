@@ -61,7 +61,7 @@ public class TaskAddCommand implements Command {
       task.setDeadline(Prompt.inputDate("마감일? "));
       task.setStatus(Prompt.inputInt("상태?\n0: 신규\n1: 진행중\n2: 완료\n> "));
 
-      // 작업을 수행할 담당자를 결정한다.
+      // 프로젝트의 멤버 중에서 작업을 수행할 담당자를 결정한다.
       List<Member> members = memberDao.findByProjectNo(task.getProjectNo());
       if (members.size() == 0) {
         System.out.println("멤버가 없습니다!");
@@ -79,7 +79,7 @@ public class TaskAddCommand implements Command {
 
       // 사용자로부터 멤버 번호를 입력 받는다.
       while (true) {
-        int no = Prompt.inputInt("멤버 번호?(0: 취소) ");
+        int no = Prompt.inputInt("담당자 번호?(0: 취소) ");
         if (no == 0) {
           System.out.println("작업 등록을 취소합니다.");
           return;
@@ -94,6 +94,7 @@ public class TaskAddCommand implements Command {
 
       // 작업 정보를 입력한다.
       taskDao.insert(task);
+
       System.out.println("작업을 등록했습니다.");
 
     } catch (Exception e) {
