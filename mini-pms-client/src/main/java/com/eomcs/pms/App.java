@@ -1,5 +1,6 @@
 package com.eomcs.pms;
 
+import java.sql.Connection;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -100,11 +101,13 @@ public class App {
 
     Map<String,Command> commandMap = new HashMap<>();
 
+    // AppInitListener 가 준비한 Connection 객체를 꺼낸다.
+    Connection con  = (Connection) context.get("con");
 
-    BoardDao boardDao = new BoardDaoImpl();
-    MemberDao memberDao = new MemberDaoImpl();
-    ProjectDao projectDao = new ProjectDaoImpl();
-    TaskDao taskDao = new TaskDaoImpl();
+    BoardDao boardDao = new BoardDaoImpl(con);
+    MemberDao memberDao = new MemberDaoImpl(con);
+    ProjectDao projectDao = new ProjectDaoImpl(con);
+    TaskDao taskDao = new TaskDaoImpl(con);
 
     commandMap.put("/board/add", new BoardAddCommand(boardDao, memberDao));
     commandMap.put("/board/list", new BoardListCommand(boardDao));

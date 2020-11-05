@@ -1,7 +1,6 @@
 package com.eomcs.pms.dao.mariadb;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -11,85 +10,81 @@ import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 
 public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
+
+  Connection con;
+
+  public ProjectDaoImpl(Connection con) {
+    this.con = con;
+  }
+
   @Override
   public int insert(Project project) throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "insert into pms_project(title,content,sdt,edt,owner)"
+            + " values(?,?,?,?,?)",
+            Statement.RETURN_GENERATED_KEYS)) {
 
-      try (PreparedStatement stmt = con.prepareStatement(
-          "insert into pms_project(title,content,sdt,edt,owner)"
-              + " values(?,?,?,?,?)",
-              Statement.RETURN_GENERATED_KEYS)) {
+      stmt.setString(1, project.getTitle());
+      stmt.setString(2, project.getContent());
+      stmt.setDate(3, project.getStartDate());
+      stmt.setDate(4, project.getEndDate());
+      stmt.setInt(5, project.getOwner().getNo());
+      stmt.executeUpdate();
 
-        stmt.setString(1, project.getTitle());
-        stmt.setString(2, project.getContent());
-        stmt.setDate(3, project.getStartDate());
-        stmt.setDate(4, project.getEndDate());
-        stmt.setInt(5, project.getOwner().getNo());
-        stmt.executeUpdate();
-
-        // 금방 입력한 프로젝트의 no 값을 가져오기
-        try (ResultSet keyRs = stmt.getGeneratedKeys()) {
-          keyRs.next();
-          project.setNo(keyRs.getInt(1));
-        }
+      // 금방 입력한 프로젝트의 no 값을 가져오기
+      try (ResultSet keyRs = stmt.getGeneratedKeys()) {
+        keyRs.next();
+        project.setNo(keyRs.getInt(1));
       }
-
-      // 프로젝트에 참여하는 멤버의 정보를 저장한다.
-      try (PreparedStatement stmt2 = con.prepareStatement(
-          "insert into pms_member_project(member_no, project_no) values(?,?)")) {
-        for (Member member : project.getMembers()) {
-          stmt2.setInt(1, member.getNo());
-          stmt2.setInt(2, project.getNo());
-          stmt2.executeUpdate();
-        }
-      }
-      return 1;
     }
+
+    // 프로젝트에 참여하는 멤버의 정보를 저장한다.
+    try (PreparedStatement stmt2 = con.prepareStatement(
+        "insert into pms_member_project(member_no, project_no) values(?,?)")) {
+      for (Member member : project.getMembers()) {
+        stmt2.setInt(1, member.getNo());
+        stmt2.setInt(2, project.getNo());
+        stmt2.executeUpdate();
+      }
+    }
+    return 1;
   }
 
   @Override
   public int delete(int no) throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
+    // => 프로젝트의 작업을 지운다.
+    try (PreparedStatement stmt = con.prepareStatement(
+        "delete from pms_task where project_no=" + no)) {
+      stmt.executeUpdate();
+    }
 
-      // => 프로젝트의 작업을 지운다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_task where project_no=" + no)) {
-        stmt.executeUpdate();
-      }
+    // => 프로젝트에 참여하는 모든 팀원을 삭제한다.
+    try (PreparedStatement stmt = con.prepareStatement(
+        "delete from pms_member_project where project_no=" + no)) {
+      stmt.executeUpdate();
+    }
 
-      // => 프로젝트에 참여하는 모든 팀원을 삭제한다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_member_project where project_no=" + no)) {
-        stmt.executeUpdate();
-      }
-
-      // => 프로젝트를 삭제한다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_project where no=?")) {
-        stmt.setInt(1, no);
-        return stmt.executeUpdate();
-      }
+    // => 프로젝트를 삭제한다.
+    try (PreparedStatement stmt = con.prepareStatement(
+        "delete from pms_project where no=?")) {
+      stmt.setInt(1, no);
+      return stmt.executeUpdate();
     }
   }
 
   @Override
   public Project findByNo(int no) throws Exception {
-
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "select"
-                + " p.no,"
-                + " p.title,"
-                + " p.content,"
-                + " p.sdt,"
-                + " p.edt,"
-                + " m.no owner_no,"
-                + " m.name owner_name"
-                + " from pms_project p inner join pms_member m on p.owner=m.no"
-                + " where p.no = ?")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "select"
+            + " p.no,"
+            + " p.title,"
+            + " p.content,"
+            + " p.sdt,"
+            + " p.edt,"
+            + " m.no owner_no,"
+            + " m.name owner_name"
+            + " from pms_project p inner join pms_member m on p.owner=m.no"
+            + " where p.no = ?")) {
 
       stmt.setInt(1, no);
 
@@ -132,12 +127,10 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   @Override
   public List<Project> findAll() throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "select p.no, p.title, p.sdt, p.edt, m.no owner_no, m.name owner_name"
-                + " from pms_project p inner join pms_member m on p.owner=m.no"
-                + " order by p.no desc")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "select p.no, p.title, p.sdt, p.edt, m.no owner_no, m.name owner_name"
+            + " from pms_project p inner join pms_member m on p.owner=m.no"
+            + " order by p.no desc")) {
 
       try (ResultSet rs = stmt.executeQuery()) {
         ArrayList<Project> projects = new ArrayList<>();
@@ -178,49 +171,44 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   @Override
   public int update(Project project) throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "update pms_project set"
+            + " title = ?,"
+            + " content = ?,"
+            + " sdt = ?,"
+            + " edt = ?,"
+            + " owner = ?"
+            + " where no = ?")) {
 
-      try (PreparedStatement stmt = con.prepareStatement(
-          "update pms_project set"
-              + " title = ?,"
-              + " content = ?,"
-              + " sdt = ?,"
-              + " edt = ?,"
-              + " owner = ?"
-              + " where no = ?")) {
+      stmt.setString(1, project.getTitle());
+      stmt.setString(2, project.getContent());
+      stmt.setDate(3, project.getStartDate());
+      stmt.setDate(4, project.getEndDate());
+      stmt.setInt(5, project.getOwner().getNo());
+      stmt.setInt(6, project.getNo());
+      int count = stmt.executeUpdate();
 
-        stmt.setString(1, project.getTitle());
-        stmt.setString(2, project.getContent());
-        stmt.setDate(3, project.getStartDate());
-        stmt.setDate(4, project.getEndDate());
-        stmt.setInt(5, project.getOwner().getNo());
-        stmt.setInt(6, project.getNo());
-        int count = stmt.executeUpdate();
-
-        if (count == 0) {
-          return 0;
-        }
+      if (count == 0) {
+        return 0;
       }
+    }
 
-      // 프로젝트 팀원 변경한다.
-      // => 기존에 설정된 모든 팀원을 삭제한다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_member_project where project_no=" + project.getNo())) {
+    // 프로젝트 팀원 변경한다.
+    // => 기존에 설정된 모든 팀원을 삭제한다.
+    try (PreparedStatement stmt = con.prepareStatement(
+        "delete from pms_member_project where project_no=" + project.getNo())) {
+      stmt.executeUpdate();
+    }
+
+    // => 새로 팀원을 입력한다.
+    try (PreparedStatement stmt = con.prepareStatement(
+        "insert into pms_member_project(member_no, project_no) values(?,?)")) {
+      for (Member member : project.getMembers()) {
+        stmt.setInt(1, member.getNo());
+        stmt.setInt(2, project.getNo());
         stmt.executeUpdate();
       }
-
-      // => 새로 팀원을 입력한다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "insert into pms_member_project(member_no, project_no) values(?,?)")) {
-        for (Member member : project.getMembers()) {
-          stmt.setInt(1, member.getNo());
-          stmt.setInt(2, project.getNo());
-          stmt.executeUpdate();
-        }
-      }
-
-      return 1;
     }
+    return 1;
   }
 }

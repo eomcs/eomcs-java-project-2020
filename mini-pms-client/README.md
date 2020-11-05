@@ -15,33 +15,17 @@
 
 ### 1단계 - 각 DAO 메서드에서 DB 커넥션을 생성하지 않고 공유한다.
 
+- com.eomcs.pms.listener.AppInitListener 변경
+  - contextInitialized() 가 호출될 때 Connection 객체를 생성하여 context 맵에 담아 놓는다.
+  - contextDestroyed() 가 호출될 때 Connection 객체를 닫는다.
 - com.eomcs.pms.App 변경
-  - DB 커넥션을 준비한다.
+  - context 맵에 보관된 Connection 객체를 꺼낸다.
   - DAO 객체를 생성할 때 주입한다.
 - com.eomcs.pms.dao.mariadb.XxxDaoImpl 클래스 변경
   - 생성자에서 파라미터로 DB 커넥션을 주입 받는다.
   - 각 메서드는 이렇게 주입 받은 DB 커넥션을 사용한다.
 
-### 2단계 - `MemberDao` 를 인터페이스로 정의한다.
 
-- com.eomcs.pms.dao.MemberDao 인터페이스 생성
-- com.eomcs.pms.dao.mariadb.MemberDaoImpl 클래스 변경
-  - 기존의 MemberDao 클래스를 mariadb 하위 패키지로 옮긴 후 이름을 변경한다.
-  - 위에서 정의한 인터페이스를 구현한다.
-
-### 3단계 - `ProjectDao` 를 인터페이스로 정의한다.
-
-- com.eomcs.pms.dao.ProjectDao 인터페이스 생성
-- com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
-  - 기존의 ProjectDao 클래스를 mariadb 하위 패키지로 옮긴 후 이름을 변경한다.
-  - 위에서 정의한 인터페이스를 구현한다.
-
-### 4단계 - `TaskDao` 를 인터페이스로 정의한다.
-
-- com.eomcs.pms.dao.TaskDao 인터페이스 생성
-- com.eomcs.pms.dao.mariadb.TaskDaoImpl 클래스 변경
-  - 기존의 TaskDao 클래스를 mariadb 하위 패키지로 옮긴 후 이름을 변경한다.
-  - 위에서 정의한 인터페이스를 구현한다.
 
 ## 실습 결과
 - src/main/java/com/eomcs/pms/dao/BoardDao.java 변경

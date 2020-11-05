@@ -1,7 +1,6 @@
 package com.eomcs.pms.dao.mariadb;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -11,13 +10,17 @@ import com.eomcs.pms.domain.Task;
 
 public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
+  Connection con;
+
+  public TaskDaoImpl(Connection con) {
+    this.con = con;
+  }
+
   @Override
   public int insert(Task task) throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "insert into pms_task(content,deadline,owner,project_no,status)"
-                + " values(?,?,?,?,?)")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "insert into pms_task(content,deadline,owner,project_no,status)"
+            + " values(?,?,?,?,?)")) {
 
       stmt.setString(1, task.getContent());
       stmt.setDate(2, task.getDeadline());
@@ -30,10 +33,8 @@ public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
   @Override
   public int delete(int no) throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "delete from pms_task where no=?")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "delete from pms_task where no=?")) {
 
       stmt.setInt(1, no);
       return stmt.executeUpdate();
@@ -42,22 +43,20 @@ public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
   @Override
   public Task findByNo(int no) throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "select"
-                + " t.no,"
-                + " t.content,"
-                + " t.deadline,"
-                + " t.status,"
-                + " m.no owner_no,"
-                + " m.name owner_name,"
-                + " p.no project_no,"
-                + " p.title"
-                + " from pms_task t"
-                + " inner join pms_member m on t.owner=m.no"
-                + " inner join pms_project p on t.project_no=p.no"
-                + " where t.no = ?")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "select"
+            + " t.no,"
+            + " t.content,"
+            + " t.deadline,"
+            + " t.status,"
+            + " m.no owner_no,"
+            + " m.name owner_name,"
+            + " p.no project_no,"
+            + " p.title"
+            + " from pms_task t"
+            + " inner join pms_member m on t.owner=m.no"
+            + " inner join pms_project p on t.project_no=p.no"
+            + " where t.no = ?")) {
 
       stmt.setInt(1, no);
 
@@ -86,12 +85,10 @@ public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
   @Override
   public List<Task> findAll() throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "select t.no, t.content, t.deadline, t.status, m.no owner_no, m.name owner_name"
-                + " from pms_task t inner join pms_member m on t.owner=m.no"
-                + " order by t.deadline asc")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "select t.no, t.content, t.deadline, t.status, m.no owner_no, m.name owner_name"
+            + " from pms_task t inner join pms_member m on t.owner=m.no"
+            + " order by t.deadline asc")) {
 
       try (ResultSet rs = stmt.executeQuery()) {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -118,16 +115,14 @@ public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
   @Override
   public int update(Task task) throws Exception {
-    try (Connection con = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
-        PreparedStatement stmt = con.prepareStatement(
-            "update pms_task set"
-                + " content = ?,"
-                + " deadline = ?,"
-                + " owner = ?,"
-                + " project_no = ?,"
-                + " status = ?"
-                + " where no = ?")) {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "update pms_task set"
+            + " content = ?,"
+            + " deadline = ?,"
+            + " owner = ?,"
+            + " project_no = ?,"
+            + " status = ?"
+            + " where no = ?")) {
 
       stmt.setString(1, task.getContent());
       stmt.setDate(2, task.getDeadline());
