@@ -1,5 +1,6 @@
 package com.eomcs.pms.handler;
 
+import java.util.Map;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.util.Prompt;
 
@@ -11,7 +12,7 @@ public class ProjectDeleteCommand implements Command {
   }
 
   @Override
-  public void execute() {
+  public void execute(Map<String,Object> context) {
     System.out.println("[프로젝트 삭제]");
     int no = Prompt.inputInt("번호? ");
 

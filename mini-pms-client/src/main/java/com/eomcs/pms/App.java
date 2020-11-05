@@ -27,6 +27,7 @@ import com.eomcs.pms.handler.BoardListCommand;
 import com.eomcs.pms.handler.BoardUpdateCommand;
 import com.eomcs.pms.handler.Command;
 import com.eomcs.pms.handler.HelloCommand;
+import com.eomcs.pms.handler.LoginCommand;
 import com.eomcs.pms.handler.MemberAddCommand;
 import com.eomcs.pms.handler.MemberDeleteCommand;
 import com.eomcs.pms.handler.MemberDetailCommand;
@@ -135,6 +136,8 @@ public class App {
 
     commandMap.put("/hello", new HelloCommand());
 
+    commandMap.put("/login", new LoginCommand(memberDao));
+
     Deque<String> commandStack = new ArrayDeque<>();
     Queue<String> commandQueue = new LinkedList<>();
 
@@ -161,7 +164,7 @@ public class App {
             if (command != null) {
               try {
                 // 실행 중 오류가 발생할 수 있는 코드는 try 블록 안에 둔다.
-                command.execute();
+                command.execute(context);
               } catch (Exception e) {
                 // 오류가 발생하면 그 정보를 갖고 있는 객체의 클래스 이름을 출력한다.
                 System.out.println("--------------------------------------------------------------");

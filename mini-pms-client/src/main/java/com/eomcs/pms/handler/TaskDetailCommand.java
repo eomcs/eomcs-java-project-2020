@@ -1,5 +1,6 @@
 package com.eomcs.pms.handler;
 
+import java.util.Map;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.util.Prompt;
@@ -12,7 +13,7 @@ public class TaskDetailCommand implements Command {
   }
 
   @Override
-  public void execute() {
+  public void execute(Map<String,Object> context) {
     System.out.println("[작업 상세보기]");
 
     try {

@@ -156,4 +156,31 @@ public class MemberDaoImpl implements com.eomcs.pms.dao.MemberDao {
       return members;
     }
   }
+
+  @Override
+  public Member findByEmailPassword(String email, String password) throws Exception {
+    try (PreparedStatement stmt = con.prepareStatement(
+        "select no, name, email, photo, tel, cdt"
+            + " from pms_member"
+            + " where email = ? and password = password(?)")) {
+
+      stmt.setString(1, email);
+      stmt.setString(2, password);
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+          Member member = new Member();
+          member.setNo(rs.getInt("no"));
+          member.setName(rs.getString("name"));
+          member.setEmail(rs.getString("email"));
+          member.setPhoto(rs.getString("photo"));
+          member.setTel(rs.getString("tel"));
+          member.setRegisteredDate(rs.getDate("cdt"));
+          return member;
+        } else {
+          return null;
+        }
+      }
+    }
+  }
 }

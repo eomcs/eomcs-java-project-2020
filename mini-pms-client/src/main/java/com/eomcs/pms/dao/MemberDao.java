@@ -11,4 +11,9 @@ public interface MemberDao {
   List<Member> findAll() throws Exception;
   int update(Member member) throws Exception;
   List<Member> findByProjectNo(int projectNo) throws Exception;
+  Member findByEmailPassword(String email, String password) throws Exception;
 }
+
+
+
+

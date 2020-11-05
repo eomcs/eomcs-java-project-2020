@@ -1,5 +1,6 @@
 package com.eomcs.pms.handler;
 
+import java.util.Map;
 import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.util.Prompt;
@@ -12,7 +13,7 @@ public class MemberUpdateCommand implements Command {
   }
 
   @Override
-  public void execute() {
+  public void execute(Map<String,Object> context) {
     System.out.println("[회원 변경]");
     int no = Prompt.inputInt("번호? ");
 
