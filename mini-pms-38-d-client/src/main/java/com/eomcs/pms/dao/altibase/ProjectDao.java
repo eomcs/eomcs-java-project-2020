@@ -1,6 +1,7 @@
-package com.eomcs.pms.dao.mariadb;
+package com.eomcs.pms.dao.altibase;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -9,21 +10,11 @@ import java.util.List;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 
-public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
-
-  Connection con;
-
-  public ProjectDaoImpl(Connection con) {
-    this.con = con;
-  }
-
-  @Override
+public class ProjectDao {
   public int insert(Project project) throws Exception {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
 
-    // 커넥션 객체에서 수행하는 작업을 수동 커밋하도록 설정한다.
-    con.setAutoCommit(false);
-
-    try {
       try (PreparedStatement stmt = con.prepareStatement(
           "insert into pms_project(title,content,sdt,edt,owner)"
               + " values(?,?,?,?,?)",
@@ -43,9 +34,6 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
         }
       }
 
-      // 위의 입력을 수행한 후 일부로 다음 입력을 60초 정도 지연시킨다.
-      Thread.sleep(60000);
-
       // 프로젝트에 참여하는 멤버의 정보를 저장한다.
       try (PreparedStatement stmt2 = con.prepareStatement(
           "insert into pms_member_project(member_no, project_no) values(?,?)")) {
@@ -55,33 +43,14 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
           stmt2.executeUpdate();
         }
       }
-
-      // 프로젝트 멤버의 등록까지 예외없이 정상적으로 실행되었다면,
-      // DBMS 서버에게 작업 내용을 실제 테이블에 반영하라고 요구한다.
-      con.commit();
-
       return 1;
-
-    } catch (Exception e) {
-      // 작업을 수행하는 중에 예외가 발생하면
-      // 이전에 수행했던 작업도 되돌린다.
-      // 즉 마지막 커밋 상태로 되돌린다.
-      con.rollback();
-
-      // 예외가 발생하면 여기서 처리하지 말고 호출자에게 떠넘긴다.
-      throw e;
-
-    } finally {
-      // 정상적으로 실행하거나 또는 예외가 발생해도
-      // DB 커넥션은 다시 원래의 auto commit 상태로 만든다.
-      con.setAutoCommit(true);
     }
   }
 
-  @Override
   public int delete(int no) throws Exception {
-    con.setAutoCommit(false);
-    try {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
+
       // => 프로젝트의 작업을 지운다.
       try (PreparedStatement stmt = con.prepareStatement(
           "delete from pms_task where project_no=" + no)) {
@@ -95,38 +64,29 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
       }
 
       // => 프로젝트를 삭제한다.
-      int count = 0;
       try (PreparedStatement stmt = con.prepareStatement(
           "delete from pms_project where no=?")) {
         stmt.setInt(1, no);
-        count = stmt.executeUpdate();
+        return stmt.executeUpdate();
       }
-
-      con.commit();
-      return count;
-
-    } catch (Exception e) {
-      con.rollback();
-      throw e;
-
-    } finally {
-      con.setAutoCommit(true);
     }
   }
 
-  @Override
   public Project findByNo(int no) throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select"
-            + " p.no,"
-            + " p.title,"
-            + " p.content,"
-            + " p.sdt,"
-            + " p.edt,"
-            + " m.no owner_no,"
-            + " m.name owner_name"
-            + " from pms_project p inner join pms_member m on p.owner=m.no"
-            + " where p.no = ?")) {
+
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select"
+                + " p.no,"
+                + " p.title,"
+                + " p.content,"
+                + " p.sdt,"
+                + " p.edt,"
+                + " m.no owner_no,"
+                + " m.name owner_name"
+                + " from pms_project p inner join pms_member m on p.owner=m.no"
+                + " where p.no = ?")) {
 
       stmt.setInt(1, no);
 
@@ -167,12 +127,13 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
     }
   }
 
-  @Override
   public List<Project> findAll() throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select p.no, p.title, p.sdt, p.edt, m.no owner_no, m.name owner_name"
-            + " from pms_project p inner join pms_member m on p.owner=m.no"
-            + " order by p.no desc")) {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
+        PreparedStatement stmt = con.prepareStatement(
+            "select p.no, p.title, p.sdt, p.edt, m.no owner_no, m.name owner_name"
+                + " from pms_project p inner join pms_member m on p.owner=m.no"
+                + " order by p.no desc")) {
 
       try (ResultSet rs = stmt.executeQuery()) {
         ArrayList<Project> projects = new ArrayList<>();
@@ -211,10 +172,10 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
     }
   }
 
-  @Override
   public int update(Project project) throws Exception {
-    con.setAutoCommit(false);
-    try {
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/studydb?user=study&password=1111")) {
+
       try (PreparedStatement stmt = con.prepareStatement(
           "update pms_project set"
               + " title = ?,"
@@ -253,15 +214,8 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
           stmt.executeUpdate();
         }
       }
-      con.commit();
+
       return 1;
-
-    } catch (Exception e) {
-      con.rollback();
-      throw e;
-
-    } finally {
-      con.setAutoCommit(true);
     }
   }
 }
