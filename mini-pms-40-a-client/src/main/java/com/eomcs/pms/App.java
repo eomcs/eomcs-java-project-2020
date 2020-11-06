@@ -41,7 +41,6 @@ import com.eomcs.pms.handler.ProjectDeleteCommand;
 import com.eomcs.pms.handler.ProjectDetailCommand;
 import com.eomcs.pms.handler.ProjectListCommand;
 import com.eomcs.pms.handler.ProjectUpdateCommand;
-import com.eomcs.pms.handler.Request;
 import com.eomcs.pms.handler.TaskAddCommand;
 import com.eomcs.pms.handler.TaskDeleteCommand;
 import com.eomcs.pms.handler.TaskDetailCommand;
@@ -169,9 +168,6 @@ public class App {
             System.out.println("안녕!");
             break loop;
           default:
-            // 커맨드나 필터가 사용할 객체를 준비한다.
-            Request request = new Request(inputStr, context);
-
             logOut.println(inputStr);
             Command command = commandMap.get(inputStr);
             if (command != null) {
