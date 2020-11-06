@@ -1,15 +1,17 @@
 package com.eomcs.pms.filter;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.Map;
 import com.eomcs.pms.handler.Request;
 
 public class LogCommandFilter implements CommandFilter {
   PrintWriter logOut;
 
-  public LogCommandFilter(File file) throws Exception {
-    logOut = new PrintWriter(new FileWriter(file));
+  @Override
+  public void init(Map<String, Object> context) throws Exception {
+    File file = (File) context.get("logFile");
+    logOut = new PrintWriter(file);
   }
 
   @Override

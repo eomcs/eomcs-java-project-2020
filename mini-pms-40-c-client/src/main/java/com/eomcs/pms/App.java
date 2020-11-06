@@ -156,9 +156,13 @@ public class App {
     CommandFilterManager filterManager = new CommandFilterManager();
 
     // 필터를 등록한다.
-    filterManager.add(new LogCommandFilter(new File("command.log")));
+    filterManager.add(new LogCommandFilter());
     filterManager.add(new AuthCommandFilter());
     filterManager.add(new DefaultCommandFilter());
+
+    // 필터가 사용할 값을 context 맵에 담는다.
+    File logFile = new File("command.log");
+    context.put("logFile", logFile);
 
     // 필터들을 준비시킨다.
     filterManager.init(context);
