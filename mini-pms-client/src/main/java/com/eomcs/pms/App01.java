@@ -48,7 +48,7 @@ import com.eomcs.pms.handler.WhoamiCommand;
 import com.eomcs.pms.listener.AppInitListener;
 import com.eomcs.util.Prompt;
 
-public class App {
+public class App01 {
 
   // 옵저버와 공유할 맵 객체
   Map<String,Object> context = new Hashtable<>();
@@ -90,7 +90,7 @@ public class App {
 
 
   public static void main(String[] args) throws Exception {
-    App app = new App();
+    App01 app = new App01();
 
     // 옵저버 등록
     app.addApplicationContextListener(new AppInitListener());
