@@ -14,6 +14,13 @@ public class CommandFilterManager implements FilterChain {
     filters.add(filter);
   }
 
+  // 필터 관리자에게 필터를 순서대로 실행시키기 전에
+  // 먼저 필터의 인덱스를 0으로 설정한다.
+  //
+  public void reset() {
+    this.nextFilterIndex = 0;
+  }
+
   // 다음 순서의 필터를 실행시킨다.
   @Override
   public void doFilter(Request request) throws Exception {

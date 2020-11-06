@@ -22,6 +22,9 @@ import com.eomcs.pms.dao.mariadb.BoardDaoImpl;
 import com.eomcs.pms.dao.mariadb.MemberDaoImpl;
 import com.eomcs.pms.dao.mariadb.ProjectDaoImpl;
 import com.eomcs.pms.dao.mariadb.TaskDaoImpl;
+import com.eomcs.pms.filter.AuthCommandFilter;
+import com.eomcs.pms.filter.CommandFilterManager;
+import com.eomcs.pms.filter.DefaultCommandFilter;
 import com.eomcs.pms.handler.BoardAddCommand;
 import com.eomcs.pms.handler.BoardDeleteCommand;
 import com.eomcs.pms.handler.BoardDetailCommand;
@@ -145,6 +148,17 @@ public class App {
     commandMap.put("/whoami", new WhoamiCommand());
     commandMap.put("/logout", new LogoutCommand());
 
+    // commandMap 객체를 context 맵에 보관한다.
+    // => 필터나 커맨드 객체가 사용할 수 있기 때문이다.
+    context.put("commandMap", commandMap);
+
+    // 필터 관리자 준비
+    CommandFilterManager filterManager = new CommandFilterManager();
+
+    // 필터를 등록한다.
+    filterManager.add(new AuthCommandFilter());
+    filterManager.add(new DefaultCommandFilter());
+
     Deque<String> commandStack = new ArrayDeque<>();
     Queue<String> commandQueue = new LinkedList<>();
 
@@ -169,27 +183,14 @@ public class App {
             System.out.println("안녕!");
             break loop;
           default:
+            logOut.println(inputStr);
+
             // 커맨드나 필터가 사용할 객체를 준비한다.
             Request request = new Request(inputStr, context);
 
-            logOut.println(inputStr);
-            Command command = commandMap.get(inputStr);
-            if (command != null) {
-              try {
-                if (inputStr.equalsIgnoreCase("/login") || context.get("loginUser") != null) {
-                  command.execute(context);
-                } else {
-                  System.out.println("로그인이 필요합니다.");
-                }
-              } catch (Exception e) {
-                // 오류가 발생하면 그 정보를 갖고 있는 객체의 클래스 이름을 출력한다.
-                System.out.println("--------------------------------------------------------------");
-                System.out.printf("명령어 실행 중 오류 발생: %s\n", e);
-                System.out.println("--------------------------------------------------------------");
-              }
-            } else {
-              System.out.println("실행할 수 없는 명령입니다.");
-            }
+            // 사용자가 명령을 입력하면 필터 관리자를 실행시킨다.
+            filterManager.reset(); // 실행할 필터의 인덱스를 0으로 초기화시킨다.
+            filterManager.doFilter(request);
         }
         System.out.println();
       }
