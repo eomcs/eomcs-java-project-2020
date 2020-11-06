@@ -108,15 +108,23 @@ x1 님 환영합니다.
 
 ### 4단계 - 로그아웃을 처리한다.
 
-- com.eomcs.pms.handler.LogoutCommand 생성
-  - context 맵 객체에 보관된 로그인 회원 정보를 제거한다.
-
+다음과 같이 동작하게 구현한다.
 ```
 명령> /logout
-aaa 님 안녕히 가세요!
+aaa 님 안녕히 가세요!   <--- 로그인 상태일 경우
 
-명령>
+명령> /logout
+로그인 된 상태가 아닙니다!   <--- 로그인 상태가 아닐 경우
+
+명령> /whoami
+로그인 하지 않았습니다!
 ```
+
+- com.eomcs.pms.handler.LogoutCommand 생성
+  - context 맵 객체에 보관된 로그인 회원 정보를 제거한다.
+- com.eomcs.pms.App 변경
+  - 커맨드 객체를 등록한다.
+
 
 ## 실습 결과
 - src/main/java/com/eomcs/pms/dao/mariadb/MemberDaoImpl.java 변경

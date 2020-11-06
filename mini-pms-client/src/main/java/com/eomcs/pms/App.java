@@ -28,6 +28,7 @@ import com.eomcs.pms.handler.BoardUpdateCommand;
 import com.eomcs.pms.handler.Command;
 import com.eomcs.pms.handler.HelloCommand;
 import com.eomcs.pms.handler.LoginCommand;
+import com.eomcs.pms.handler.LogoutCommand;
 import com.eomcs.pms.handler.MemberAddCommand;
 import com.eomcs.pms.handler.MemberDeleteCommand;
 import com.eomcs.pms.handler.MemberDetailCommand;
@@ -139,6 +140,7 @@ public class App {
 
     commandMap.put("/login", new LoginCommand(memberDao));
     commandMap.put("/whoami", new WhoamiCommand());
+    commandMap.put("/logout", new LogoutCommand());
 
     Deque<String> commandStack = new ArrayDeque<>();
     Queue<String> commandQueue = new LinkedList<>();
