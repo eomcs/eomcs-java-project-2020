@@ -43,6 +43,7 @@ import com.eomcs.pms.handler.TaskDeleteCommand;
 import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
+import com.eomcs.pms.handler.WhoamiCommand;
 import com.eomcs.pms.listener.AppInitListener;
 import com.eomcs.util.Prompt;
 
@@ -137,6 +138,7 @@ public class App {
     commandMap.put("/hello", new HelloCommand());
 
     commandMap.put("/login", new LoginCommand(memberDao));
+    commandMap.put("/whoami", new WhoamiCommand());
 
     Deque<String> commandStack = new ArrayDeque<>();
     Queue<String> commandQueue = new LinkedList<>();
