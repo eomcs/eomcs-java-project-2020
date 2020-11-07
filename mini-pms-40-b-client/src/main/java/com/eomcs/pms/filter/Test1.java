@@ -35,6 +35,7 @@ public class Test1 {
     filterManager.add(new Filter2());
     filterManager.add(new Filter3());
 
-    filterManager.doFilter(null);
+    FilterChain chain = filterManager.getFilterChains();
+    chain.doFilter(null);
   }
 }

@@ -93,7 +93,7 @@ public class App01 {
 
 
   public static void main(String[] args) throws Exception {
-    App app = new App();
+    App01 app = new App01();
 
     // 옵저버 등록
     app.addApplicationContextListener(new AppInitListener());

@@ -24,6 +24,7 @@ import com.eomcs.pms.dao.mariadb.TaskDaoImpl;
 import com.eomcs.pms.filter.AuthCommandFilter;
 import com.eomcs.pms.filter.CommandFilterManager;
 import com.eomcs.pms.filter.DefaultCommandFilter;
+import com.eomcs.pms.filter.FilterChain;
 import com.eomcs.pms.filter.LogCommandFilter;
 import com.eomcs.pms.handler.BoardAddCommand;
 import com.eomcs.pms.handler.BoardDeleteCommand;
@@ -167,6 +168,9 @@ public class App {
     // 필터들을 준비시킨다.
     filterManager.init(context);
 
+    // 사용자가 명령을 처리할 필터 체인을 얻는다.
+    FilterChain filterChain = filterManager.getFilterChains();
+
     Deque<String> commandStack = new ArrayDeque<>();
     Queue<String> commandQueue = new LinkedList<>();
 
@@ -192,9 +196,10 @@ public class App {
             // 커맨드나 필터가 사용할 객체를 준비한다.
             Request request = new Request(inputStr, context);
 
-            // 사용자가 명령을 입력하면 필터 관리자를 실행시킨다.
-            filterManager.reset(); // 실행할 필터의 인덱스를 0으로 초기화시킨다.
-            filterManager.doFilter(request);
+            // 필터들의 체인을 실행한다.
+            if (filterChain != null) {
+              filterChain.doFilter(request);
+            }
         }
         System.out.println();
       }

@@ -12,6 +12,7 @@ public class LogCommandFilter implements CommandFilter {
   public void init(Map<String, Object> context) throws Exception {
     File file = (File) context.get("logFile");
     logOut = new PrintWriter(file);
+    System.out.println("로그 파일을 열었습니다.");
   }
 
   @Override
