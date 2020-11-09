@@ -1,54 +1,69 @@
-# 40-c. 커맨드 실행 전/후에 기능 추가하기: init() 와 destroy()의 필요성
+# 41-a. 41-a. DB 프로그래밍 더 쉽고 간단히 하는 방법 : Mybatis 퍼시스턴스 프레임워크 도입
 
 이번 훈련에서는,
-- **Chain of Responsibility 디자인 패턴** 을 응용하는 방법을 배울 것이다.
+- 실무에서 자주 쓰이는 *퍼시스턴스 프레임워크* 중에 하나인 **마이바티스** 프레임워크의 사용법을 배울 것이다.
 
-**Chain of Responsibility 패턴** 은,
-- 작업 요청을 받은 객체(sender)가 실제 작업자(receiver)에게 그 책임을 위임하는 구조에서 사용하는 설계 기법이다.
-- 작업자 간에 연결 고리를 구축하여 작업을 나누어 처리할 수 있다.
-- 체인 방식이기 때문에 작업에 참여하는 모든 객체가 서로 알 필요가 없다.
-- 오직 자신과 연결된 다음 작업자만 알면 되기 때문에 객체 간에 결합도를 낮추는 효과가 있다.
-- 런타임에서 연결 고리를 변경하거나 추가할 수 있어, 상황에 따라 실시간으로 기능을 추가하거나 삭제할 수 있다.
-- 보통 필터링을 구현할 때 이 설계 기법을 많이 사용한다.
+**퍼시스턴스 프레임워크(Persistence Framework)** 는,
+- 데이터의 저장, 조회, 변경, 삭제를 다루는 클래스 및 설정 파일들의 집합이다.(위키백과)
+- JDBC 프로그래밍의 번거로움 없이 간결하게 데이터베이스와 연동할 수 있다.
+- 소스 코드에서 SQL 문을 분리하여 관리한다.
+
+**마이바티스(Mybatis)** 는,
+- *퍼시스턴스 프레임워크* 중의 하나이다.
+- JDBC 프로그래밍을 캡슐화하여 데이터베이스 연동을 쉽게 하도록 도와준다.
+- 자바 소스 파일에서 SQL을 분리하여 별도의 파일로 관리하기 때문에
+  자바 소스 코드를 간결하게 유지할 수 있다.
+- JDBC 프로그래밍 할 때와 마찬가지로 직접 SQL을 다루기 때문에
+  레거시(legacy) 시스템에서 사용하는 데이터베이스와 연동할 때 유리하다.
+- SQL을 통해 데이터베이스와 연동한다고 해서 보통 **SQL 매퍼(mapper)** 라 부른다.
 
 ## 훈련 목표
-- 객체를 사용하기 전/후에 자원을 준비시키고 해제시키는 방법을 배운다.
+- **Mybatis SQL 맵퍼** 의 특징과 동작 원리를 이해한다.
+- Mybatis 퍼시스턴스 프레임워크를 설정하고 다루는 방법을 배운다.
 
 ## 훈련 내용
-- **CommandFilter** 를 사용하기 전에 자원을 준비시키는 방법을 제공한다.
-- **CommandFilter** 를 사용 완료 후 자원을 해제시키는 방법을 제공한다.
+-
 
 ## 실습
 
-### 1단계 - `CommandFilter` 인터페이스 에 초기화와 마무리에 관련된 규칙을 추가한다.
+### 1단계 - 프로젝트에 MyBatis 라이브러리를 추가한다.
 
-- com.eomcs.pms.filter.CommandFilter 변경
-  - init() 규칙 추가
-    - 필터가 사용되기 전에 호출된다.
-    - 필터가 사용할 자원을 준비시키는 코드를 둔다.
-  - destroy() 규칙 추가
-    - 필터 사용을 마친 후 종료되기 전에 호출된다.
-    - 필터가 준비한 자원을 해제시키는 코드를 둔다.
+- build.gradle   
+  - `search.maven.org` 사이트에서 *mybatis* 라이브러리 정보를 찾는다.
+  - 의존 라이브러리 블록에서 `mybatis` 라이브러리를 등록한다.
+- gradle을 이용하여 eclipse 설정 파일을 갱신한다.
+  - `$ gradle eclipse`
+- 이클립스에서 프로젝트를 갱신한다.
 
+### 2단계 - `MyBatis` 설정 파일을 준비한다.
 
-### 2단계 - `LogCommandFilter` 에서 시스템이 종료될 때 파일을 닫는다.
-
-- com.eomcs.pms.filter.LogCommandFilter 변경
-  - destroy() 메서드를 구현한다.
-  - 열려있는 파일을 닫는다.
-
-### 3단계 - 필터 관리자가 보유한 각 필터에 대해 초기화시키고 마무리시키는 기능을 추가한다.
-
-- com.eomcs.pms.filter.CommandFilterManager 변경
-  - init() 추가 : 각 필터에 대해 init() 호출
-  - destory() 추가 : 각 필터에 대해 destroy() 호출
-- com.eomcs.pms.App 변경
-  - 필터를 사용하기 전에 필터 관리자의 init()를 호출하여 필터를 초기화시킨다.
-  - 필터 사용을 끝낸 후에는 필터 관리자의 destroy()를 호출하여 필터를 마무리시킨다.
+- src/main/resources/com/eomcs/pms/conf/jdbc.properties
+  - 마이바티스 홈 : <http://www.mybatis.org>
+  - `MyBatis` 설정 파일에서 참고할 DBMS 접속 정보를 등록한다.
+- src/main/resources/com/eomcs/pms/conf/mybatis-config.xml
+  - `MyBatis` 설정 파일이다.
+  - DBMS 서버의 접속 정보를 갖고 있는 jdbc.properties 파일의 경로를 등록한다.
+  - DBMS 서버 정보를 설정한다.
+  - DB 커넥션 풀을 설정한다.
 
 
+### 3단계: BoardDaoImpl 에 Mybatis를 적용한다.
+
+- com.eomcs.pms.dao.mariadb.BoardDaoImpl 클래스 변경
+  - SQL을 뜯어내어 BoardMapper.xml로 옮긴다.
+  - JDBC 코드를 뜯어내고 그 자리에 Mybatis 클래스로 대체한다.
+- com/eomcs/pms/mapper/BoardMapper.xml 추가
+  - BoardDaoImpl 에 있던 SQL문을 이 파일로 옮긴다.
+- com/eomcs/lms/conf/mybatis-config.xml 변경
+  - BoardMapper 파일의 경로를 등록한다.
+- com.eomcs.lms.DataLoaderListener 변경
+  - SqlSessionFactory 객체를 준비한다.
+  - BoardDaoImpl 에 주입한다.
 
 ## 실습 결과
+- build.gradle 변경
+- src/main/resources/com/eomcs/pms/conf/jdbc.properties 생성
+-
 - src/main/java/com/eomcs/pms/filter/CommandFilter.java 변경
 - src/main/java/com/eomcs/pms/filter/LogCommandFilter.java 변경
 - src/main/java/com/eomcs/pms/filter/CommandFilterManager.java 변경

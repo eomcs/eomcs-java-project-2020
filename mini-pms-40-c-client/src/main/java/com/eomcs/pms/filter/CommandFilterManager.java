@@ -42,7 +42,7 @@ public class CommandFilterManager {
     }
   }
 
-  public static class Chain implements FilterChain {
+  private static class Chain implements FilterChain {
     CommandFilter filter;
     Chain nextChain;
 

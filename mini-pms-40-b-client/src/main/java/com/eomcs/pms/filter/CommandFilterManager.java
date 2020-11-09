@@ -23,7 +23,7 @@ public class CommandFilterManager {
     return firstChain;
   }
 
-  public static class Chain implements FilterChain {
+  private static class Chain implements FilterChain {
     CommandFilter filter;
     Chain nextChain;
 

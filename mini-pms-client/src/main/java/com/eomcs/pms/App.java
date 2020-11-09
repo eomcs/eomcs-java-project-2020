@@ -168,7 +168,7 @@ public class App {
     // 필터들을 준비시킨다.
     filterManager.init(context);
 
-    // 사용자가 명령을 처리할 필터 체인을 얻는다.
+    // 사용자가 입력한 명령을 처리할 필터 체인을 얻는다.
     FilterChain filterChain = filterManager.getFilterChains();
 
     Deque<String> commandStack = new ArrayDeque<>();
