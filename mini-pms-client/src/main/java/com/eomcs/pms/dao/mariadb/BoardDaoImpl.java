@@ -25,13 +25,18 @@ public class BoardDaoImpl implements com.eomcs.pms.dao.BoardDao{
 
   @Override
   public int insert(Board board) throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "insert into pms_board(title,content,writer) values(?,?,?)")) {
+    InputStream inputStream = Resources.getResourceAsStream(
+        "com/eomcs/pms/conf/mybatis-config.xml");
+    SqlSessionFactory sqlSessionFactory =
+        new SqlSessionFactoryBuilder().build(inputStream);
 
-      stmt.setString(1, board.getTitle());
-      stmt.setString(2, board.getContent());
-      stmt.setInt(3, board.getWriter().getNo());
-      return stmt.executeUpdate();
+    // mybatis 의 커밋 상태
+    // - sqlSession.openSession() : 수동 커밋
+    // - sqlSession.openSession(true) : 오토 커밋
+    try (SqlSession sqlSession = sqlSessionFactory.openSession(true)) {
+
+      // => SqlSession 객체에 insert SQL 문을 실행하라고 명령한다.
+      return sqlSession.insert("BoardDao.insert", board);
     }
   }
 
@@ -92,12 +97,20 @@ public class BoardDaoImpl implements com.eomcs.pms.dao.BoardDao{
   @Override
   public List<Board> findAll() throws Exception {
     // mybatis 객체 준비
+
     // => mybatis 설정 파일을 읽어 들일 입력 스트림을 준비한다.
     InputStream inputStream = Resources.getResourceAsStream(
         "com/eomcs/pms/conf/mybatis-config.xml");
+
+    // => 입력 스트림에서 mybatis 설정 값을 읽어 SqlSessionFactory를 만든다.
     SqlSessionFactory sqlSessionFactory =
         new SqlSessionFactoryBuilder().build(inputStream);
+
+    // => SqlSessionFactory에서 SqlSession 객체를 얻는다.
+    //    SqlSession 객체는 SQL 문을 실행하는 객체다.
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+
+      // => SqlSession 객체에게 별도 파일에 분리한 SQL을 찾아 실행하라고 명령한다.
       return sqlSession.selectList("BoardDao.findAll");
     }
   }

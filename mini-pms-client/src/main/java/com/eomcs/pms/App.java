@@ -21,7 +21,6 @@ import com.eomcs.pms.dao.mariadb.BoardDaoImpl;
 import com.eomcs.pms.dao.mariadb.MemberDaoImpl;
 import com.eomcs.pms.dao.mariadb.ProjectDaoImpl;
 import com.eomcs.pms.dao.mariadb.TaskDaoImpl;
-import com.eomcs.pms.filter.AuthCommandFilter;
 import com.eomcs.pms.filter.CommandFilterManager;
 import com.eomcs.pms.filter.DefaultCommandFilter;
 import com.eomcs.pms.filter.FilterChain;
@@ -158,7 +157,7 @@ public class App {
 
     // 필터를 등록한다.
     filterManager.add(new LogCommandFilter());
-    filterManager.add(new AuthCommandFilter());
+    //filterManager.add(new AuthCommandFilter());
     filterManager.add(new DefaultCommandFilter());
 
     // 필터가 사용할 값을 context 맵에 담는다.

@@ -12,6 +12,38 @@ namespace 속성
 
 -->
 <mapper namespace="BoardDao">
+  
+  <!-- 컬럼의 값을 어떤 자바 객체에 담을 것인지 
+       다음과 같이 따로 정의할 수 있다. 
+      - type 속성 : 자바 클래스명 
+      - id 속성 : 컬럼-프로퍼티의 연결 정보를 가리킬 이름. 
+                  SQL 문을 정의할 때 사용.
+  -->
+  <resultMap type="com.eomcs.pms.domain.Board" id="BoardMap">
+    <!-- 자바 코드
+         Board b = new Board();
+         b.setNo(rs.getInt("no"));
+         b.setTitle(rs.getString("title"));
+         b.setRegisteredDate(rs.getDate("cdt"));
+         b.setViewCount(rs.getInt("vw_cnt"));
+    -->
+    <id column="no"     property="no"/>
+    <result column="title"  property="title"/>
+    <result column="cdt"    property="registeredDate"/>
+    <result column="vw_cnt" property="viewCount"/>
+    
+    <!-- 
+      Member m = new Member();
+      m.setNo(rs.getInt("no"));
+      m.setName(rs.getString("name"));
+      b.setWriter(m);
+    -->
+    <association property="writer" javaType="com.eomcs.pms.domain.Member">
+      <id column="writer_no"    property="no"/>
+      <result column="name"     property="name"/>
+    </association>
+  </resultMap>
+
 
   <!-- select 태그
     - select SQL 문을 정의하는 태그다.
@@ -25,7 +57,7 @@ namespace 속성
       - 이렇게 여러 개 생성된 도메인 객체는 List 컬렉션 객체에 저장된다.
       - 그리고 List 컬렉션 객체가 최종적으로 리턴된다.
    -->
-  <select id="findAll" resultType="com.eomcs.pms.domain.Board">
+  <select id="findAll" resultMap="BoardMap">
     select 
       b.no, 
       b.title, 
@@ -39,4 +71,15 @@ namespace 속성
     order by 
       b.no desc
   </select>
+  
+  <insert id="insert" parameterType="com.eomcs.pms.domain.Board">
+    insert into pms_board(title,content,writer) 
+    values(#{title}, #{content}, #{writer.no})
+  </insert>
 </mapper>
+
+
+
+
+
+
