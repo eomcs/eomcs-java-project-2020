@@ -1,10 +1,14 @@
 package com.eomcs.pms.dao.mariadb;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 
@@ -87,32 +91,14 @@ public class BoardDaoImpl implements com.eomcs.pms.dao.BoardDao{
 
   @Override
   public List<Board> findAll() throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select b.no, b.title, b.cdt, b.vw_cnt, m.no writer_no, m.name"
-            + " from pms_board b inner join pms_member m on b.writer=m.no"
-            + " order by b.no desc")) {
-
-      try (ResultSet rs = stmt.executeQuery()) {
-
-        ArrayList<Board> list = new ArrayList<>();
-
-        while (rs.next()) {
-          Board board = new Board();
-          board.setNo(rs.getInt("no"));
-          board.setTitle(rs.getString("title"));
-
-          Member member = new Member();
-          member.setNo(rs.getInt("writer_no"));
-          member.setName(rs.getString("name"));
-          board.setWriter(member);
-
-          board.setRegisteredDate(rs.getDate("cdt"));
-          board.setViewCount(rs.getInt("vw_cnt"));
-
-          list.add(board);
-        }
-        return list;
-      }
+    // mybatis 객체 준비
+    // => mybatis 설정 파일을 읽어 들일 입력 스트림을 준비한다.
+    InputStream inputStream = Resources.getResourceAsStream(
+        "com/eomcs/pms/conf/mybatis-config.xml");
+    SqlSessionFactory sqlSessionFactory =
+        new SqlSessionFactoryBuilder().build(inputStream);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.selectList("BoardDao.findAll");
     }
   }
 

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- SQL 문 목록 
+namespace 속성
+- SQL 문을 가리킬 때 사용할 그룹명이다.
+- 보통 SQL을 사용하는 객체 이름으로 설정한다.
+- 즉 DAO 인터페이스 또는 클래스명으로 설정한다.
+- 그래야만 유지보수할 때 DAO와 연결된 SQL을 바로 찾을 수 있다.
+
+-->
+<mapper namespace="BoardDao">
+
+  <!-- select 태그
+    - select SQL 문을 정의하는 태그다.
+    - id 속성
+      - mybatis에서 SQL을 찾을 때 사용할 이름이다.
+      - 보통 이 SQL을 사용하는 메서드 이름으로 설정한다.
+      - 이렇게 하면 다른 개발자가 이해하기 쉬울 것이다.
+    - resultType 속성
+      - select 결과물에서 각 레코드 값을 담을 도메인 객체 이름이다.
+      - select의 결과가 여러 개라면, 해당 도메인 객체도 여러 개가 생성될 것이다.
+      - 이렇게 여러 개 생성된 도메인 객체는 List 컬렉션 객체에 저장된다.
+      - 그리고 List 컬렉션 객체가 최종적으로 리턴된다.
+   -->
+  <select id="findAll" resultType="com.eomcs.pms.domain.Board">
+    select 
+      b.no, 
+      b.title, 
+      b.cdt, 
+      b.vw_cnt, 
+      m.no writer_no, 
+      m.name
+    from 
+      pms_board b 
+      inner join pms_member m on b.writer=m.no
+    order by 
+      b.no desc
+  </select>
+</mapper>

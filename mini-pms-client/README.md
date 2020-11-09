@@ -54,11 +54,9 @@
   - JDBC 코드를 뜯어내고 그 자리에 Mybatis 클래스로 대체한다.
 - com/eomcs/pms/mapper/BoardMapper.xml 추가
   - BoardDaoImpl 에 있던 SQL문을 이 파일로 옮긴다.
-- com/eomcs/lms/conf/mybatis-config.xml 변경
+- com/eomcs/pms/conf/mybatis-config.xml 변경
   - BoardMapper 파일의 경로를 등록한다.
-- com.eomcs.lms.DataLoaderListener 변경
-  - SqlSessionFactory 객체를 준비한다.
-  - BoardDaoImpl 에 주입한다.
+
 
 ## 실습 결과
 - build.gradle 변경
