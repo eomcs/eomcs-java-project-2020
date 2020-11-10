@@ -2,8 +2,6 @@ package com.eomcs.pms.dao.mariadb;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
@@ -80,54 +78,8 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   @Override
   public Project findByNo(int no) throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select"
-            + " p.no,"
-            + " p.title,"
-            + " p.content,"
-            + " p.sdt,"
-            + " p.edt,"
-            + " m.no owner_no,"
-            + " m.name owner_name"
-            + " from pms_project p inner join pms_member m on p.owner=m.no"
-            + " where p.no = ?")) {
-
-      stmt.setInt(1, no);
-
-      try (ResultSet rs = stmt.executeQuery()) {
-        if (rs.next()) {
-          Project project = new Project();
-          project.setNo(rs.getInt("no"));
-          project.setTitle(rs.getString("title"));
-          project.setContent(rs.getString("content"));
-          project.setStartDate(rs.getDate("sdt"));
-          project.setEndDate(rs.getDate("edt"));
-
-          Member owner = new Member();
-          owner.setNo(rs.getInt("owner_no"));
-          owner.setName(rs.getString("owner_name"));
-          project.setOwner(owner);
-
-          ArrayList<Member> members = new ArrayList<>();
-          try (PreparedStatement stmt2 = con.prepareStatement(
-              "select mp.member_no, m.name"
-                  + " from pms_member_project mp"
-                  + " inner join pms_member m on mp.member_no=m.no"
-                  + " where mp.project_no=" + rs.getInt("no"));
-              ResultSet memberRs = stmt2.executeQuery()) {
-
-            while (memberRs.next()) {
-              Member member = new Member();
-              member.setNo(memberRs.getInt("member_no"));
-              member.setName(memberRs.getString("name"));
-              members.add(member);
-            }
-          }
-          project.setMembers(members);
-          return project;
-        }
-        return null;
-      }
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.selectOne("ProjectDao.findByNo", no);
     }
   }
 

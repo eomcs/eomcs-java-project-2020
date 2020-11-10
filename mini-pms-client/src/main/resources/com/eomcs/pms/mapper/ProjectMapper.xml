@@ -52,23 +52,27 @@
     values(#{memberNo},#{projectNo})
   </insert>
   
-<!--  
-  <select id="findByNo" 
-    parameterType="java.lang.Integer" 
-    resultMap="BoardMap">
-    select
-	    b.no,
-	    b.title,
-	    b.content,
-	    b.cdt,
-	    b.vw_cnt,
-	    m.no writer_no,
-	    m.name
+  <select id="findByNo" resultMap="ProjectMap" parameterType="java.lang.Integer">
+    select 
+      p.no, 
+      p.title,
+      p.content, 
+      p.sdt, 
+      p.edt, 
+      m.no owner_no, 
+      m.name owner_name,
+      mp.member_no,
+      m2.name member_name
     from 
-      pms_board b inner join pms_member m on b.writer=m.no
-    where b.no = #{no}
+      pms_project p 
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on p.no=mp.project_no
+      left outer join pms_member m2 on mp.member_no=m2.no
+    where 
+      p.no = #{no}
   </select>
   
+<!--  
   <update id="updateViewCount" parameterType="java.lang.Integer">
     update pms_board set 
       vw_cnt = vw_cnt + 1
