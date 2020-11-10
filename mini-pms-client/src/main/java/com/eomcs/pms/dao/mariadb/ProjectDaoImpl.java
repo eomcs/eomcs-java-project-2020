@@ -93,55 +93,25 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   @Override
   public int update(Project project) throws Exception {
-    con.setAutoCommit(false);
-    try {
-      try (PreparedStatement stmt = con.prepareStatement(
-          "update pms_project set"
-              + " title = ?,"
-              + " content = ?,"
-              + " sdt = ?,"
-              + " edt = ?,"
-              + " owner = ?"
-              + " where no = ?")) {
-
-        stmt.setString(1, project.getTitle());
-        stmt.setString(2, project.getContent());
-        stmt.setDate(3, project.getStartDate());
-        stmt.setDate(4, project.getEndDate());
-        stmt.setInt(5, project.getOwner().getNo());
-        stmt.setInt(6, project.getNo());
-        int count = stmt.executeUpdate();
-
-        if (count == 0) {
-          return 0;
-        }
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      int count = sqlSession.update("ProjectDao.update", project);
+      if (count == 0) {
+        return 0;
       }
 
       // 프로젝트 팀원 변경한다.
       // => 기존에 설정된 모든 팀원을 삭제한다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_member_project where project_no=" + project.getNo())) {
-        stmt.executeUpdate();
-      }
+      sqlSession.delete("ProjectDao.deleteMember", project.getNo());
 
       // => 새로 팀원을 입력한다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "insert into pms_member_project(member_no, project_no) values(?,?)")) {
-        for (Member member : project.getMembers()) {
-          stmt.setInt(1, member.getNo());
-          stmt.setInt(2, project.getNo());
-          stmt.executeUpdate();
-        }
+      for (Member member : project.getMembers()) {
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("memberNo", member.getNo());
+        map.put("projectNo", project.getNo());
+        sqlSession.insert("ProjectDao.insertMember", map);
       }
-      con.commit();
+      sqlSession.commit();
       return 1;
-
-    } catch (Exception e) {
-      con.rollback();
-      throw e;
-
-    } finally {
-      con.setAutoCommit(true);
     }
   }
 }

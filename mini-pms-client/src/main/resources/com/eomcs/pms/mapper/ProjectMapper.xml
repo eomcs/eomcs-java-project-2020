@@ -52,6 +52,11 @@
     values(#{memberNo},#{projectNo})
   </insert>
   
+  <delete id="deleteMember" parameterType="java.lang.Integer">
+    delete from pms_member_project 
+    where project_no=#{no}
+  </delete>
+  
   <select id="findByNo" resultMap="ProjectMap" parameterType="java.lang.Integer">
     select 
       p.no, 
@@ -72,12 +77,16 @@
       p.no = #{no}
   </select>
   
-<!--  
-  <update id="updateViewCount" parameterType="java.lang.Integer">
-    update pms_board set 
-      vw_cnt = vw_cnt + 1
+  <update id="update" parameterType="com.eomcs.pms.domain.Project">
+    update pms_project set
+      title = #{title},
+      content = #{content},
+      sdt = #{startDate},
+      edt = #{endDate},
+      owner = #{owner.no}
     where no = #{no}
   </update>
+<!--  
 
   <update id="update" parameterType="com.eomcs.pms.domain.Board">
     update pms_board set 
