@@ -79,7 +79,17 @@
   - MemberDaoImpl 에 있던 SQL문을 이 파일로 옮긴다.
 - com/eomcs/pms/conf/mybatis-config.xml 변경
   - MemberMapper 파일의 경로를 등록한다.
-    -
+
+### 6단계: ProjectDaoImpl 에 Mybatis를 적용한다.
+
+- com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
+  - SQL을 뜯어내어 ProjectMapper.xml로 옮긴다.
+  - JDBC 코드를 뜯어내고 그 자리에 Mybatis 클래스로 대체한다.
+- com/eomcs/pms/mapper/ProjectMapper.xml 추가
+  - ProjectDaoImpl 에 있던 SQL문을 이 파일로 옮긴다.
+- com/eomcs/pms/conf/mybatis-config.xml 변경
+  - ProjectMapper 파일의 경로를 등록한다.
+
 ## 실습 결과
 - build.gradle 변경
 - src/main/resources/com/eomcs/pms/conf/jdbc.properties 생성

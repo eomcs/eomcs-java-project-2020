@@ -6,15 +6,19 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 
 public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   Connection con;
+  SqlSessionFactory sqlSessionFactory;
 
-  public ProjectDaoImpl(Connection con) {
+  public ProjectDaoImpl(Connection con, SqlSessionFactory sqlSessionFactory) {
     this.con = con;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -169,45 +173,9 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   @Override
   public List<Project> findAll() throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "select p.no, p.title, p.sdt, p.edt, m.no owner_no, m.name owner_name"
-            + " from pms_project p inner join pms_member m on p.owner=m.no"
-            + " order by p.no desc")) {
-
-      try (ResultSet rs = stmt.executeQuery()) {
-        ArrayList<Project> projects = new ArrayList<>();
-        while (rs.next()) {
-          Project project = new Project();
-          project.setNo(rs.getInt("no"));
-          project.setTitle(rs.getString("title"));
-          project.setStartDate(rs.getDate("sdt"));
-          project.setEndDate(rs.getDate("edt"));
-
-          Member owner = new Member();
-          owner.setNo(rs.getInt("owner_no"));
-          owner.setName(rs.getString("owner_name"));
-          project.setOwner(owner);
-
-          ArrayList<Member> members = new ArrayList<>();
-          try (PreparedStatement stmt2 = con.prepareStatement(
-              "select mp.member_no, m.name"
-                  + " from pms_member_project mp"
-                  + " inner join pms_member m on mp.member_no=m.no"
-                  + " where mp.project_no=" + rs.getInt("no"));
-              ResultSet memberRs = stmt2.executeQuery()) {
-
-            while (memberRs.next()) {
-              Member member = new Member();
-              member.setNo(memberRs.getInt("member_no"));
-              member.setName(memberRs.getString("name"));
-              members.add(member);
-            }
-          }
-          project.setMembers(members);
-          projects.add(project);
-        }
-        return projects;
-      }
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      List<Project> projects = sqlSession.selectList("ProjectDao.findAll");
+      return projects;
     }
   }
 

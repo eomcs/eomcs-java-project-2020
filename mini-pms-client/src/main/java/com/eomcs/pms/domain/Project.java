@@ -14,6 +14,10 @@ public class Project {
   private Member owner;
   private List<Member> members;
 
+  public Project() {
+    System.out.println("Project()");
+  }
+
   public int getNo() {
     return no;
   }
