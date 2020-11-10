@@ -5,15 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Task;
 
 public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
   Connection con;
+  SqlSessionFactory sqlSessionFactory;
 
-  public TaskDaoImpl(Connection con) {
+  public TaskDaoImpl(Connection con, SqlSessionFactory sqlSessionFactory) {
     this.con = con;
+    this.sqlSessionFactory = sqlSessionFactory;
   }
 
   @Override
@@ -33,11 +37,15 @@ public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
   @Override
   public int delete(int no) throws Exception {
-    try (PreparedStatement stmt = con.prepareStatement(
-        "delete from pms_task where no=?")) {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession(true)) {
+      return sqlSession.delete("TaskDao.delete", no);
+    }
+  }
 
-      stmt.setInt(1, no);
-      return stmt.executeUpdate();
+  @Override
+  public int deleteByProjectNo(int projectNo) throws Exception {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession(true)) {
+      return sqlSession.delete("TaskDao.deleteByProjectNo", projectNo);
     }
   }
 

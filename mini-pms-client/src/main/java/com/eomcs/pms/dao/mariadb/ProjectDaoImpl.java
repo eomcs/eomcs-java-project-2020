@@ -1,7 +1,5 @@
 package com.eomcs.pms.dao.mariadb;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
@@ -11,11 +9,9 @@ import com.eomcs.pms.domain.Project;
 
 public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
-  Connection con;
   SqlSessionFactory sqlSessionFactory;
 
-  public ProjectDaoImpl(Connection con, SqlSessionFactory sqlSessionFactory) {
-    this.con = con;
+  public ProjectDaoImpl(SqlSessionFactory sqlSessionFactory) {
     this.sqlSessionFactory = sqlSessionFactory;
   }
 
@@ -42,37 +38,15 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   @Override
   public int delete(int no) throws Exception {
-    con.setAutoCommit(false);
-    try {
-      // => 프로젝트의 작업을 지운다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_task where project_no=" + no)) {
-        stmt.executeUpdate();
-      }
-
-      // => 프로젝트에 참여하는 모든 팀원을 삭제한다.
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_member_project where project_no=" + no)) {
-        stmt.executeUpdate();
-      }
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      // 프로젝트에 소속된 모든 멤버를 삭제한다.
+      sqlSession.delete("ProjectDao.deleteMembers", no);
 
       // => 프로젝트를 삭제한다.
-      int count = 0;
-      try (PreparedStatement stmt = con.prepareStatement(
-          "delete from pms_project where no=?")) {
-        stmt.setInt(1, no);
-        count = stmt.executeUpdate();
-      }
+      int count = sqlSession.delete("ProjectDao.delete", no);
 
-      con.commit();
+      sqlSession.commit();
       return count;
-
-    } catch (Exception e) {
-      con.rollback();
-      throw e;
-
-    } finally {
-      con.setAutoCommit(true);
     }
   }
 
@@ -101,7 +75,7 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
       // 프로젝트 팀원 변경한다.
       // => 기존에 설정된 모든 팀원을 삭제한다.
-      sqlSession.delete("ProjectDao.deleteMember", project.getNo());
+      sqlSession.delete("ProjectDao.deleteMembers", project.getNo());
 
       // => 새로 팀원을 입력한다.
       for (Member member : project.getMembers()) {

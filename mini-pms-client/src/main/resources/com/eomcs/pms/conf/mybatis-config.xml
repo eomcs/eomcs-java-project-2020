@@ -35,6 +35,7 @@
     <mapper resource="com/eomcs/pms/mapper/BoardMapper.xml"/>
     <mapper resource="com/eomcs/pms/mapper/MemberMapper.xml"/>
     <mapper resource="com/eomcs/pms/mapper/ProjectMapper.xml"/>
+    <mapper resource="com/eomcs/pms/mapper/TaskMapper.xml"/>
   </mappers>
 
 </configuration>

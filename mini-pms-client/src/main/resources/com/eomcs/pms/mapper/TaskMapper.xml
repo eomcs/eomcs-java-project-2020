@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="TaskDao">
+  
+<!--  
+  <resultMap type="com.eomcs.pms.domain.Board" id="BoardMap">
+    <id column="no"           property="no"/>
+    <result column="title"    property="title"/>
+    <result column="content"  property="content"/>
+    <result column="cdt"      property="registeredDate"/>
+    <result column="vw_cnt"   property="viewCount"/>
+    
+    <association property="writer" javaType="com.eomcs.pms.domain.Member">
+      <id column="writer_no"    property="no"/>
+      <result column="name"     property="name"/>
+    </association>
+  </resultMap>
+  
+  <select id="findAll" resultMap="BoardMap">
+    select 
+      b.no, 
+      b.title, 
+      b.cdt, 
+      b.vw_cnt, 
+      m.no writer_no, 
+      m.name
+    from 
+      pms_board b 
+      inner join pms_member m on b.writer=m.no
+    order by 
+      b.no desc
+  </select>
+  
+  <insert id="insert" parameterType="com.eomcs.pms.domain.Board">
+    insert into pms_board(title,content,writer) 
+    values(#{title}, #{content}, #{writer.no})
+  </insert>
+  
+  <select id="findByNo" 
+    parameterType="java.lang.Integer" 
+    resultMap="BoardMap">
+    select
+	    b.no,
+	    b.title,
+	    b.content,
+	    b.cdt,
+	    b.vw_cnt,
+	    m.no writer_no,
+	    m.name
+    from 
+      pms_board b inner join pms_member m on b.writer=m.no
+    where b.no = #{no}
+  </select>
+  
+  <update id="updateViewCount" parameterType="java.lang.Integer">
+    update pms_board set 
+      vw_cnt = vw_cnt + 1
+    where no = #{no}
+  </update>
+
+  <update id="update" parameterType="com.eomcs.pms.domain.Board">
+    update pms_board set 
+      title = #{title}, 
+      content = #{content} 
+    where no = #{no}
+  </update>
+  
+  
+-->
+  
+  <delete id="deleteByProjectNo" parameterType="java.lang.Integer">
+    delete from pms_task
+    where project_no=#{projectNo}
+  </delete>
+</mapper>
+
+
+
+
+
+

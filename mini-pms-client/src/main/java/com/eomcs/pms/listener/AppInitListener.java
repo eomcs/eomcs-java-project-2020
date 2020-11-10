@@ -59,8 +59,8 @@ public class AppInitListener implements ApplicationContextListener {
       // DAO 구현체 생성
       BoardDao boardDao = new BoardDaoImpl(sqlSessionFactory);
       MemberDao memberDao = new MemberDaoImpl(sqlSessionFactory);
-      ProjectDao projectDao = new ProjectDaoImpl(con, sqlSessionFactory);
-      TaskDao taskDao = new TaskDaoImpl(con);
+      ProjectDao projectDao = new ProjectDaoImpl(sqlSessionFactory);
+      TaskDao taskDao = new TaskDaoImpl(con, sqlSessionFactory);
 
       // Command 구현체 생성 및 commandMap 객체 준비
       Map<String,Command> commandMap = new HashMap<>();
@@ -81,7 +81,7 @@ public class AppInitListener implements ApplicationContextListener {
       commandMap.put("/project/list", new ProjectListCommand(projectDao, memberDao));
       commandMap.put("/project/detail", new ProjectDetailCommand(projectDao));
       commandMap.put("/project/update", new ProjectUpdateCommand(projectDao, memberDao));
-      commandMap.put("/project/delete", new ProjectDeleteCommand(projectDao));
+      commandMap.put("/project/delete", new ProjectDeleteCommand(projectDao, taskDao));
 
       commandMap.put("/task/add", new TaskAddCommand(taskDao, projectDao, memberDao));
       commandMap.put("/task/list", new TaskListCommand(taskDao));
