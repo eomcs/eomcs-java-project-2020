@@ -52,10 +52,18 @@
 - com.eomcs.pms.dao.mariadb.BoardDaoImpl 클래스 변경
   - SQL을 뜯어내어 BoardMapper.xml로 옮긴다.
   - JDBC 코드를 뜯어내고 그 자리에 Mybatis 클래스로 대체한다.
+  - 백업: BoardDaoImpl01.java
 - com/eomcs/pms/mapper/BoardMapper.xml 추가
   - BoardDaoImpl 에 있던 SQL문을 이 파일로 옮긴다.
 - com/eomcs/pms/conf/mybatis-config.xml 변경
   - BoardMapper 파일의 경로를 등록한다.
+
+### 4단계: App 에서 사용하는 객체를 AppInitListener 에서 모두 준비한다.
+
+- com.eomcs.pms.listener.AppInitListener 변경
+  - `SqlSessionFactory` 객체를 생성한다.
+  - `XxxDao` 구현체 생성 코드도 이 클래스로 옮긴다.
+  - `Command` 구현체 생성 코드도 이 클래스로 옮긴다.
 
 
 ## 실습 결과

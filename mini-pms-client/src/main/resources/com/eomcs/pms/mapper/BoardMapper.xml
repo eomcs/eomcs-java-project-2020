@@ -99,6 +99,18 @@ namespace 속성
       vw_cnt = vw_cnt + 1
     where no = #{no}
   </update>
+
+  <update id="update" parameterType="com.eomcs.pms.domain.Board">
+    update pms_board set 
+      title = #{title}, 
+      content = #{content} 
+    where no = #{no}
+  </update>
+  
+  <delete id="delete" parameterType="java.lang.Integer">
+    delete from pms_board 
+    where no=#{no}
+  </delete>
 </mapper>
 
 

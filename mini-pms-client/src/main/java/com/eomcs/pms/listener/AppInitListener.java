@@ -3,6 +3,9 @@ package com.eomcs.pms.listener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Map;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import com.eomcs.context.ApplicationContextListener;
 
 public class AppInitListener implements ApplicationContextListener {
@@ -15,6 +18,11 @@ public class AppInitListener implements ApplicationContextListener {
       Connection con = DriverManager.getConnection(
           "jdbc:mysql://localhost:3306/studydb?user=study&password=1111");
       context.put("con", con);
+
+      // Mybatis 객체 준비
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(
+          Resources.getResourceAsStream("com/eomcs/pms/conf/mybatis-config.xml"));
+      context.put("sqlSessionFactory", sqlSessionFactory);
 
     } catch (Exception e) {
       System.out.println("DB 커넥션을 준비하는 중에 오류 발생");
