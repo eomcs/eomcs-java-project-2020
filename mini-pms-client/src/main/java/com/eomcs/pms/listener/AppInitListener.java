@@ -58,7 +58,7 @@ public class AppInitListener implements ApplicationContextListener {
 
       // DAO 구현체 생성
       BoardDao boardDao = new BoardDaoImpl(sqlSessionFactory);
-      MemberDao memberDao = new MemberDaoImpl(con);
+      MemberDao memberDao = new MemberDaoImpl(sqlSessionFactory);
       ProjectDao projectDao = new ProjectDaoImpl(con);
       TaskDao taskDao = new TaskDaoImpl(con);
 
