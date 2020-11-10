@@ -6,20 +6,20 @@
 <mapper namespace="ProjectDao">
   
   <resultMap type="com.eomcs.pms.domain.Project" id="ProjectMap">
-    <id column="no"       property="no"/>
+    <id column="no"           property="no"/>
     <result column="title"    property="title"/>
     <result column="content"  property="content"/>
     <result column="sdt"      property="startDate"/>
     <result column="edt"      property="endDate"/>
     
     <association property="owner" javaType="com.eomcs.pms.domain.Member">
-	    <id column="owner_no"      property="no"/>
+	    <id column="owner_no"          property="no"/>
 	    <result column="owner_name"    property="name"/>
     </association>
     
     <collection property="members" ofType="com.eomcs.pms.domain.Member">
-      <id column="member_no"     property="no"/>
-      <result column="member_name"   property="name"/>
+      <id column="member_no"          property="no"/>
+      <result column="member_name"    property="name"/>
     </collection>
   </resultMap>
 
@@ -41,12 +41,18 @@
     order by p.no desc
   </select>
   
-<!--  
-  <insert id="insert" parameterType="com.eomcs.pms.domain.Board">
-    insert into pms_board(title,content,writer) 
-    values(#{title}, #{content}, #{writer.no})
+  <insert id="insert" parameterType="com.eomcs.pms.domain.Project"
+          useGeneratedKeys="true" keyColumn="no" keyProperty="no">
+    insert into pms_project(title,content,sdt,edt,owner)
+    values(#{title},#{content},#{startDate},#{endDate},#{owner.no})
   </insert>
   
+  <insert id="insertMember" parameterType="java.util.Map">
+    insert into pms_member_project(member_no, project_no) 
+    values(#{memberNo},#{projectNo})
+  </insert>
+  
+<!--  
   <select id="findByNo" 
     parameterType="java.lang.Integer" 
     resultMap="BoardMap">

@@ -3,8 +3,8 @@ package com.eomcs.pms.dao.mariadb;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -24,61 +24,21 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
   @Override
   public int insert(Project project) throws Exception {
 
-    // 커넥션 객체에서 수행하는 작업을 수동 커밋하도록 설정한다.
-    con.setAutoCommit(false);
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
 
-    try {
-      try (PreparedStatement stmt = con.prepareStatement(
-          "insert into pms_project(title,content,sdt,edt,owner)"
-              + " values(?,?,?,?,?)",
-              Statement.RETURN_GENERATED_KEYS)) {
+      // 프로젝트 정보 입력
+      int count = sqlSession.insert("ProjectDao.insert", project);
 
-        stmt.setString(1, project.getTitle());
-        stmt.setString(2, project.getContent());
-        stmt.setDate(3, project.getStartDate());
-        stmt.setDate(4, project.getEndDate());
-        stmt.setInt(5, project.getOwner().getNo());
-        stmt.executeUpdate();
-
-        // 금방 입력한 프로젝트의 no 값을 가져오기
-        try (ResultSet keyRs = stmt.getGeneratedKeys()) {
-          keyRs.next();
-          project.setNo(keyRs.getInt(1));
-        }
+      // 프로젝트의 멤버 정보 입력
+      for (Member member : project.getMembers()) {
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("memberNo", member.getNo());
+        map.put("projectNo", project.getNo());
+        sqlSession.insert("ProjectDao.insertMember", map);
       }
 
-      // 위의 입력을 수행한 후 일부로 다음 입력을 60초 정도 지연시킨다.
-      //Thread.sleep(60000);
-
-      // 프로젝트에 참여하는 멤버의 정보를 저장한다.
-      try (PreparedStatement stmt2 = con.prepareStatement(
-          "insert into pms_member_project(member_no, project_no) values(?,?)")) {
-        for (Member member : project.getMembers()) {
-          stmt2.setInt(1, member.getNo());
-          stmt2.setInt(2, project.getNo());
-          stmt2.executeUpdate();
-        }
-      }
-
-      // 프로젝트 멤버의 등록까지 예외없이 정상적으로 실행되었다면,
-      // DBMS 서버에게 작업 내용을 실제 테이블에 반영하라고 요구한다.
-      con.commit();
-
-      return 1;
-
-    } catch (Exception e) {
-      // 작업을 수행하는 중에 예외가 발생하면
-      // 이전에 수행했던 작업도 되돌린다.
-      // 즉 마지막 커밋 상태로 되돌린다.
-      con.rollback();
-
-      // 예외가 발생하면 여기서 처리하지 말고 호출자에게 떠넘긴다.
-      throw e;
-
-    } finally {
-      // 정상적으로 실행하거나 또는 예외가 발생해도
-      // DB 커넥션은 다시 원래의 auto commit 상태로 만든다.
-      con.setAutoCommit(true);
+      sqlSession.commit();
+      return count;
     }
   }
 
