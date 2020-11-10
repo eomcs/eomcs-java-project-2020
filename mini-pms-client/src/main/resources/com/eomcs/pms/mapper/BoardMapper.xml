@@ -27,10 +27,11 @@ namespace 속성
          b.setRegisteredDate(rs.getDate("cdt"));
          b.setViewCount(rs.getInt("vw_cnt"));
     -->
-    <id column="no"     property="no"/>
-    <result column="title"  property="title"/>
-    <result column="cdt"    property="registeredDate"/>
-    <result column="vw_cnt" property="viewCount"/>
+    <id column="no"           property="no"/>
+    <result column="title"    property="title"/>
+    <result column="content"  property="content"/>
+    <result column="cdt"      property="registeredDate"/>
+    <result column="vw_cnt"   property="viewCount"/>
     
     <!-- 
       Member m = new Member();
@@ -76,6 +77,28 @@ namespace 속성
     insert into pms_board(title,content,writer) 
     values(#{title}, #{content}, #{writer.no})
   </insert>
+  
+  <select id="findByNo" 
+    parameterType="java.lang.Integer" 
+    resultMap="BoardMap">
+    select
+	    b.no,
+	    b.title,
+	    b.content,
+	    b.cdt,
+	    b.vw_cnt,
+	    m.no writer_no,
+	    m.name
+    from 
+      pms_board b inner join pms_member m on b.writer=m.no
+    where b.no = #{no}
+  </select>
+  
+  <update id="updateViewCount" parameterType="java.lang.Integer">
+    update pms_board set 
+      vw_cnt = vw_cnt + 1
+    where no = #{no}
+  </update>
 </mapper>
 
 
