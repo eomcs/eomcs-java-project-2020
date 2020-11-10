@@ -71,7 +71,7 @@
       m.no, 
       m.name
     from 
-      pms_member_project mp inner join pms_member m on mp.member_no=m.no"
+      pms_member_project mp inner join pms_member m on mp.member_no=m.no
     where 
       mp.project_no=#{no}
     order by 
@@ -91,7 +91,7 @@
     from 
       pms_member
     where 
-      email = #{email} 
+      email = #{email}
       and password = password(#{password})
   </select>
   
