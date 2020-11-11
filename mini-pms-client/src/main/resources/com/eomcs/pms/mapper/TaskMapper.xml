@@ -5,7 +5,7 @@
   
 <mapper namespace="TaskDao">
    
-  <resultMap type="com.eomcs.pms.domain.Task" id="TaskMap">
+  <resultMap type="task" id="TaskMap">
     <id column="no"                 property="no"/>
     <result column="content"        property="content"/>
     <result column="deadline"       property="deadline"/>
@@ -13,7 +13,7 @@
     <result column="project_no"     property="projectNo"/>
     <result column="project_title"  property="projectTitle"/>
     
-    <association property="owner" javaType="com.eomcs.pms.domain.Member">
+    <association property="owner" javaType="member">
       <id column="owner_no"         property="no"/>
       <result column="owner_name"   property="name"/>
     </association>
@@ -33,7 +33,7 @@
     order by t.deadline asc
   </select>
   
-  <select id="findByNo" parameterType="java.lang.Integer" resultMap="TaskMap">
+  <select id="findByNo" parameterType="int" resultMap="TaskMap">
     select
       t.no,
       t.content,
@@ -50,12 +50,12 @@
     where t.no = #{taskNo}
   </select>
   
-  <insert id="insert" parameterType="com.eomcs.pms.domain.Task">
+  <insert id="insert" parameterType="task">
     insert into pms_task(content,deadline,owner,project_no,status)
     values(#{content},#{deadline},#{owner.no},#{projectNo},#{status})
   </insert>
   
-  <update id="update" parameterType="com.eomcs.pms.domain.Task">
+  <update id="update" parameterType="task">
     update pms_task set
       content = #{content},
       deadline = #{deadline},
@@ -65,12 +65,12 @@
     where no = #{no}
   </update>
   
-  <delete id="delete" parameterType="java.lang.Integer">
+  <delete id="delete" parameterType="int">
     delete from pms_task
     where no=#{taskNo}
   </delete>
   
-  <delete id="deleteByProjectNo" parameterType="java.lang.Integer">
+  <delete id="deleteByProjectNo" parameterType="int">
     delete from pms_task
     where project_no=#{projectNo}
   </delete>

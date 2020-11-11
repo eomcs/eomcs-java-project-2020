@@ -19,7 +19,7 @@ namespace 속성
       - id 속성 : 컬럼-프로퍼티의 연결 정보를 가리킬 이름. 
                   SQL 문을 정의할 때 사용.
   -->
-  <resultMap type="com.eomcs.pms.domain.Board" id="BoardMap">
+  <resultMap type="board" id="BoardMap">
     <!-- 자바 코드
          Board b = new Board();
          b.setNo(rs.getInt("no"));
@@ -39,7 +39,7 @@ namespace 속성
       m.setName(rs.getString("name"));
       b.setWriter(m);
     -->
-    <association property="writer" javaType="com.eomcs.pms.domain.Member">
+    <association property="writer" javaType="member">
       <id column="writer_no"    property="no"/>
       <result column="name"     property="name"/>
     </association>
@@ -73,13 +73,13 @@ namespace 속성
       b.no desc
   </select>
   
-  <insert id="insert" parameterType="com.eomcs.pms.domain.Board">
+  <insert id="insert" parameterType="board">
     insert into pms_board(title,content,writer) 
     values(#{title}, #{content}, #{writer.no})
   </insert>
   
   <select id="findByNo" 
-    parameterType="java.lang.Integer" 
+    parameterType="int" 
     resultMap="BoardMap">
     select
 	    b.no,
@@ -94,20 +94,20 @@ namespace 속성
     where b.no = #{no}
   </select>
   
-  <update id="updateViewCount" parameterType="java.lang.Integer">
+  <update id="updateViewCount" parameterType="int">
     update pms_board set 
       vw_cnt = vw_cnt + 1
     where no = #{no}
   </update>
 
-  <update id="update" parameterType="com.eomcs.pms.domain.Board">
+  <update id="update" parameterType="board">
     update pms_board set 
       title = #{title}, 
       content = #{content} 
     where no = #{no}
   </update>
   
-  <delete id="delete" parameterType="java.lang.Integer">
+  <delete id="delete" parameterType="int">
     delete from pms_board 
     where no=#{no}
   </delete>

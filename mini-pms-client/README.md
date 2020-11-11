@@ -1,4 +1,4 @@
-# 41-a. DB 프로그래밍 더 쉽고 간단히 하는 방법 : Mybatis 퍼시스턴스 프레임워크 도입
+# 41-b. DB 프로그래밍 더 쉽고 간단히 하는 방법 : Mybatis 기타 기능 활용하기
 
 이번 훈련에서는,
 - 실무에서 자주 쓰이는 *퍼시스턴스 프레임워크* 중에 하나인 **마이바티스** 프레임워크의 사용법을 배울 것이다.
@@ -26,16 +26,37 @@
 
 ## 실습
 
-### 1단계 - 프로젝트에 MyBatis 라이브러리를 추가한다.
+### 1단계 - fully-qualified class name 에 대해 별명을 부여하기
 
-- build.gradle   
-  - `search.maven.org` 사이트에서 *mybatis* 라이브러리 정보를 찾는다.
-  - 의존 라이브러리 블록에서 `mybatis` 라이브러리를 등록한다.
-- gradle을 이용하여 eclipse 설정 파일을 갱신한다.
-  - `$ gradle eclipse`
-- 이클립스에서 프로젝트를 갱신한다.
+- src/main/resources/com/eomcs/pms/conf/mybatis-config.xml 변경
+  - 클래스 이름에 대해 별명을 지정한다.
+```
+<typeAliases>
+  <typeAlias type="com.eomcs.pms.domain.Board" alias="board"/>
+  <typeAlias type="com.eomcs.pms.domain.Member" alias="member"/>
+  <typeAlias type="com.eomcs.pms.domain.Project" alias="project"/>
+  <typeAlias type="com.eomcs.pms.domain.Task" alias="task"/>
+</typeAliases>
+```
+- src/main/resources/com/eomcs/pms/mapper/XxxMapper.xml 변경
+  - 클래스 이름 대신 별명을 사용한다.
 
-### 2단계 - `MyBatis` 설정 파일을 준비한다.
+일부 자바 클래스에서 대해서 미리 별명이 부여되었다.
+- 예)
+  - int -> _int
+  - java.lang.Integer -> int
+  - java.lang.String -> string
+  - java.util.Map -> map
+  - java.util.HashMap -> hashmap
+
+### 2단계 - 특정 패키지에 소속된 전체 클래스에 대해 별명 부여하기
+
+- src/main/resources/com/eomcs/pms/conf/mybatis-config.xml 변경
+```
+<typeAliases>
+  <package name="com.eomcs.pms.domain"/>
+</typeAliases>
+```
 
 - src/main/resources/com/eomcs/pms/conf/jdbc.properties
   - 마이바티스 홈 : <http://www.mybatis.org>

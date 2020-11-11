@@ -5,7 +5,7 @@
   
 <mapper namespace="MemberDao">
   
-  <resultMap type="com.eomcs.pms.domain.Member" id="MemberMap">
+  <resultMap type="member" id="MemberMap">
     <id column="no"           property="no"/>
     <result column="name"     property="name"/>
     <result column="email"    property="email"/>
@@ -27,14 +27,12 @@
       no desc
   </select>
   
-  <insert id="insert" parameterType="com.eomcs.pms.domain.Member">
+  <insert id="insert" parameterType="member">
     insert into pms_member(name,email,password,photo,tel)
     values(#{name},#{email},password(#{password}),#{photo},#{tel})
   </insert>
   
-  <select id="findByNo" 
-    parameterType="java.lang.Integer" 
-    resultMap="MemberMap">
+  <select id="findByNo" parameterType="int" resultMap="MemberMap">
     select 
       no, 
       name, 
@@ -48,9 +46,7 @@
       no = #{no}
   </select>
   
-  <select id="findByName" 
-    parameterType="java.lang.String" 
-    resultMap="MemberMap">
+  <select id="findByName" parameterType="string" resultMap="MemberMap">
     select 
       no, 
       name, 
@@ -64,9 +60,7 @@
       name = #{name}
   </select>
   
-  <select id="findByProjectNo" 
-    parameterType="java.lang.Integer" 
-    resultMap="MemberMap">
+  <select id="findByProjectNo" parameterType="int" resultMap="MemberMap">
     select 
       m.no, 
       m.name
@@ -79,9 +73,7 @@
       m.name asc
   </select>
 
-  <select id="findByEmailPassword" 
-    parameterType="java.util.Map" 
-    resultMap="MemberMap">
+  <select id="findByEmailPassword" parameterType="map" resultMap="MemberMap">
     select 
       no, 
       name, 
@@ -96,7 +88,7 @@
       and password = password(#{password})
   </select>
   
-  <update id="update" parameterType="com.eomcs.pms.domain.Member">
+  <update id="update" parameterType="member">
     update pms_member set
       name = #{name},
       email = #{email},
@@ -106,7 +98,7 @@
     where no = #{no}
   </update>
   
-  <delete id="delete" parameterType="java.lang.Integer">
+  <delete id="delete" parameterType="int">
     delete from pms_member 
     where no=#{no}
   </delete>

@@ -5,19 +5,19 @@
   
 <mapper namespace="ProjectDao">
   
-  <resultMap type="com.eomcs.pms.domain.Project" id="ProjectMap">
+  <resultMap type="project" id="ProjectMap">
     <id column="no"           property="no"/>
     <result column="title"    property="title"/>
     <result column="content"  property="content"/>
     <result column="sdt"      property="startDate"/>
     <result column="edt"      property="endDate"/>
     
-    <association property="owner" javaType="com.eomcs.pms.domain.Member">
+    <association property="owner" javaType="member">
 	    <id column="owner_no"          property="no"/>
 	    <result column="owner_name"    property="name"/>
     </association>
     
-    <collection property="members" ofType="com.eomcs.pms.domain.Member">
+    <collection property="members" ofType="member">
       <id column="member_no"          property="no"/>
       <result column="member_name"    property="name"/>
     </collection>
@@ -41,23 +41,23 @@
     order by p.no desc
   </select>
   
-  <insert id="insert" parameterType="com.eomcs.pms.domain.Project"
+  <insert id="insert" parameterType="project"
           useGeneratedKeys="true" keyColumn="no" keyProperty="no">
     insert into pms_project(title,content,sdt,edt,owner)
     values(#{title},#{content},#{startDate},#{endDate},#{owner.no})
   </insert>
   
-  <insert id="insertMember" parameterType="java.util.Map">
+  <insert id="insertMember" parameterType="map">
     insert into pms_member_project(member_no, project_no) 
     values(#{memberNo},#{projectNo})
   </insert>
   
-  <delete id="deleteMembers" parameterType="java.lang.Integer">
+  <delete id="deleteMembers" parameterType="int">
     delete from pms_member_project 
     where project_no=#{no}
   </delete>
   
-  <select id="findByNo" resultMap="ProjectMap" parameterType="java.lang.Integer">
+  <select id="findByNo" resultMap="ProjectMap" parameterType="int">
     select 
       p.no, 
       p.title,
@@ -77,7 +77,7 @@
       p.no = #{no}
   </select>
   
-  <update id="update" parameterType="com.eomcs.pms.domain.Project">
+  <update id="update" parameterType="project">
     update pms_project set
       title = #{title},
       content = #{content},
@@ -87,7 +87,7 @@
     where no = #{no}
   </update>
 
-  <delete id="delete" parameterType="java.lang.Integer">
+  <delete id="delete" parameterType="int">
     delete from pms_project
     where no=#{no}
   </delete>

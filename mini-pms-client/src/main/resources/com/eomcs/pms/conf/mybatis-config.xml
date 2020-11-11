@@ -3,13 +3,22 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-  
   <!-- 설정 파일에서 사용할 .properties 파일 정보 -->
   <properties resource="com/eomcs/pms/conf/jdbc.properties"></properties>
 
   <settings>
     <setting name="cacheEnabled" value="true"/>
   </settings>
+
+  <typeAliases>
+    <package name="com.eomcs.pms.domain"/>
+<!--  
+    <typeAlias type="com.eomcs.pms.domain.Board" alias="board"/>
+    <typeAlias type="com.eomcs.pms.domain.Member" alias="member"/>
+    <typeAlias type="com.eomcs.pms.domain.Project" alias="project"/>
+    <typeAlias type="com.eomcs.pms.domain.Task" alias="task"/>
+-->
+  </typeAliases>
 
   <!-- DBMS 접속 정보들 -->
   <environments default="development">
