@@ -101,8 +101,29 @@
 - com.eomcs.pms.listener.AppInitListener 클래스 변경
   - `/board/search` 를 처리할 `BoardSearchCommand` 객체를 등록한다.
 
-### 4단계 - 
+### 4단계 - 프로젝트 검색 기능을 추가한다.
 
+마이바티스의 `if` 태그를 사용하여 동적 SQL을 작성한다.
+
+```
+명령> /project/search
+항목(1:프로젝트명, 2:관리자명, 3:팀원, 그 외: 전체)? 1
+검색어? java
+번호, 프로젝트명, 시작일 ~ 종료일, 관리자, 팀원
+21, javajavaxx, 2020-02-02 ~ 2020-03-03, aaa, [ccc,ddd]
+17, java1, 2020-01-01 ~ 2020-02-02, aaa, []
+```
+
+- com.eomcs.pms.dao.ProjectDao 인터페이스 변경
+  - `findByKeyword(String item, String keyword)` 을 추가한다.
+- com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
+  - `findByKeyword(String item, String keyword)` 를 구현한다.
+- src/main/resources/com/eomcs/pms/mapper/ProjectMapper.xml 변경
+  - `findByKeyword` SQL 문을 추가한다.
+- com.eomcs.pms.handler.ProjectSearchCommand 클래스 생성
+  - `BoardDao.findByKeyword()` 을 사용하여 검색 기능을 처리한다.
+- com.eomcs.pms.listener.AppInitListener 클래스 변경
+  - `/project/search` 를 처리할 `ProjectSearchCommand` 객체를 등록한다.
 
 ## 실습 결과
 - build.gradle 변경
