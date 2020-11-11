@@ -41,9 +41,9 @@ public class BoardDaoImpl implements com.eomcs.pms.dao.BoardDao{
   }
 
   @Override
-  public List<Board> findAll() throws Exception {
+  public List<Board> findAll(String keyword) throws Exception {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-      return sqlSession.selectList("BoardDao.findAll");
+      return sqlSession.selectList("BoardDao.findAll", "%" + keyword + "%");
     }
   }
 

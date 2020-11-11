@@ -18,6 +18,7 @@ import com.eomcs.pms.handler.BoardAddCommand;
 import com.eomcs.pms.handler.BoardDeleteCommand;
 import com.eomcs.pms.handler.BoardDetailCommand;
 import com.eomcs.pms.handler.BoardListCommand;
+import com.eomcs.pms.handler.BoardSearchCommand;
 import com.eomcs.pms.handler.BoardUpdateCommand;
 import com.eomcs.pms.handler.Command;
 import com.eomcs.pms.handler.HelloCommand;
@@ -65,6 +66,7 @@ public class AppInitListener implements ApplicationContextListener {
       commandMap.put("/board/detail", new BoardDetailCommand(boardDao));
       commandMap.put("/board/update", new BoardUpdateCommand(boardDao));
       commandMap.put("/board/delete", new BoardDeleteCommand(boardDao));
+      commandMap.put("/board/search", new BoardSearchCommand(boardDao));
 
       commandMap.put("/member/add", new MemberAddCommand(memberDao));
       commandMap.put("/member/list", new MemberListCommand(memberDao));
