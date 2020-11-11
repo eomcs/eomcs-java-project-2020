@@ -60,8 +60,7 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
   @Override
   public List<Project> findAll() throws Exception {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-      List<Project> projects = sqlSession.selectList("ProjectDao.findAll");
-      return projects;
+      return sqlSession.selectList("ProjectDao.findAll");
     }
   }
 
