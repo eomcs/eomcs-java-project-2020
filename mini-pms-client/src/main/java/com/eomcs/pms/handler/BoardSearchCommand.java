@@ -22,7 +22,7 @@ public class BoardSearchCommand implements Command {
       String keyword = Prompt.inputString("검색어? ");
 
       System.out.println("번호, 제목, 작성자, 등록일, 조회수");
-      List<Board> list = boardDao.findAll(keyword);
+      List<Board> list = boardDao.findAll("%" + keyword + "%");
       for (Board board : list) {
         System.out.printf("%d, %s, %s, %s, %d\n",
             board.getNo(),

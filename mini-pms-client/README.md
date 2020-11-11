@@ -101,6 +101,9 @@
 - com.eomcs.pms.listener.AppInitListener 클래스 변경
   - `/board/search` 를 처리할 `BoardSearchCommand` 객체를 등록한다.
 
+### 4단계 - 
+
+
 ## 실습 결과
 - build.gradle 변경
 - src/main/resources/com/eomcs/pms/conf/jdbc.properties 생성
