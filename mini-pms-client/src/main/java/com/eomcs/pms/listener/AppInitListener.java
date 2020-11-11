@@ -32,6 +32,7 @@ import com.eomcs.pms.handler.MemberUpdateCommand;
 import com.eomcs.pms.handler.ProjectAddCommand;
 import com.eomcs.pms.handler.ProjectDeleteCommand;
 import com.eomcs.pms.handler.ProjectDetailCommand;
+import com.eomcs.pms.handler.ProjectDetailSearchCommand;
 import com.eomcs.pms.handler.ProjectListCommand;
 import com.eomcs.pms.handler.ProjectSearchCommand;
 import com.eomcs.pms.handler.ProjectUpdateCommand;
@@ -81,6 +82,7 @@ public class AppInitListener implements ApplicationContextListener {
       commandMap.put("/project/update", new ProjectUpdateCommand(projectDao, memberDao));
       commandMap.put("/project/delete", new ProjectDeleteCommand(projectDao, taskDao));
       commandMap.put("/project/search", new ProjectSearchCommand(projectDao));
+      commandMap.put("/project/detailSearch", new ProjectDetailSearchCommand(projectDao));
 
       commandMap.put("/task/add", new TaskAddCommand(taskDao, projectDao, memberDao));
       commandMap.put("/task/list", new TaskListCommand(taskDao));

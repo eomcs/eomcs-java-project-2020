@@ -68,6 +68,35 @@
     order by p.no desc
   </select>
   
+  <select id="findByDetailKeyword" resultMap="ProjectMap" parameterType="map">
+    select 
+      p.no, 
+      p.title, 
+      p.sdt, 
+      p.edt, 
+      m.no owner_no, 
+      m.name owner_name,
+      mp.member_no,
+      m2.name member_name
+    from 
+      pms_project p 
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on p.no=mp.project_no
+      left outer join pms_member m2 on mp.member_no=m2.no
+    <where>
+	    <if test="title != null">
+	      p.title like concat('%', #{title}, '%')
+	    </if>
+	    <if test="owner != null">
+	      and m.name like concat('%', #{owner}, '%')
+	    </if>
+	    <if test="member != null">
+	      and m2.name like concat('%', #{member}, '%')
+	    </if>
+    </where>
+    order by p.no desc
+  </select>
+  
   <insert id="insert" parameterType="project"
           useGeneratedKeys="true" keyColumn="no" keyProperty="no">
     insert into pms_project(title,content,sdt,edt,owner)
