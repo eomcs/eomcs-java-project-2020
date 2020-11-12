@@ -56,6 +56,19 @@
       inner join pms_member m on p.owner=m.no
       left outer join pms_member_project mp on p.no=mp.project_no
       left outer join pms_member m2 on mp.member_no=m2.no
+    where
+    <choose>
+      <when test="item == 1">
+      p.title like concat('%', #{keyword}, '%')
+      </when>
+      <when test="item == 2">
+      m.name like concat('%', #{keyword}, '%')
+      </when>
+      <otherwise>
+      m2.name like concat('%', #{keyword}, '%')
+      </otherwise>
+    </choose>
+<!--  
     <if test="item == 1">
     where p.title like concat('%', #{keyword}, '%')
     </if>
@@ -65,6 +78,7 @@
     <if test="item == 3">
     where m2.name like concat('%', #{keyword}, '%')
     </if>
+-->
     order by p.no desc
   </select>
   
