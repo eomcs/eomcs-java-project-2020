@@ -22,10 +22,8 @@
       <result column="member_name"    property="name"/>
     </collection>
   </resultMap>
-  
-  <!-- 여러 SQL 문에서 중복되는 코드가 있다면, 
-       다음과 같이 별도로 분리한다. -->
-  <sql id="sql1">
+
+  <select id="findAll" resultMap="ProjectMap">
     select 
       p.no, 
       p.title, 
@@ -40,29 +38,36 @@
       inner join pms_member m on p.owner=m.no
       left outer join pms_member_project mp on p.no=mp.project_no
       left outer join pms_member m2 on mp.member_no=m2.no
-  </sql>
-       
-  <select id="findAll" resultMap="ProjectMap">
-    <!-- 별도로 분리된 SQL 코드를 가져오고 싶다면, 다음과 같이 하라. -->
-    <include refid="sql1"/>
     order by p.no desc
   </select>
   
   <select id="findByKeyword" resultMap="ProjectMap" parameterType="map">
-    <include refid="sql1"/>
-    <where>
-	    <choose>
-	      <when test="item == 1">
-	      p.title like concat('%', #{keyword}, '%')
-	      </when>
-	      <when test="item == 2">
-	      m.name like concat('%', #{keyword}, '%')
-	      </when>
-	      <otherwise>
-	      m2.name like concat('%', #{keyword}, '%')
-	      </otherwise>
-	    </choose>
-    </where>
+    select 
+      p.no, 
+      p.title, 
+      p.sdt, 
+      p.edt, 
+      m.no owner_no, 
+      m.name owner_name,
+      mp.member_no,
+      m2.name member_name
+    from 
+      pms_project p 
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on p.no=mp.project_no
+      left outer join pms_member m2 on mp.member_no=m2.no
+    where
+    <choose>
+      <when test="item == 1">
+      p.title like concat('%', #{keyword}, '%')
+      </when>
+      <when test="item == 2">
+      m.name like concat('%', #{keyword}, '%')
+      </when>
+      <otherwise>
+      m2.name like concat('%', #{keyword}, '%')
+      </otherwise>
+    </choose>
 <!--  
     <if test="item == 1">
     where p.title like concat('%', #{keyword}, '%')
@@ -78,7 +83,20 @@
   </select>
   
   <select id="findByDetailKeyword" resultMap="ProjectMap" parameterType="map">
-    <include refid="sql1"/>
+    select 
+      p.no, 
+      p.title, 
+      p.sdt, 
+      p.edt, 
+      m.no owner_no, 
+      m.name owner_name,
+      mp.member_no,
+      m2.name member_name
+    from 
+      pms_project p 
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on p.no=mp.project_no
+      left outer join pms_member m2 on mp.member_no=m2.no
     <where>
 	    <if test="title != null">
 	      p.title like concat('%', #{title}, '%')
