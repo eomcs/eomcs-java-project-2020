@@ -220,7 +220,7 @@
 
 - 새 방식은 변경할 값만 입력한다.
 - 그리고 입력한 값만 변경된다.
-
+- src/main/resources/com/eomcs/pms/mapper/MemberMapper.xml 변경
 ```
 명령> /member/update
 [회원 변경]
@@ -241,6 +241,28 @@
 사진: x4.gif   <--- 입력 안한 값은 그대로다.
 전화: 1255
 등록일: 2020-11-05
+```
+
+### 8단계 - 프로젝트 멤버를 등록할 때 `insert` 를 한 번만 수행한다.
+
+- 기존 방식은 멤버 수 만큼 `insert` 를 실행하였다.
+- 새 방식은 마이바티스의 `foreach` 태그를 이용하여 한 번만 `insert` 하도록 변경한다.
+- src/main/resources/com/eomcs/pms/mapper/ProjectMapper.xml 변경
+```
+이전 방식:
+<insert id="insertMember" parameterType="map">
+  insert into pms_member_project(member_no, project_no)
+  values(#{memberNo},#{projectNo})
+</insert>
+
+새 방식: 다음 SQL 추가!
+<insert id="insertMembers" parameterType="project">
+  insert into pms_member_project(member_no, project_no)
+  values
+  <foreach collection="members" item="member" separator=",">
+    (#{member.no},#{no})
+  </foreach>
+</insert>
 ```
 
 

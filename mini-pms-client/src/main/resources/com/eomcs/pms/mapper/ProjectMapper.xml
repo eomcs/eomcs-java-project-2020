@@ -119,7 +119,15 @@
   
   <insert id="insertMember" parameterType="map">
     insert into pms_member_project(member_no, project_no) 
-    values(#{memberNo},#{projectNo})
+    values (#{memberNo},#{projectNo})
+  </insert>
+  
+  <insert id="insertMembers" parameterType="project">
+    insert into pms_member_project(member_no, project_no) 
+    values
+    <foreach collection="members" item="member" separator=",">
+      (#{member.no},#{no})
+    </foreach>
   </insert>
   
   <delete id="deleteMembers" parameterType="int">
