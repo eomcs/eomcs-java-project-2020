@@ -22,7 +22,9 @@
 - Mybatis 퍼시스턴스 프레임워크를 설정하고 다루는 방법을 배운다.
 
 ## 훈련 내용
--
+- *Mybatis 프레임워크* 라이브러리 파일을 프로젝트에 추가한다.
+- *Mybatis* 를 설정한다.
+- *DAO* 에 *Mybatis* 를 적용한다.
 
 ## 실습
 
@@ -121,4 +123,3 @@
 - src/main/java/com/eomcs/pms/dao/TaskDao.java 변경
 - src/main/java/com/eomcs/pms/dao/mariadb/TaskDaoImpl.java 변경
 - src/main/java/com/eomcs/pms/listener/AppInitListener.java 변경
-- src/main/java/com/eomcs/pms/App.java 변경

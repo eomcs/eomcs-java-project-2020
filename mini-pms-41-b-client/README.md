@@ -18,11 +18,14 @@
 - SQL을 통해 데이터베이스와 연동한다고 해서 보통 **SQL 매퍼(mapper)** 라 부른다.
 
 ## 훈련 목표
-- **Mybatis SQL 맵퍼** 의 특징과 동작 원리를 이해한다.
-- Mybatis 퍼시스턴스 프레임워크를 설정하고 다루는 방법을 배운다.
+- **Mybatis** SQL 매퍼 파일에서 동적 SQL 다루는 방법을 배운다.
 
 ## 훈련 내용
--
+- 마이바티스 설정 파일에서 클래스에 대해 별명을 설정한다.
+- SQL 매퍼 파일에서 클래스 이름 대신 별명을 사용한다.
+- 게시글 검색 기능을 추가한다.
+- `<if>` 태그를 사용하여 조건에 따라 SQL 코드를 삽입한다.
+- `<where>`, `<choose>`, `<set>`, `<foreach>`, `<sql>` 태그를 적용한다.
 
 ## 실습
 
@@ -311,4 +314,3 @@
 - src/main/java/com/eomcs/pms/handler/ProjectSearchCommand.java 변경
 - src/main/java/com/eomcs/pms/handler/ProjectDetailSearchCommand.java 변경
 - src/main/java/com/eomcs/pms/listener/AppInitListener.java 변경
-- src/main/java/com/eomcs/pms/App.java 변경
