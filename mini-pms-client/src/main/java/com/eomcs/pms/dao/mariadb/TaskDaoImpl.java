@@ -30,7 +30,7 @@ public class TaskDaoImpl implements com.eomcs.pms.dao.TaskDao {
 
   @Override
   public int deleteByProjectNo(int projectNo) throws Exception {
-    try (SqlSession sqlSession = sqlSessionFactory.openSession(true)) {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
       return sqlSession.delete("TaskDao.deleteByProjectNo", projectNo);
     }
   }
