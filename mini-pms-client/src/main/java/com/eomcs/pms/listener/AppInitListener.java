@@ -78,7 +78,7 @@ public class AppInitListener implements ApplicationContextListener {
 
       commandMap.put("/project/add", new ProjectAddCommand(projectDao, memberDao));
       commandMap.put("/project/list", new ProjectListCommand(projectDao));
-      commandMap.put("/project/detail", new ProjectDetailCommand(projectDao));
+      commandMap.put("/project/detail", new ProjectDetailCommand(projectDao, taskDao));
       commandMap.put("/project/update", new ProjectUpdateCommand(projectDao, memberDao));
       commandMap.put("/project/delete", new ProjectDeleteCommand(projectDao, taskDao));
       commandMap.put("/project/search", new ProjectSearchCommand(projectDao));

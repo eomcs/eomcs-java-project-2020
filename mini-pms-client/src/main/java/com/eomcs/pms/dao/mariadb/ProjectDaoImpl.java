@@ -38,6 +38,12 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
       // 프로젝트에 소속된 모든 멤버를 삭제한다.
       sqlSession.delete("ProjectDao.deleteMembers", no);
 
+      // 프로젝트 멤버 삭제 후 일부러 예외를 발생시킨다.
+      // 그러면 위에서 수행한 프로젝트 멤버 삭제가 완료되지 않고 취소될 것이다.
+      if (100 == 100) {
+        throw new Exception("일부러 예외 발생!");
+      }
+
       // => 프로젝트를 삭제한다.
       int count = sqlSession.delete("ProjectDao.delete", no);
 
