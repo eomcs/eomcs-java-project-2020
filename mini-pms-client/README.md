@@ -71,7 +71,37 @@ DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴�
   - `list()` 메서드 선언
 - com.eomcs.pms.service.DefaultProjectService 클래스 생성
   - `list()` 메서드 구현
-    - `ProjectListCommand` 에서 비즈니스 로직과 관련된 코드를 가져온다.
+  - `ProjectListCommand` 에서 비즈니스 로직과 관련된 코드를 가져온다.
+- com.eomcs.pms.handler.ProjectListCommand 클래스 변경
+  - `ProjectService` 구현체를 사용하여 프로젝트 목록 조회 처리
+
+### 5단계 - 프로젝트 검색 커맨드에서 비즈니스 로직을 분리한다.
+
+- com.eomcs.pms.service.ProjectService 인터페이스 생성
+  - `list(String)` 메서드 변경
+    - 검색어를 받는 파라미터를 추가한다.
+- com.eomcs.pms.service.DefaultProjectService 클래스 생성
+  - `list(String)` 메서드 구현
+    - 검색어를 받는 파라미터를 추가한다.
+- com.eomcs.pms.dao.ProjectDao 인터페이스 변경
+  - `findAll(String)` 메서드를 변경한다.
+  - `findByKeyword()` 메서드를 삭제한다.
+    - `findAll()` 메서드와 합친다.
+- com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
+  - 인터페이스 변경에 맞춰 `findAll(String)` 메서드를 변경한다.
+  - `findByKeyword()` 메서드를 삭제한다.
+    - 구현 기능을 `findAll()` 메서드에 합친다.
+- src/main/resources/com/eomcs/pms/mapper/ProjectMapper.xml 변경
+  - `findAll` SQL 문을 변경한다.
+  - `findByKeyword` SQL 문을 삭제한다.
+    - `findAll` SQL 문과 기능을 합친다.
+- com.eomcs.pms.handler.ProjectListCommand 클래스 변경
+  - `ProjectService.list(String)` 메서드 호출 코드를 변경한다.
+- com.eomcs.pms.handler.ProjectSearchCommand 클래스 변경
+  - `ProjectService.list(String)` 메서드를 사용하여 프로젝트를 검색한다.
+
+
+
 
 ## 실습 결과
 

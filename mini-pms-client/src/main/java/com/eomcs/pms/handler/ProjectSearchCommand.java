@@ -2,16 +2,17 @@ package com.eomcs.pms.handler;
 
 import java.util.List;
 import java.util.Map;
-import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
+import com.eomcs.pms.service.ProjectService;
 import com.eomcs.util.Prompt;
 
 public class ProjectSearchCommand implements Command {
-  ProjectDao projectDao;
 
-  public ProjectSearchCommand(ProjectDao projectDao) {
-    this.projectDao = projectDao;
+  ProjectService projectService;
+
+  public ProjectSearchCommand(ProjectService projectService) {
+    this.projectService = projectService;
   }
 
   @Override
@@ -19,11 +20,9 @@ public class ProjectSearchCommand implements Command {
     System.out.println("[프로젝트 검색]");
 
     try {
-      String item = Prompt.inputString(
-          "항목(1:프로젝트명, 2:관리자명, 3:팀원, 그 외: 전체)? ");
       String keyword = Prompt.inputString("검색어? ");
 
-      List<Project> list = projectDao.findByKeyword(item, keyword);
+      List<Project> list = projectService.list(keyword);
       System.out.println("번호, 프로젝트명, 시작일 ~ 종료일, 관리자, 팀원");
 
       for (Project project : list) {
