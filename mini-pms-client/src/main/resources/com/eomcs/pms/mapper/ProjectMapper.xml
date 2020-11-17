@@ -115,12 +115,13 @@
   </select>
   
   <update id="update" parameterType="project">
-    update pms_project set
-      title = #{title},
-      content = #{content},
-      sdt = #{startDate},
-      edt = #{endDate},
-      owner = #{owner.no}
+    update pms_project
+    <set>
+      <if test="title != null">title = #{title},</if>
+      <if test="content != null">content = #{content},</if>
+      <if test="startDate != null">sdt = #{startDate},</if>
+      <if test="endDate != null">edt = #{endDate}</if>
+    </set>
     where no = #{no}
   </update>
 

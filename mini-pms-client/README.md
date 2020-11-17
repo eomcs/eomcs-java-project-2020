@@ -122,10 +122,26 @@ DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴�
   - `listByProject(int)` 메서드 추가
 - com.eomcs.pms.service.DefaultTaskService 클래스 생성
   - `listByProject(int)` 메서드 구현
-
 - com.eomcs.pms.handler.ProjectDetailCommand 클래스 변경
   - `ProjectService.get(int)` 메서드를 사용하여 프로젝트를 조회한다.
+  - `TaskService.listByProject(int)` 메서드를 사용하여 작업 목록을 조회한다.
 
+### 8단계 - 프로젝트 변경 커맨드에서 비즈니스 로직을 분리한다.
+
+- com.eomcs.pms.service.ProjectService 인터페이스 변경
+  - `update(Project)` 메서드 추가
+- com.eomcs.pms.service.DefaultProjectService 클래스 변경
+  - `update(Project)` 메서드 구현
+- src/main/resources/com/eomcs/pms/mapper/ProjectMapper.xml 변경
+  - `update` SQL 문을 동적 SQL로 변경한다.
+- com.eomcs.pms.handler.ProjectUpdateCommand 클래스 변경
+  - `ProjectService.update(Project)` 메서드를 사용하여 프로젝트를 변경한다.
+
+### 9단계 - 게시글, 회원, 작업 커맨드 객체의 비즈니스 로직을 서비스 객체로 분리한다.
+
+화이팅!
+
+ 
 
 ## 실습 결과
 

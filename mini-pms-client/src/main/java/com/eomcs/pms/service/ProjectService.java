@@ -10,4 +10,5 @@ public interface ProjectService {
   List<Project> list(String keyword) throws Exception;
   List<Project> list(Map<String,Object> keywords) throws Exception;
   Project get(int no) throws Exception;
+  int update(Project project) throws Exception;
 }

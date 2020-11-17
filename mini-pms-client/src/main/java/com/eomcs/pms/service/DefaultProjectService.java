@@ -97,6 +97,11 @@ public class DefaultProjectService implements ProjectService {
   public Project get(int no) throws Exception {
     return projectDao.findByNo(no);
   }
+
+  @Override
+  public int update(Project project) throws Exception {
+    return projectDao.update(project);
+  }
 }
 
 
