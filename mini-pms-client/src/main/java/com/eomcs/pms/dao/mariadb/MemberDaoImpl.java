@@ -36,14 +36,9 @@ public class MemberDaoImpl implements com.eomcs.pms.dao.MemberDao {
   }
 
   @Override
-  public Member findByName(String name) throws Exception {
+  public List<Member> findByName(String name) throws Exception {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-      List<Member> members = sqlSession.selectList("MemberDao.findByName", name);
-      if (members.size() > 0) {
-        return members.get(0);
-      } else {
-        return null;
-      }
+      return sqlSession.selectList("MemberDao.findByName", name);
     }
   }
 

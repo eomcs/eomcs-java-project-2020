@@ -41,7 +41,9 @@ import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.pms.handler.WhoamiCommand;
+import com.eomcs.pms.service.DefaultMemberService;
 import com.eomcs.pms.service.DefaultProjectService;
+import com.eomcs.pms.service.MemberService;
 import com.eomcs.pms.service.ProjectService;
 import com.eomcs.util.SqlSessionFactoryProxy;
 
@@ -64,6 +66,7 @@ public class AppInitListener implements ApplicationContextListener {
       TaskDao taskDao = new TaskDaoImpl(sqlSessionFactory);
 
       // Service 구현체 생성
+      MemberService memberService = new DefaultMemberService(memberDao);
       ProjectService projectService = new DefaultProjectService(taskDao, projectDao, sqlSessionFactory);
 
       // Command 구현체 생성 및 commandMap 객체 준비
@@ -82,7 +85,7 @@ public class AppInitListener implements ApplicationContextListener {
       commandMap.put("/member/update", new MemberUpdateCommand(memberDao));
       commandMap.put("/member/delete", new MemberDeleteCommand(memberDao));
 
-      commandMap.put("/project/add", new ProjectAddCommand(projectDao, memberDao));
+      commandMap.put("/project/add", new ProjectAddCommand(projectService, memberService));
       commandMap.put("/project/list", new ProjectListCommand(projectDao));
       commandMap.put("/project/detail", new ProjectDetailCommand(projectDao, taskDao));
       commandMap.put("/project/update", new ProjectUpdateCommand(projectDao, memberDao));

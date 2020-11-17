@@ -14,4 +14,5 @@ public interface ProjectDao {
   int update(Project project) throws Exception;
 
   int deleteMembers(int projectNo) throws Exception;
+  int insertMembers(Project project) throws Exception;
 }

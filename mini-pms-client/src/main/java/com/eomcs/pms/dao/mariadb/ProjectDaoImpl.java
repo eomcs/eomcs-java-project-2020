@@ -17,16 +17,8 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   @Override
   public int insert(Project project) throws Exception {
-
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-
-      // 프로젝트 정보 입력
-      int count = sqlSession.insert("ProjectDao.insert", project);
-
-      // 프로젝트의 멤버 정보 입력
-      sqlSession.insert("ProjectDao.insertMembers", project);
-
-      return count;
+      return sqlSession.insert("ProjectDao.insert", project);
     }
   }
 
@@ -80,6 +72,13 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
   public int deleteMembers(int projectNo) throws Exception {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
       return sqlSession.delete("ProjectDao.deleteMembers", projectNo);
+    }
+  }
+
+  @Override
+  public int insertMembers(Project project) throws Exception {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.insert("ProjectDao.insertMembers", project);
     }
   }
 }

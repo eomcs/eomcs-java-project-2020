@@ -14,104 +14,58 @@
 
 ## 실습
 
-### 1단계 - 프로젝트 관련 Command 객체에 업무 코드를 분리한다.
+### 1단계 - 프로젝트 삭제 Command 객체에서 업무 코드를 분리한다.
 
 커맨드 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴다.
 
 - com.eomcs.pms.service.ProjectService 인터페이스 생성
+  - 서비스 객체의 메서드 명은 보통 업무 관련 용어를 사용한다.
+  - DAO 객체의 메서드 명은 데이터 관련 용어를 사용한다.
   - `delete()` 메서드 선언
 - com.eomcs.pms.service.DefaultProjectService 클래스 생성
   - `delete()` 메서드 구현
     - `ProjectDeleteCommand` 에서 비즈니스 로직과 관련된 코드를 가져온다.
 - com.eomcs.pms.handler.ProjectDeleteCommand 클래스 변경
   - `ProjectService` 구현체를 사용하여 프로젝트 삭제 처리
+
+
+### 2단계 - 프로젝트 삭제 DAO 객체에서 업무 코드를 분리한다.
+
+DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴다.
+
 - com.eomcs.pms.dao.ProjectDao 인터페이스 변경
   - `deleteMembers()` 메서드 선언 추가
 - com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
-  - `delete()` 메서드에서 비즈니스 로직을 추출하여 `DefaultProjectService` 로 옮긴다.
-    - 프로젝트 멤버를 삭제하는 코드를 별도의 메서드 `deleteMembers()` 로 옮긴다.
-    - `DefaultProjectService.delete()` 메서드 변경한다.
-- com.eomcs.pms.dao.TaskDao 인터페이스 변경
-  - `findAll(Map<String,Object>)` 메서드를 변경한다.
-- com.eomcs.pms.dao.mariadb.TaskDaoImpl 클래스 변경
-  - `findAll(Map<String,Object>)` 메서드를 변경한다.
-- com.eomcs.pms.handler.TaskListCommand 변경
-  - `findAll(null)` 호출 코드 변경
-- com.eomcs.pms.handler.ProjectDetailCommand 변경
-  - 프로젝트 정보 외에 작업 목록을 추가로 출력한다.
+  - `delete()` 메서드에서 멤버 삭제 관련 코드를 별도의 메서드 `deleteMembers()` 로 분리한다.
+- com.eomcs.pms.service.DefaultProjectService 클래스 변경
+  - `delete()` 메서드 변경
+    - 프로젝트 멤버를 삭제하는 `deleteMembers()` 를 호출한다.
 
-### 2단계 - 현재 프로젝트에서 트랜잭션을 다루는 방식과 문제점을 이해한다.
+### 3단계 - 프로젝트 등록 커맨드 객체에서 비즈니스 로직을 분리한다.
 
-- com.eomcs.pms.handler.ProjectDeleteCommand
-  - `TaskDao` 를 통해 작업을 삭제한다.
-  - `ProjectDao` 를 통해 프로젝트 멤버와 프로젝트를 삭제한다.
-  - *프로젝트 멤버 삭제* 와 *프로젝트 삭제* 작업은 한 트랜잭션으로 묶여 있다.
-  - 그러나 *작업 삭제* 는 다른 트랜잭션에서 수행한다.
-  - 만약 *프로젝트 삭제* 중에 예외가 발생한다면,
-    *프로젝트 멤버 삭제* 는 자동 취소되지만,
-    같은 트랜잭션에 묶여있지 않은 *작업 삭제* 는 취소되지 않는다.
-- 문제 상황 실습:
-  - com.eomcs.pms.dao.mariadb.ProjectDaoImpl 변경
-    - `ProjectDaoImpl` 클래스에서 *프로젝트 삭제* 를 수행하기 전에 예외를 발생시킨다.
-    - 그런 후, 그 전에 수행했던 *프로젝트 멤버 삭제* 가 취소된 것을 확인한다.
-    - 그러나 *작업 삭제* 가 취소되지 않은 것을 확인한다.
-  - 이유?
-    - `TaskDaoImpl.deleteByProjectNo()` 에서 사용한 `SqlSession` 객체와
-      `ProjectDaoImpl.delete()` 에서 사용한 `SqlSession` 객체가 다르기 때문이다.
-    - Mybatis 에서는 각 SqlSession 이 트랜잭션을 관리한다.
-- **DAO** 객체에서 트랜잭션을 다루면 안되는 이유?
-  - **DAO** 의 각 메서드는 작업을 수행하기 위해 현재 별도의 `SqlSession` 객체를 사용한다.
-  - 트랜잭션은 `SqlSession` 객체에서 제어한다.
-  - 즉 DAO 각 메서드 마다 트랜잭션이 분리되어 있다.
-  - 실습 상황처럼 DAO 각 메서드 마다 트랜잭션이 분리되어 있으면,
-    여러 DAO의 메서드를 묶어서 한 단위로 작업할 때
-    통제할 수 없는 문제가 발생한다.
-  - 해결책?
-    - **DAO** 의 각 메서드가 트랜잭션을 통제하지 않도록 만든다.
-    - 그럼 누가 트랜잭션을 통제하는가?
-      - **DAO** 를 사용하는 **Command** 객체가 통제하게 한다.
-      - 즉 트랜잭션 통제권을 **DAO** 를 사용하는 객체로 넘긴다.
-
-### 3단계 - `Command` 객체에서 트랜잭션을 통제해 보자!
-
-- com.eomcs.util.SqlSessionProxy 클래스 생성
-  - Mybatis 의 `SqlSession` 구현체의 대리 역할을 수행할 클래스를 정의한다.
-  - `close()` 메서드를 재정의한다.
-  - 트랜잭션을 수행 중인 상태에서는 `close()`가 동작되지 않도록 막는다.
-- com.eomcs.util.SqlSessionFactoryProxy 클래스 생성
-  - Mybatis 의 `SqlSessionFactory` 구현체의 대리 역할을 수행할 클래스를 정의한다.
-  - `startTransaction()`, `endTransaction()` 메서드 추가
-  - `commit()`, `rollback()` 메서드 추가
-  - `openSession()` 메서드 재정의
-- com.eomcs.pms.listener.AppInitListener 클래스 변경
-  - DAO 객체에 오리지널 `SqlSessionFactory` 대신에 프록시 객체를 주입한다.
-- com.eomcs.pms.dao.mariadb.TaskDaoImpl 클래스 변경
-  - `deleteByProjectNo()` 메서드에서 SqlSession 을 얻을 때 수동 커밋 상태의
-    `SqlSession` 을 사용하도록 변경한다.
-  - 왜? 다른 작업과 묶을 수 있도록 하기 위함이다.
+- com.eomcs.pms.dao.ProjectDao 인터페이스 변경
+  - `insertMembers()` 메서드 선언 추가
 - com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
-  - `delete()` 메서드에서 트랜잭션을 제어하는 코드를 없앤다.
-    - `commit()` 호출하는 코드를 없앤다.
-  - 왜? 트랜잭션 제어는 DAO를 사용하는 측에서 해야하기 때문이다.
-  - 상황에 따라 여러 개의 DAO에서 수행한 작업을 한 트랜잭션을 묶어서 다룰 경우가 있다.
-  - 이런 상황에서 각각의 DAO가 commit()/rollback() 을 하게 되면
-    트랜잭션 제어가 안되기 때문이다.
-- com.eomcs.pms.handler.ProjectDeleteCommand 클래스 변경
-  - 여러 작업을 트랜잭션으로 묶어서 다룰 경우 트랜잭션 제어는 Command 객체에서 한다.
-  - 예외없이 실행이 정상적으로 완료되었다면, SqlSessionFactoryProxy 에게 commit 요청한다.
-  - 생성자에서 SqlSessionFactoryProxy 를 받아야 한다.
+  - `insert()` 메서드에서 비즈니스 로직을 추출하여 별도의 메서드 `insertMembers()` 로 옮긴다.
+- com.eomcs.pms.service.ProjectService 인터페이스 생성
+  - `add()` 메서드 선언
+- com.eomcs.pms.service.DefaultProjectService 클래스 생성
+  - `add()` 메서드 구현
+    - `ProjectAddCommand` 에서 비즈니스 로직과 관련된 코드를 가져온다.
+- com.eomcs.pms.service.MemberService 인터페이스 생성
+  - `list()` 메서드 선언
+- com.eomcs.pms.service.DefaultMemberService 인터페이스 생성
+  - `list()` 메서드 구현
+- com.eomcs.pms.service.MemberDao 인터페이스 변경
+  - `findByName()` 의 리턴 값을 `List` 객체로 변경한다.
+- com.eomcs.pms.service.MemberDaoImpl 클래스 변경
+  - `findByName()` 의 리턴 값을 `List` 객체로 변경한다.
+- com.eomcs.pms.handler.ProjectAddCommand 클래스 변경
+  - `MemberService` 구현체를 사용하여 멤버 찾기
+  - `ProjectService` 구현체를 사용하여 프로젝트 등록 처리
 
-### 4단계 - 모든 DAO 클래스에서 자동 커밋을 수동 커밋으로 변경한다.
 
-- com.eomcs.pms.dao.mariadb.XxxDaoImpl 클래스 변경
-  - `openSession(true)` 코드를 `openSession()` 으로 변경한다.
-  - 즉 트랜잭션 통제권을 DAO를 사용하는 측에 넘긴다.
 
-### 5단계 - 프로젝트 정보를 변경할 때 팀원 정보는 변경하지 않는다.
-- com.eomcs.pms.handler.ProjectUpdateCommand 클래스 변경
-  - 프로젝트의 정보를 변경할 때 팀원 정보를 변경하지 않는다.
-- com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
-  - 프로젝트 정보를 변경할 때 회원 정보를 변경하지 않는다.
 
 ## 실습 결과
 

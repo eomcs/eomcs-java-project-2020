@@ -3,20 +3,22 @@ package com.eomcs.pms.handler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.eomcs.pms.dao.MemberDao;
-import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
+import com.eomcs.pms.service.MemberService;
+import com.eomcs.pms.service.ProjectService;
 import com.eomcs.util.Prompt;
 
 public class ProjectAddCommand implements Command {
 
-  ProjectDao projectDao;
-  MemberDao memberDao;
+  ProjectService projectService;
+  MemberService memberService;
 
-  public ProjectAddCommand(ProjectDao projectDao, MemberDao memberDao) {
-    this.projectDao = projectDao;
-    this.memberDao = memberDao;
+  public ProjectAddCommand(
+      ProjectService projectService,
+      MemberService memberService) {
+    this.projectService = projectService;
+    this.memberService = memberService;
   }
 
   @Override
@@ -40,20 +42,17 @@ public class ProjectAddCommand implements Command {
         if (name.length() == 0) {
           break;
         } else {
-          Member member = memberDao.findByName(name);
-          if (member == null) {
+          List<Member> list = memberService.list(name);
+          if (list.size() == 0) {
             System.out.println("등록된 회원이 아닙니다.");
             continue;
           }
-          members.add(member);
+          members.add(list.get(0));
         }
       }
-
-      // 사용자로부터 입력 받은 멤버 정보를 프로젝트에 저장한다.
       project.setMembers(members);
 
-      projectDao.insert(project);
-
+      projectService.add(project);
       System.out.println("프로젝트가 등록되었습니다!");
 
     } catch (Exception e) {
