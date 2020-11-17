@@ -39,7 +39,7 @@ public class TaskUpdateCommand implements Command {
       // 프로젝트 변경
       System.out.printf("현재 프로젝트: %s\n", task.getProjectTitle());
 
-      List<Project> projects = projectDao.findAll();
+      List<Project> projects = projectDao.findAll(null);
       if (projects.size() == 0) {
         System.out.println("프로젝트가 없습니다!");
         return;

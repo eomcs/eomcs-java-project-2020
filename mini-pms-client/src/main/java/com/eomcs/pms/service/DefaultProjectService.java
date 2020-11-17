@@ -92,6 +92,11 @@ public class DefaultProjectService implements ProjectService {
   public List<Project> list(Map<String, Object> keywords) throws Exception {
     return projectDao.findByDetailKeyword(keywords);
   }
+
+  @Override
+  public Project get(int no) throws Exception {
+    return projectDao.findByNo(no);
+  }
 }
 
 

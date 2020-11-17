@@ -47,9 +47,9 @@ DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴�
   - `insertMembers()` 메서드 선언 추가
 - com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
   - `insert()` 메서드에서 비즈니스 로직을 추출하여 별도의 메서드 `insertMembers()` 로 옮긴다.
-- com.eomcs.pms.service.ProjectService 인터페이스 생성
+- com.eomcs.pms.service.ProjectService 인터페이스 변경
   - `add()` 메서드 선언
-- com.eomcs.pms.service.DefaultProjectService 클래스 생성
+- com.eomcs.pms.service.DefaultProjectService 클래스 변경
   - `add()` 메서드 구현
     - `ProjectAddCommand` 에서 비즈니스 로직과 관련된 코드를 가져온다.
 - com.eomcs.pms.service.MemberService 인터페이스 생성
@@ -67,9 +67,9 @@ DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴�
 
 ### 4단계 - 프로젝트 목록 조회 커맨드에서 비즈니스 로직을 분리한다.
 
-- com.eomcs.pms.service.ProjectService 인터페이스 생성
+- com.eomcs.pms.service.ProjectService 인터페이스 변경
   - `list()` 메서드 선언
-- com.eomcs.pms.service.DefaultProjectService 클래스 생성
+- com.eomcs.pms.service.DefaultProjectService 클래스 변경
   - `list()` 메서드 구현
   - `ProjectListCommand` 에서 비즈니스 로직과 관련된 코드를 가져온다.
 - com.eomcs.pms.handler.ProjectListCommand 클래스 변경
@@ -77,10 +77,10 @@ DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴�
 
 ### 5단계 - 프로젝트 검색 커맨드에서 비즈니스 로직을 분리한다.
 
-- com.eomcs.pms.service.ProjectService 인터페이스 생성
+- com.eomcs.pms.service.ProjectService 인터페이스 변경
   - `list(String)` 메서드 변경
     - 검색어를 받는 파라미터를 추가한다.
-- com.eomcs.pms.service.DefaultProjectService 클래스 생성
+- com.eomcs.pms.service.DefaultProjectService 클래스 변경
   - `list(String)` 메서드 구현
     - 검색어를 받는 파라미터를 추가한다.
 - com.eomcs.pms.dao.ProjectDao 인터페이스 변경
@@ -103,12 +103,29 @@ DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴�
 
 ### 6단계 - 프로젝트 상세 검색 커맨드에서 비즈니스 로직을 분리한다.
 
-- com.eomcs.pms.service.ProjectService 인터페이스 생성
+- com.eomcs.pms.service.ProjectService 인터페이스 변경
   - `list(Map<String,Object> keywords)` 메서드 추가(오버로딩)
     - 검색 항목과 검색어를 입력 받는 파라미터를 추가한다.
-- com.eomcs.pms.service.DefaultProjectService 클래스 생성
+- com.eomcs.pms.service.DefaultProjectService 클래스 변경
   - `list(Map<String,Object> keywords)` 메서드 구현(오버로딩)
     - 검색 항목과 검색어를 입력 받는 파라미터를 추가한다.
+- com.eomcs.pms.handler.ProjectDetailSearchCommand 클래스 변경
+  - `ProjectService.list(Map)` 메서드를 사용하여 프로젝트를 검색한다.
+
+### 7단계 - 프로젝트 상세 조회 커맨드에서 비즈니스 로직을 분리한다.
+
+- com.eomcs.pms.service.ProjectService 인터페이스 변경
+  - `get(int)` 메서드 추가
+- com.eomcs.pms.service.DefaultProjectService 클래스 변경
+  - `get(int)` 메서드 구현
+- com.eomcs.pms.service.TaskService 인터페이스 생성
+  - `listByProject(int)` 메서드 추가
+- com.eomcs.pms.service.DefaultTaskService 클래스 생성
+  - `listByProject(int)` 메서드 구현
+
+- com.eomcs.pms.handler.ProjectDetailCommand 클래스 변경
+  - `ProjectService.get(int)` 메서드를 사용하여 프로젝트를 조회한다.
+
 
 ## 실습 결과
 
