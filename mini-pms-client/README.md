@@ -1,32 +1,36 @@
-### 41-c. DB 프로그래밍 더 쉽고 간단히 하는 방법 : Mybatis에서 트랜잭션 다루기
+### 42. 비즈니스 로직 분리하기 : 서비스 객체의 도입
 
 이번 훈련에서는,
 - *Mybatis* 에서 *트랜잭션* 을 다루는 방법을 배울 것이다.
 - 기존 클래스의 코드를 손대지 않고 일부 기능을 변경하는 **프록시 패턴** 설계 기법을 배운다.
 
-**프록시(proxy) 디자인 패턴** 은,
-- 특정 객체의 접근을
 
 
 ## 훈련 목표
-- `SqlSession` 객체를 통해 트랜잭션을 다루는 방법을 연습한다.
-- **프록시 패턴** 의 용도와 동작 원리를 이해한다.
-- **프록시 패턴** 을 적용하는 방법을 연습한다.
+-
 
 ## 훈련 내용
-- 프로젝트의 상세 정보를 출력할 때 작업 목록을 추가한다.
-- DAO의 메서드에서 트랜잭션을 다룰 때 문제가 되는 상황을 경험한다.
-- 트랜잭션의 통제를 *DAO* 대신 *Command* 객체가 수행한다.
-- `SqlSession` 객체의 트랜잭션 통제를 위해 프록시 패턴을 적용한다.
+-
 
 ## 실습
 
-### 1단계 - 트랜잭션을 다루기 전에 프로젝트 상세 조회 기능 변경한다.
+### 1단계 - 프로젝트 관련 Command 객체에 업무 코드를 분리한다.
 
-기존 기능을 변경해 보자!
+커맨드 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴다.
 
-- src/main/resources/com/eomcs/pms/mapper/TaskMapper.xml 변경
-  - `findAll` SQL 변경
+- com.eomcs.pms.service.ProjectService 인터페이스 생성
+  - `delete()` 메서드 선언
+- com.eomcs.pms.service.DefaultProjectService 클래스 생성
+  - `delete()` 메서드 구현
+    - `ProjectDeleteCommand` 에서 비즈니스 로직과 관련된 코드를 가져온다.
+- com.eomcs.pms.handler.ProjectDeleteCommand 클래스 변경
+  - `ProjectService` 구현체를 사용하여 프로젝트 삭제 처리
+- com.eomcs.pms.dao.ProjectDao 인터페이스 변경
+  - `deleteMembers()` 메서드 선언 추가
+- com.eomcs.pms.dao.mariadb.ProjectDaoImpl 클래스 변경
+  - `delete()` 메서드에서 비즈니스 로직을 추출하여 `DefaultProjectService` 로 옮긴다.
+    - 프로젝트 멤버를 삭제하는 코드를 별도의 메서드 `deleteMembers()` 로 옮긴다.
+    - `DefaultProjectService.delete()` 메서드 변경한다.
 - com.eomcs.pms.dao.TaskDao 인터페이스 변경
   - `findAll(Map<String,Object>)` 메서드를 변경한다.
 - com.eomcs.pms.dao.mariadb.TaskDaoImpl 클래스 변경

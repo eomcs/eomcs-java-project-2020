@@ -1,23 +1,15 @@
 package com.eomcs.pms.handler;
 
 import java.util.Map;
-import com.eomcs.pms.dao.ProjectDao;
-import com.eomcs.pms.dao.TaskDao;
+import com.eomcs.pms.service.ProjectService;
 import com.eomcs.util.Prompt;
-import com.eomcs.util.SqlSessionFactoryProxy;
 
 public class ProjectDeleteCommand implements Command {
-  ProjectDao projectDao;
-  TaskDao taskDao;
-  SqlSessionFactoryProxy factoryProxy;
 
-  public ProjectDeleteCommand(
-      ProjectDao projectDao,
-      TaskDao taskDao,
-      SqlSessionFactoryProxy factoryProxy) {
-    this.projectDao = projectDao;
-    this.taskDao = taskDao;
-    this.factoryProxy = factoryProxy;
+  ProjectService projectService;
+
+  public ProjectDeleteCommand(ProjectService projectService) {
+    this.projectService = projectService;
   }
 
   @Override
@@ -32,26 +24,15 @@ public class ProjectDeleteCommand implements Command {
     }
 
     try {
-      factoryProxy.startTransaction();
-
-      // 프로젝트에 소속된 모든 작업 삭제하기
-      taskDao.deleteByProjectNo(no);
-
-      // 프로젝트 삭제하기
-      if (projectDao.delete(no) == 0) {
+      if (projectService.delete(no) == 0) {
         System.out.println("해당 번호의 프로젝트가 존재하지 않습니다.");
         return;
       }
       System.out.println("프로젝트를 삭제하였습니다.");
-      factoryProxy.commit();
 
     } catch (Exception e) {
-      factoryProxy.rollback();
       System.out.println("프로젝트 삭제 중 오류 발생!");
       e.printStackTrace();
-
-    } finally {
-      factoryProxy.endTransaction();
     }
   }
 }
