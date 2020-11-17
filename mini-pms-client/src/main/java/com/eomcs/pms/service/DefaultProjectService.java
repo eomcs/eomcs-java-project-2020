@@ -1,6 +1,7 @@
 package com.eomcs.pms.service;
 
 import java.util.List;
+import java.util.Map;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Project;
@@ -85,6 +86,11 @@ public class DefaultProjectService implements ProjectService {
     //    중간에서 DAO 객체의 메서드를 호출해 주는 것이다.
     //
     return projectDao.findAll(keyword);
+  }
+
+  @Override
+  public List<Project> list(Map<String, Object> keywords) throws Exception {
+    return projectDao.findByDetailKeyword(keywords);
   }
 }
 
