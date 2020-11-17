@@ -1,5 +1,6 @@
 package com.eomcs.pms.service;
 
+import java.util.List;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Project;
@@ -65,4 +66,31 @@ public class DefaultProjectService implements ProjectService {
       factoryProxy.endTransaction();
     }
   }
+
+  @Override
+  public List<Project> list() throws Exception {
+    // 이 메서드를 보면 서비스 객체가 할 일이 없다.
+    // 그냥 DAO 객체의 메서드를 호출한 다음에 그 리턴 값을
+    // 그대로 리턴해주는 일을 한다.
+    // 그럼 왜 이런 메서드를 만들어야 할까?
+    // => 프로그래밍의 일관성을 위해서다.
+    // => 커맨드 객체가 상황에 따라 Service 객체를 쓰거나 DAO 객체를 써야 한다면,
+    //    프로그래밍의 일관성이 없어서 유지보수하기가 어렵다.
+    // => 커맨드 객체가 서비스 객체를 사용하기로 했으면
+    //    어떤 작업을 수행하던지 간에 일관되게 서비스 객체를 사용하는 것이
+    //    유지보수하기에 더 낫다.
+    // => 그래서 이런 메서드를 만드는 것이다
+    //    즉 서비스 객체의 메서드에서 특별히 할 일이 없다 하더라도
+    //    커맨드 객체가 일관성 있게 작업을 수행할 수 있도록
+    //    중간에서 DAO 객체의 메서드를 호출해 주는 것이다.
+    //
+    return projectDao.findAll();
+  }
 }
+
+
+
+
+
+
+
