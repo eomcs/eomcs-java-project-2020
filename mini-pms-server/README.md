@@ -73,7 +73,7 @@
 
 ### 8단계 - 회원, 프로젝트, 작업 커맨드, 로그인/로그아웃 등 커맨드 객체를 변경한다.
 
-화이팅!
+화이팅!  
 
 ## 실습 결과
 - src/main/java/com/eomcs/util/concurrent/ThreadPool.java 삭제
