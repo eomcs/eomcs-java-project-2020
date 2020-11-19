@@ -140,7 +140,9 @@ public class ServerApp {
 
       Command command = (Command) context.get(request);
       if (command != null) {
-        command.execute(out, in);
+        // 클라이언트 요청 처리 객체 간에 값을 공유하기 위해
+        // context 맵 보관소를 파라미터로 넘겨준다.
+        command.execute(out, in, context);
       } else {
         out.println("해당 명령을 처리할 수 없습니다!");
       }
