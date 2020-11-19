@@ -7,21 +7,24 @@ import java.util.Map;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
+import com.eomcs.util.Prompt;
 
-public class ProjectListCommand implements Command {
+public class ProjectSearchCommand implements Command {
 
   ProjectService projectService;
 
-  public ProjectListCommand(ProjectService projectService) {
+  public ProjectSearchCommand(ProjectService projectService) {
     this.projectService = projectService;
   }
 
   @Override
   public void execute(PrintWriter out, BufferedReader in, Map<String,Object> context) {
-    out.println("[프로젝트 목록]");
+    System.out.println("[프로젝트 검색]");
 
     try {
-      List<Project> list = projectService.list();
+      String keyword = Prompt.inputString("검색어? ", out, in);
+
+      List<Project> list = projectService.list(keyword);
       out.println("번호, 프로젝트명, 시작일 ~ 종료일, 관리자, 팀원");
 
       for (Project project : list) {

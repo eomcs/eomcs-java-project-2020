@@ -54,6 +54,7 @@
 - com.eomcs.pms.listener.DataHandlerListener 변경
   - Mybatis 관련 객체를 준비한다.
   - DAO 객체를 준비한다.
+  - Service 객체 생성
   - `mini-pms-42-client/src/main/com/eomcs/pms/listener/AppInitListener.java` 에서 관련 코드를 가져온다.
 
 
@@ -62,17 +63,17 @@
 데이터를 다룰 때 Service 객체를 사용한다.
 
 - com.eomcs.pms.handler.Command 인터페이스 변경
-  - `execute(Map<String,Object> context)` 파라미터를 변경한다.
+  - `execute(PrintWriter, BufferedReader, Map<String,Object> context)` 파라미터를 변경한다.
   - 요청 처리 객체 간에 값을 공유하기 위해 context 맵 객체를 파라미터로 받는다.
-- com.eomcs.pms.handler.BoardAddCommand 클래스 변경
+- com.eomcs.pms.handler.BoardXxxCommand 클래스 변경
   - `BoardService` 구현체를 사용하여 사용자가 보낸 게시글을 DBMS 저장한다.
 - com.eomcs.pms.listener.RequestMappingListener 변경
   - 테스트 하는 동안 사용할 로그인 사용자 정보를 임의 생성하여 주입해둔다.
-  - BoardService 객체 생성
   - BoardXxxCommand 객체에 주입
-  -
-- com.eomcs.pms.handler.BoardXxxCommand 클래스 변경
-  - 서비스 객체를 사용한다.
+
+### 8단계 - 회원, 프로젝트, 작업 커맨드, 로그인/로그아웃 등 커맨드 객체를 변경한다.
+
+화이팅!
 
 ## 실습 결과
 - src/main/java/com/eomcs/util/concurrent/ThreadPool.java 삭제

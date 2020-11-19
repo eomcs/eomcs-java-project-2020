@@ -2,35 +2,54 @@ package com.eomcs.pms.handler;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
+import com.eomcs.util.Prompt;
 
-public class ProjectListCommand implements Command {
+public class ProjectDetailSearchCommand implements Command {
 
   ProjectService projectService;
 
-  public ProjectListCommand(ProjectService projectService) {
+  public ProjectDetailSearchCommand(ProjectService projectService) {
     this.projectService = projectService;
   }
 
   @Override
   public void execute(PrintWriter out, BufferedReader in, Map<String,Object> context) {
-    out.println("[프로젝트 목록]");
+    out.println("[프로젝트 상세 검색]");
 
     try {
-      List<Project> list = projectService.list();
+      HashMap<String,Object> keywords = new HashMap<>();
+
+      String title = Prompt.inputString("프로젝트명? ", out, in);
+      if (title.length() > 0) {
+        keywords.put("title", title);
+      }
+
+      String owner = Prompt.inputString("관리자명? ", out, in);
+      if (owner.length() > 0) {
+        keywords.put("owner", owner);
+      }
+
+      String member = Prompt.inputString("팀원명? ", out, in);
+      if (member.length() > 0) {
+        keywords.put("member", member);
+      }
+
+      List<Project> list = projectService.list(keywords);
       out.println("번호, 프로젝트명, 시작일 ~ 종료일, 관리자, 팀원");
 
       for (Project project : list) {
         StringBuilder members = new StringBuilder();
-        for (Member member : project.getMembers()) {
+        for (Member m : project.getMembers()) {
           if (members.length() > 0) {
             members.append(",");
           }
-          members.append(member.getName());
+          members.append(m.getName());
         }
 
         out.printf("%d, %s, %s ~ %s, %s, [%s]\n",
