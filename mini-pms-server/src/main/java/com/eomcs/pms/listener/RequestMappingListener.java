@@ -4,6 +4,7 @@ import java.util.Map;
 import com.eomcs.context.ApplicationContextListener;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.handler.BoardAddCommand;
+import com.eomcs.pms.handler.BoardListCommand;
 import com.eomcs.pms.service.BoardService;
 import com.eomcs.pms.service.MemberService;
 import com.eomcs.pms.service.ProjectService;
@@ -30,7 +31,7 @@ public class RequestMappingListener implements ApplicationContextListener {
 
       // 클라이언트의 요청을 처리할 커맨드 객체를 생성한다.
       context.put("/board/add", new BoardAddCommand(boardService));
-      //    context.put("/board/list", new BoardListCommand(boardList));
+      context.put("/board/list", new BoardListCommand(boardService));
       //    context.put("/board/detail", new BoardDetailCommand(boardList));
       //    context.put("/board/update", new BoardUpdateCommand(boardList));
       //    context.put("/board/delete", new BoardDeleteCommand(boardList));
