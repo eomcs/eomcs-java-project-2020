@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="ProjectDao">
+  
+  <resultMap type="project" id="ProjectMap">
+    <id column="no"           property="no"/>
+    <result column="title"    property="title"/>
+    <result column="content"  property="content"/>
+    <result column="sdt"      property="startDate"/>
+    <result column="edt"      property="endDate"/>
+    
+    <association property="owner" javaType="member">
+	    <id column="owner_no"          property="no"/>
+	    <result column="owner_name"    property="name"/>
+    </association>
+    
+    <collection property="members" ofType="member">
+      <id column="member_no"          property="no"/>
+      <result column="member_name"    property="name"/>
+    </collection>
+  </resultMap>
+  
+  <!-- 여러 SQL 문에서 중복되는 코드가 있다면, 
+       다음과 같이 별도로 분리한다. -->
+  <sql id="sql1">
+    select 
+      p.no, 
+      p.title, 
+      p.sdt, 
+      p.edt, 
+      m.no owner_no, 
+      m.name owner_name,
+      mp.member_no,
+      m2.name member_name
+    from 
+      pms_project p 
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on p.no=mp.project_no
+      left outer join pms_member m2 on mp.member_no=m2.no
+  </sql>
+       
+  <select id="findAll" resultMap="ProjectMap" parameterType="string">
+    <!-- 별도로 분리된 SQL 코드를 가져오고 싶다면, 다음과 같이 하라. -->
+    <include refid="sql1"/>
+    <if test="keyword != null">
+    where 
+      p.title like concat('%', #{keyword}, '%')
+      or m.name like concat('%', #{keyword}, '%')
+      or m2.name like concat('%', #{keyword}, '%')
+    </if>
+    order by p.no desc
+  </select>
+  
+  <select id="findByDetailKeyword" resultMap="ProjectMap" parameterType="map">
+    <include refid="sql1"/>
+    <where>
+	    <if test="title != null">
+	      p.title like concat('%', #{title}, '%')
+	    </if>
+	    <if test="owner != null">
+	      and m.name like concat('%', #{owner}, '%')
+	    </if>
+	    <if test="member != null">
+	      and m2.name like concat('%', #{member}, '%')
+	    </if>
+    </where>
+    order by p.no desc
+  </select>
+  
+  <insert id="insert" parameterType="project"
+          useGeneratedKeys="true" keyColumn="no" keyProperty="no">
+    insert into pms_project(title,content,sdt,edt,owner)
+    values(#{title},#{content},#{startDate},#{endDate},#{owner.no})
+  </insert>
+  
+  <insert id="insertMember" parameterType="map">
+    insert into pms_member_project(member_no, project_no) 
+    values (#{memberNo},#{projectNo})
+  </insert>
+  
+  <insert id="insertMembers" parameterType="project">
+    insert into pms_member_project(member_no, project_no) 
+    values
+    <foreach collection="members" item="member" separator=",">
+      (#{member.no},#{no})
+    </foreach>
+  </insert>
+  
+  <delete id="deleteMembers" parameterType="int">
+    delete from pms_member_project 
+    where project_no=#{no}
+  </delete>
+  
+  <select id="findByNo" resultMap="ProjectMap" parameterType="int">
+    select 
+      p.no, 
+      p.title,
+      p.content, 
+      p.sdt, 
+      p.edt, 
+      m.no owner_no, 
+      m.name owner_name,
+      mp.member_no,
+      m2.name member_name
+    from 
+      pms_project p 
+      inner join pms_member m on p.owner=m.no
+      left outer join pms_member_project mp on p.no=mp.project_no
+      left outer join pms_member m2 on mp.member_no=m2.no
+    where 
+      p.no = #{no}
+  </select>
+  
+  <update id="update" parameterType="project">
+    update pms_project
+    <set>
+      <if test="title != null">title = #{title},</if>
+      <if test="content != null">content = #{content},</if>
+      <if test="startDate != null">sdt = #{startDate},</if>
+      <if test="endDate != null">edt = #{endDate}</if>
+    </set>
+    where no = #{no}
+  </update>
+
+  <delete id="delete" parameterType="int">
+    delete from pms_project
+    where no=#{no}
+  </delete>
+
+</mapper>
+
+
+
+
+
+
