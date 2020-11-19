@@ -41,6 +41,8 @@ import com.eomcs.pms.handler.TaskDetailCommand;
 import com.eomcs.pms.handler.TaskListCommand;
 import com.eomcs.pms.handler.TaskUpdateCommand;
 import com.eomcs.pms.handler.WhoamiCommand;
+import com.eomcs.pms.service.BoardService;
+import com.eomcs.pms.service.DefaultBoardService;
 import com.eomcs.pms.service.DefaultMemberService;
 import com.eomcs.pms.service.DefaultProjectService;
 import com.eomcs.pms.service.DefaultTaskService;
@@ -68,6 +70,7 @@ public class AppInitListener implements ApplicationContextListener {
       TaskDao taskDao = new TaskDaoImpl(sqlSessionFactory);
 
       // Service 구현체 생성
+      BoardService boardService = new DefaultBoardService(boardDao);
       MemberService memberService = new DefaultMemberService(memberDao);
       ProjectService projectService = new DefaultProjectService(taskDao, projectDao, sqlSessionFactory);
       TaskService taskService = new DefaultTaskService(taskDao);
@@ -75,18 +78,18 @@ public class AppInitListener implements ApplicationContextListener {
       // Command 구현체 생성 및 commandMap 객체 준비
       Map<String,Command> commandMap = new HashMap<>();
 
-      commandMap.put("/board/add", new BoardAddCommand(boardDao, memberDao));
-      commandMap.put("/board/list", new BoardListCommand(boardDao));
-      commandMap.put("/board/detail", new BoardDetailCommand(boardDao));
-      commandMap.put("/board/update", new BoardUpdateCommand(boardDao));
-      commandMap.put("/board/delete", new BoardDeleteCommand(boardDao));
-      commandMap.put("/board/search", new BoardSearchCommand(boardDao));
+      commandMap.put("/board/add", new BoardAddCommand(boardService));
+      commandMap.put("/board/list", new BoardListCommand(boardService));
+      commandMap.put("/board/detail", new BoardDetailCommand(boardService));
+      commandMap.put("/board/update", new BoardUpdateCommand(boardService));
+      commandMap.put("/board/delete", new BoardDeleteCommand(boardService));
+      commandMap.put("/board/search", new BoardSearchCommand(boardService));
 
-      commandMap.put("/member/add", new MemberAddCommand(memberDao));
-      commandMap.put("/member/list", new MemberListCommand(memberDao));
-      commandMap.put("/member/detail", new MemberDetailCommand(memberDao));
-      commandMap.put("/member/update", new MemberUpdateCommand(memberDao));
-      commandMap.put("/member/delete", new MemberDeleteCommand(memberDao));
+      commandMap.put("/member/add", new MemberAddCommand(memberService));
+      commandMap.put("/member/list", new MemberListCommand(memberService));
+      commandMap.put("/member/detail", new MemberDetailCommand(memberService));
+      commandMap.put("/member/update", new MemberUpdateCommand(memberService));
+      commandMap.put("/member/delete", new MemberDeleteCommand(memberService));
 
       commandMap.put("/project/add", new ProjectAddCommand(projectService, memberService));
       commandMap.put("/project/list", new ProjectListCommand(projectService));
@@ -96,15 +99,15 @@ public class AppInitListener implements ApplicationContextListener {
       commandMap.put("/project/search", new ProjectSearchCommand(projectService));
       commandMap.put("/project/detailSearch", new ProjectDetailSearchCommand(projectService));
 
-      commandMap.put("/task/add", new TaskAddCommand(taskDao, projectDao, memberDao));
-      commandMap.put("/task/list", new TaskListCommand(taskDao));
-      commandMap.put("/task/detail", new TaskDetailCommand(taskDao));
-      commandMap.put("/task/update", new TaskUpdateCommand(taskDao, projectDao, memberDao));
-      commandMap.put("/task/delete", new TaskDeleteCommand(taskDao));
+      commandMap.put("/task/add", new TaskAddCommand(taskService, projectService, memberService));
+      commandMap.put("/task/list", new TaskListCommand(taskService));
+      commandMap.put("/task/detail", new TaskDetailCommand(taskService));
+      commandMap.put("/task/update", new TaskUpdateCommand(taskService, projectService, memberService));
+      commandMap.put("/task/delete", new TaskDeleteCommand(taskService));
 
       commandMap.put("/hello", new HelloCommand());
 
-      commandMap.put("/login", new LoginCommand(memberDao));
+      commandMap.put("/login", new LoginCommand(memberService));
       commandMap.put("/whoami", new WhoamiCommand());
       commandMap.put("/logout", new LogoutCommand());
 

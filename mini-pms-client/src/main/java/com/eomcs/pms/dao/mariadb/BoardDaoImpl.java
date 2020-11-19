@@ -34,9 +34,7 @@ public class BoardDaoImpl implements com.eomcs.pms.dao.BoardDao{
   @Override
   public Board findByNo(int no) throws Exception {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-      Board board = sqlSession.selectOne("BoardDao.findByNo", no);
-      sqlSession.update("BoardDao.updateViewCount", no);
-      return board;
+      return sqlSession.selectOne("BoardDao.findByNo", no);
     }
   }
 
@@ -51,6 +49,13 @@ public class BoardDaoImpl implements com.eomcs.pms.dao.BoardDao{
   public int update(Board board) throws Exception {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
       return sqlSession.update("BoardDao.update", board);
+    }
+  }
+
+  @Override
+  public int updateViewCount(int no) throws Exception {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.update("BoardDao.updateViewCount", no);
     }
   }
 }

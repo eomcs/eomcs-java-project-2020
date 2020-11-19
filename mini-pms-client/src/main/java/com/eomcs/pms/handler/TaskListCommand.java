@@ -2,14 +2,15 @@ package com.eomcs.pms.handler;
 
 import java.util.List;
 import java.util.Map;
-import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Task;
+import com.eomcs.pms.service.TaskService;
 
 public class TaskListCommand implements Command {
-  TaskDao taskDao;
 
-  public TaskListCommand(TaskDao taskDao) {
-    this.taskDao = taskDao;
+  TaskService taskService;
+
+  public TaskListCommand(TaskService taskService) {
+    this.taskService = taskService;
   }
 
   @Override
@@ -17,7 +18,7 @@ public class TaskListCommand implements Command {
     System.out.println("[작업 목록]");
 
     try {
-      List<Task> list = taskDao.findAll(null);
+      List<Task> list = taskService.list();
       System.out.println("번호, 작업내용, 마감일, 작업자, 상태");
 
       for (Task task : list) {

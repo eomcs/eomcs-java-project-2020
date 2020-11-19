@@ -69,7 +69,7 @@ public class DefaultProjectService implements ProjectService {
   }
 
   @Override
-  public List<Project> list(String keyword) throws Exception {
+  public List<Project> list() throws Exception {
     // 이 메서드를 보면 서비스 객체가 할 일이 없다.
     // 그냥 DAO 객체의 메서드를 호출한 다음에 그 리턴 값을
     // 그대로 리턴해주는 일을 한다.
@@ -85,6 +85,11 @@ public class DefaultProjectService implements ProjectService {
     //    커맨드 객체가 일관성 있게 작업을 수행할 수 있도록
     //    중간에서 DAO 객체의 메서드를 호출해 주는 것이다.
     //
+    return projectDao.findAll(null);
+  }
+
+  @Override
+  public List<Project> list(String keyword) throws Exception {
     return projectDao.findAll(keyword);
   }
 

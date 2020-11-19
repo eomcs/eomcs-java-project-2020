@@ -19,6 +19,31 @@ public class DefaultTaskService implements TaskService {
     map.put("projectNo", projectNo);
     return taskDao.findAll(map);
   }
+
+  @Override
+  public int delete(int no) throws Exception {
+    return taskDao.delete(no);
+  }
+
+  @Override
+  public int add(Task task) throws Exception {
+    return taskDao.insert(task);
+  }
+
+  @Override
+  public List<Task> list() throws Exception {
+    return taskDao.findAll(null);
+  }
+
+  @Override
+  public Task get(int no) throws Exception {
+    return taskDao.findByNo(no);
+  }
+
+  @Override
+  public int update(Task task) throws Exception {
+    return taskDao.update(task);
+  }
 }
 
 

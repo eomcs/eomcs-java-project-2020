@@ -1,14 +1,15 @@
 package com.eomcs.pms.handler;
 
 import java.util.Map;
-import com.eomcs.pms.dao.MemberDao;
+import com.eomcs.pms.service.MemberService;
 import com.eomcs.util.Prompt;
 
 public class MemberDeleteCommand implements Command {
-  MemberDao memberDao;
 
-  public MemberDeleteCommand(MemberDao memberDao) {
-    this.memberDao = memberDao;
+  MemberService memberService;
+
+  public MemberDeleteCommand(MemberService memberService) {
+    this.memberService = memberService;
   }
 
   @Override
@@ -23,7 +24,7 @@ public class MemberDeleteCommand implements Command {
     }
 
     try {
-      if (memberDao.delete(no) == 0) {
+      if (memberService.delete(no) == 0) {
         System.out.println("해당 번호의 회원이 존재하지 않습니다.");
       } else {
         System.out.println("회원을 삭제하였습니다.");

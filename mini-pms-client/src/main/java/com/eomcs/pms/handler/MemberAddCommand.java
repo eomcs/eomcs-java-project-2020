@@ -1,16 +1,16 @@
 package com.eomcs.pms.handler;
 
 import java.util.Map;
-import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.domain.Member;
+import com.eomcs.pms.service.MemberService;
 import com.eomcs.util.Prompt;
 
 public class MemberAddCommand implements Command {
 
-  MemberDao memberDao;
+  MemberService memberService;
 
-  public MemberAddCommand(MemberDao memberDao) {
-    this.memberDao = memberDao;
+  public MemberAddCommand(MemberService memberService) {
+    this.memberService = memberService;
   }
 
   @Override
@@ -25,7 +25,7 @@ public class MemberAddCommand implements Command {
     member.setTel(Prompt.inputString("전화? "));
 
     try {
-      memberDao.insert(member);
+      memberService.add(member);
       System.out.println("회원을 등록하였습니다.");
 
     } catch (Exception e) {

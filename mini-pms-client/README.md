@@ -141,20 +141,23 @@ DAO 객체에서 비즈니스 로직을 분리하여 서비스 객체에 옮긴�
 
 화이팅!
 
- 
+
 
 ## 실습 결과
 
-- src/main/resources/com/eomcs/pms/mapper/TaskMapper.xml 생성
-- src/main/java/com/eomcs/pms/dao/TaskDao.java 변경
-- src/main/java/com/eomcs/pms/dao/mariadb/TaskDaoImpl.java 변경
+- src/main/java/com/eomcs/pms/handler/XxxCommand.java 변경
+- src/main/java/com/eomcs/pms/service/BoardService.java 생성
+- src/main/java/com/eomcs/pms/service/MemberService.java 생성
+- src/main/java/com/eomcs/pms/service/ProjectService.java 생성
+- src/main/java/com/eomcs/pms/service/TaskService.java 생성
+- src/main/java/com/eomcs/pms/service/DefaultBoardService.java 생성
+- src/main/java/com/eomcs/pms/service/DefaultMemberService.java 생성
+- src/main/java/com/eomcs/pms/service/DefaultProjectService.java 생성
+- src/main/java/com/eomcs/pms/service/DefaultTaskService.java 생성
+- src/main/java/com/eomcs/pms/dao/ProjectDao.java 변경
 - src/main/java/com/eomcs/pms/dao/mariadb/ProjectDaoImpl.java 변경
+- src/main/java/com/eomcs/pms/dao/BoardDao.java 변경
 - src/main/java/com/eomcs/pms/dao/mariadb/BoardDaoImpl.java 변경
-- src/main/java/com/eomcs/pms/dao/mariadb/MemberDaoImpl.java 변경
-- src/main/java/com/eomcs/pms/handler/TaskListCommand.java 변경
-- src/main/java/com/eomcs/pms/handler/ProjectDetailCommand.java 변경
-- src/main/java/com/eomcs/pms/handler/ProjectDeleteCommand.java 변경
-- src/main/java/com/eomcs/pms/handler/ProjectUpdateCommand.java 변경
-- src/main/java/com/eomcs/util/SqlSessionProxy.java 생성
-- src/main/java/com/eomcs/util/SqlSessionFactoryProxy.java 생성
+- src/main/resources/com/eomcs/pms/mapper/ProjectMapper.xml 변경
+- src/main/resources/com/eomcs/pms/mapper/BoardMapper.xml 변경
 - src/main/java/com/eomcs/pms/listener/AppInitListener.java 변경

@@ -9,6 +9,7 @@ public interface BoardDao {
   Board findByNo(int no) throws Exception;
   List<Board> findAll(String keyword) throws Exception;
   int update(Board board) throws Exception;
+  int updateViewCount(int no) throws Exception;
 }
 
 

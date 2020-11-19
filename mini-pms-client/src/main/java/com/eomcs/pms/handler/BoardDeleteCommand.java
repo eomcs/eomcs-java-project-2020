@@ -1,15 +1,15 @@
 package com.eomcs.pms.handler;
 
 import java.util.Map;
-import com.eomcs.pms.dao.BoardDao;
+import com.eomcs.pms.service.BoardService;
 import com.eomcs.util.Prompt;
 
 public class BoardDeleteCommand implements Command {
 
-  BoardDao boardDao;
+  BoardService boardService;
 
-  public BoardDeleteCommand(BoardDao boardDao) {
-    this.boardDao = boardDao;
+  public BoardDeleteCommand(BoardService boardService) {
+    this.boardService = boardService;
   }
 
   @Override
@@ -24,7 +24,7 @@ public class BoardDeleteCommand implements Command {
     }
 
     try {
-      int count = boardDao.delete(no);
+      int count = boardService.delete(no);
       if (count == 0) {
         System.out.println("해당 번호의 게시물이 존재하지 않습니다.");
       } else {

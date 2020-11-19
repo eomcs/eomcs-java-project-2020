@@ -19,7 +19,7 @@ public class ProjectListCommand implements Command {
     System.out.println("[프로젝트 목록]");
 
     try {
-      List<Project> list = projectService.list((String) null);
+      List<Project> list = projectService.list();
       System.out.println("번호, 프로젝트명, 시작일 ~ 종료일, 관리자, 팀원");
 
       for (Project project : list) {

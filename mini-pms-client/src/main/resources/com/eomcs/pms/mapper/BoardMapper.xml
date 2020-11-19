@@ -30,10 +30,11 @@
       pms_board b 
       inner join pms_member m on b.writer=m.no
     <if test="keyword != null">
+    <bind name="pattern" value="'%' + _parameter + '%'" />
     where 
-      b.title like #{keyword}
-      or b.content like #{keyword}
-      or m.name like #{keyword} 
+      b.title like #{pattern}
+      or b.content like #{pattern}
+      or m.name like #{pattern} 
     </if>
     order by 
       b.no desc

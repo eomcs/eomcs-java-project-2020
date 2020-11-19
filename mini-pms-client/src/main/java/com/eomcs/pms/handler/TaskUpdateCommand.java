@@ -3,24 +3,27 @@ package com.eomcs.pms.handler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.eomcs.pms.dao.MemberDao;
-import com.eomcs.pms.dao.ProjectDao;
-import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
+import com.eomcs.pms.service.MemberService;
+import com.eomcs.pms.service.ProjectService;
+import com.eomcs.pms.service.TaskService;
 import com.eomcs.util.Prompt;
 
 public class TaskUpdateCommand implements Command {
 
-  TaskDao taskDao;
-  ProjectDao projectDao;
-  MemberDao memberDao;
+  TaskService taskService;
+  ProjectService projectService;
+  MemberService memberService;
 
-  public TaskUpdateCommand(TaskDao taskDao, ProjectDao projectDao, MemberDao memberDao) {
-    this.taskDao = taskDao;
-    this.projectDao = projectDao;
-    this.memberDao = memberDao;
+  public TaskUpdateCommand(
+      TaskService taskService,
+      ProjectService projectService,
+      MemberService memberService) {
+    this.taskService = taskService;
+    this.projectService = projectService;
+    this.memberService = memberService;
   }
 
   @Override
@@ -30,7 +33,7 @@ public class TaskUpdateCommand implements Command {
     try {
       int no = Prompt.inputInt("번호? ");
 
-      Task task = taskDao.findByNo(no);
+      Task task = taskService.get(no);
       if (task == null) {
         System.out.println("해당 번호의 작업이 존재하지 않습니다.");
         return;
@@ -39,7 +42,7 @@ public class TaskUpdateCommand implements Command {
       // 프로젝트 변경
       System.out.printf("현재 프로젝트: %s\n", task.getProjectTitle());
 
-      List<Project> projects = projectDao.findAll(null);
+      List<Project> projects = projectService.list();
       if (projects.size() == 0) {
         System.out.println("프로젝트가 없습니다!");
         return;
@@ -85,7 +88,7 @@ public class TaskUpdateCommand implements Command {
           "상태(%s)?\n0: 신규\n1: 진행중\n2: 완료\n> ", stateLabel)));
 
       // 프로젝트의 멤버 중에서 작업을 수행할 담당자를 결정한다.
-      List<Member> members = memberDao.findByProjectNo(task.getProjectNo());
+      List<Member> members = memberService.listForProject(task.getProjectNo());
       if (members.size() == 0) {
         System.out.println("멤버가 없습니다!");
         return;
@@ -121,7 +124,7 @@ public class TaskUpdateCommand implements Command {
         return;
       }
 
-      if (taskDao.update(task) == 0) {
+      if (taskService.update(task) == 0) {
         System.out.println("해당 번호의 작업이 존재하지 않습니다.");
       } else {
         System.out.println("작업을 변경하였습니다.");

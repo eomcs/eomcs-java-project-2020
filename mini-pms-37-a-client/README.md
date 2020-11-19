@@ -131,6 +131,9 @@ alter table pms_member
 
 alter table pms_member
   modify column no int not null auto_increment;
+
+alter table pms_member
+  add constraint pms_member_uk unique (no);
 ```
 
 - com.eomcs.pms.listener.DataHandlerListener 변경

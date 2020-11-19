@@ -2,16 +2,16 @@ package com.eomcs.pms.handler;
 
 import java.util.List;
 import java.util.Map;
-import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.domain.Board;
+import com.eomcs.pms.service.BoardService;
 import com.eomcs.util.Prompt;
 
 public class BoardSearchCommand implements Command {
 
-  BoardDao boardDao;
+  BoardService boardService;
 
-  public BoardSearchCommand(BoardDao boardDao) {
-    this.boardDao = boardDao;
+  public BoardSearchCommand(BoardService boardService) {
+    this.boardService = boardService;
   }
 
   @Override
@@ -22,7 +22,7 @@ public class BoardSearchCommand implements Command {
       String keyword = Prompt.inputString("검색어? ");
 
       System.out.println("번호, 제목, 작성자, 등록일, 조회수");
-      List<Board> list = boardDao.findAll("%" + keyword + "%");
+      List<Board> list = boardService.list(keyword);
       for (Board board : list) {
         System.out.printf("%d, %s, %s, %s, %d\n",
             board.getNo(),

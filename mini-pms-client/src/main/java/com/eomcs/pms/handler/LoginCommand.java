@@ -1,16 +1,16 @@
 package com.eomcs.pms.handler;
 
 import java.util.Map;
-import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.domain.Member;
+import com.eomcs.pms.service.MemberService;
 import com.eomcs.util.Prompt;
 
 public class LoginCommand implements Command {
 
-  MemberDao memberDao;
+  MemberService memberService;
 
-  public LoginCommand(MemberDao memberDao) {
-    this.memberDao = memberDao;
+  public LoginCommand(MemberService memberService) {
+    this.memberService = memberService;
   }
 
   @Override
@@ -26,7 +26,7 @@ public class LoginCommand implements Command {
     String password = Prompt.inputString("암호? ");
 
     try {
-      Member member = memberDao.findByEmailPassword(email, password);
+      Member member = memberService.get(email, password);
       if (member == null) {
         System.out.println("사용자 정보가 맞지 않습니다.");
       } else {
