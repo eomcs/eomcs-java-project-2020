@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="MemberDao">
+  
+  <resultMap type="member" id="MemberMap">
+    <id column="no"           property="no"/>
+    <result column="name"     property="name"/>
+    <result column="email"    property="email"/>
+    <result column="photo"    property="photo"/>
+    <result column="tel"      property="tel"/>
+    <result column="cdt"      property="registeredDate"/>
+  </resultMap>
+
+  <select id="findAll" resultMap="MemberMap">
+    select 
+      no, 
+      name, 
+      email, 
+      tel, 
+      cdt
+    from 
+      pms_member
+    order by 
+      no desc
+  </select>
+  
+  <insert id="insert" parameterType="member">
+    insert into pms_member(name,email,password,photo,tel)
+    values(#{name},#{email},password(#{password}),#{photo},#{tel})
+  </insert>
+  
+  <select id="findByNo" parameterType="int" resultMap="MemberMap">
+    select 
+      no, 
+      name, 
+      email, 
+      photo, 
+      tel, 
+      cdt
+    from 
+      pms_member
+    where 
+      no = #{no}
+  </select>
+  
+  <select id="findByName" parameterType="string" resultMap="MemberMap">
+    select 
+      no, 
+      name, 
+      email, 
+      photo, 
+      tel, 
+      cdt
+    from 
+      pms_member
+    where 
+      name = #{name}
+  </select>
+  
+  <select id="findByProjectNo" parameterType="int" resultMap="MemberMap">
+    select 
+      m.no, 
+      m.name
+    from 
+      pms_member_project mp 
+      inner join pms_member m on mp.member_no=m.no
+    where 
+      mp.project_no=#{no}
+    order by 
+      m.name asc
+  </select>
+
+  <select id="findByEmailPassword" parameterType="map" resultMap="MemberMap">
+    select 
+      no, 
+      name, 
+      email, 
+      photo, 
+      tel, 
+      cdt
+    from 
+      pms_member
+    where 
+      email = #{email}
+      and password = password(#{password})
+  </select>
+  
+  <update id="update" parameterType="member">
+    update pms_member
+    <set>
+      <if test="name != ''">name = #{name},</if>
+      <if test="email != ''">email = #{email},</if>
+      <if test="password != ''">password = password(#{password}),</if>
+      <if test="photo != ''">photo = #{photo},</if>
+      <if test="tel != ''">tel = #{tel}</if>
+    </set>
+    where no = #{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from pms_member 
+    where no=#{no}
+  </delete>
+  
+</mapper>
+
+
+
+
+
+

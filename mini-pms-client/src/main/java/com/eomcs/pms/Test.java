@@ -1,12 +1,10 @@
 package com.eomcs.pms;
 
-public class Test {
-  public static void main(String[] args) {
-    String str = "SessionID=";
-    String[] values = str.split("=");
-    for (String value : values) {
-      System.out.println("> " + value);
+import java.net.URLDecoder;
 
-    }
+public class Test {
+  public static void main(String[] args) throws Exception {
+    String str = "abc%20def";
+    System.out.println(URLDecoder.decode(str, "UTF-8"));
   }
 }
