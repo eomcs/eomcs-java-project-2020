@@ -5,6 +5,7 @@ import java.util.List;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 
+@CommandAnno("/board/list")
 public class BoardListCommand implements Command {
 
   BoardService boardService;

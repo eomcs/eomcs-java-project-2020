@@ -9,6 +9,7 @@ import com.eomcs.pms.service.BoardService;
 import com.eomcs.util.Prompt;
 
 // Command 규칙에 따라 클래스를 정의한다.
+@CommandAnno("/board/add")
 public class BoardAddCommand implements Command {
 
   BoardService boardService;

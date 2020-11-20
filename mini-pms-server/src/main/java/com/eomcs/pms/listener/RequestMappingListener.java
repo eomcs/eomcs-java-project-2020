@@ -1,104 +1,123 @@
 package com.eomcs.pms.listener;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Parameter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.ibatis.io.Resources;
 import com.eomcs.context.ApplicationContextListener;
-import com.eomcs.pms.handler.BoardAddCommand;
-import com.eomcs.pms.handler.BoardDeleteCommand;
-import com.eomcs.pms.handler.BoardDetailCommand;
-import com.eomcs.pms.handler.BoardListCommand;
-import com.eomcs.pms.handler.BoardSearchCommand;
-import com.eomcs.pms.handler.BoardUpdateCommand;
-import com.eomcs.pms.handler.CalculatorCommand;
 import com.eomcs.pms.handler.Command;
-import com.eomcs.pms.handler.HelloCommand;
-import com.eomcs.pms.handler.LoginCommand;
-import com.eomcs.pms.handler.LogoutCommand;
-import com.eomcs.pms.handler.MemberAddCommand;
-import com.eomcs.pms.handler.MemberDeleteCommand;
-import com.eomcs.pms.handler.MemberDetailCommand;
-import com.eomcs.pms.handler.MemberListCommand;
-import com.eomcs.pms.handler.MemberUpdateCommand;
-import com.eomcs.pms.handler.ProjectAddCommand;
-import com.eomcs.pms.handler.ProjectDeleteCommand;
-import com.eomcs.pms.handler.ProjectDetailCommand;
-import com.eomcs.pms.handler.ProjectDetailSearchCommand;
-import com.eomcs.pms.handler.ProjectListCommand;
-import com.eomcs.pms.handler.ProjectSearchCommand;
-import com.eomcs.pms.handler.ProjectUpdateCommand;
-import com.eomcs.pms.handler.TaskAddCommand;
-import com.eomcs.pms.handler.TaskDeleteCommand;
-import com.eomcs.pms.handler.TaskDetailCommand;
-import com.eomcs.pms.handler.TaskListCommand;
-import com.eomcs.pms.handler.TaskUpdateCommand;
-import com.eomcs.pms.handler.WhoamiCommand;
-import com.eomcs.pms.service.BoardService;
-import com.eomcs.pms.service.MemberService;
-import com.eomcs.pms.service.ProjectService;
-import com.eomcs.pms.service.TaskService;
+import com.eomcs.pms.handler.CommandAnno;
 
 // 클라이언트 요청을 처리할 커맨드 객체를 준비한다.
 public class RequestMappingListener implements ApplicationContextListener {
 
+  Map<String,Object> context;
+
   @Override
   public void contextInitialized(Map<String,Object> context) {
     try {
-      // context 보관소에 저장되어 있는 서비스 객체를 꺼낸다.
-      // 왜? Command 객체에 주입하기 위해!
-      BoardService boardService = (BoardService) context.get("boardService");
-      MemberService memberService = (MemberService) context.get("memberService");
-      ProjectService projectService = (ProjectService) context.get("projectService");
-      TaskService taskService = (TaskService) context.get("taskService");
+      // 다른 메서드에서 context 맵 객체를 사용할 수 있도록
+      // 인스턴스 필드에 저장한다.
+      this.context = context;
+
+      // 커맨드 클래스가 있는 패키지의 파일 경로를 알아내기
+      // => Mybatis 에서 제공하는 클래스의 도움을 받는다.
+      File commandPackagePath = Resources.getResourceAsFile("com/eomcs/pms/handler");
+      System.out.println(commandPackagePath.getCanonicalPath());
+
+      // 해당 패키지의 있는 커맨드 클래스를 찾아 인스턴스를 생성한다.
+      Map<String,Object> commandMap = createCommands(commandPackagePath, "com.eomcs.pms.handler");
+
+      // 커맨드 객체만 모아 놓은 상자를 context 맵이라는 큰 상자에 담는다.
+      context.put("commandMap", commandMap);
 
       // 테스트 용 로그인 사용자 정보 가져오기
       //Member member = memberService.get("aaa@test.com", "1111");
       //context.put("loginUser", member);
 
-      // Command 구현체 생성 및 commandMap 객체 준비
-      Map<String,Command> commandMap = new HashMap<>();
-
-      // 클라이언트의 요청을 처리할 커맨드 객체를 생성한다.
-      commandMap.put("/board/add", new BoardAddCommand(boardService));
-      commandMap.put("/board/list", new BoardListCommand(boardService));
-      commandMap.put("/board/detail", new BoardDetailCommand(boardService));
-      commandMap.put("/board/update", new BoardUpdateCommand(boardService));
-      commandMap.put("/board/delete", new BoardDeleteCommand(boardService));
-      commandMap.put("/board/search", new BoardSearchCommand(boardService));
-
-      commandMap.put("/member/add", new MemberAddCommand(memberService));
-      commandMap.put("/member/list", new MemberListCommand(memberService));
-      commandMap.put("/member/detail", new MemberDetailCommand(memberService));
-      commandMap.put("/member/update", new MemberUpdateCommand(memberService));
-      commandMap.put("/member/delete", new MemberDeleteCommand(memberService));
-
-      commandMap.put("/project/add", new ProjectAddCommand(projectService, memberService));
-      commandMap.put("/project/list", new ProjectListCommand(projectService));
-      commandMap.put("/project/detail", new ProjectDetailCommand(projectService, taskService));
-      commandMap.put("/project/update", new ProjectUpdateCommand(projectService));
-      commandMap.put("/project/delete", new ProjectDeleteCommand(projectService));
-      commandMap.put("/project/search", new ProjectSearchCommand(projectService));
-      commandMap.put("/project/detailSearch", new ProjectDetailSearchCommand(projectService));
-
-      commandMap.put("/task/add", new TaskAddCommand(taskService, projectService, memberService));
-      commandMap.put("/task/list", new TaskListCommand(taskService));
-      commandMap.put("/task/detail", new TaskDetailCommand(taskService));
-      commandMap.put("/task/update", new TaskUpdateCommand(taskService, projectService, memberService));
-      commandMap.put("/task/delete", new TaskDeleteCommand(taskService));
-
-      commandMap.put("/login", new LoginCommand(memberService));
-      commandMap.put("/logout", new LogoutCommand());
-      commandMap.put("/whoami", new WhoamiCommand());
-
-      commandMap.put("/hello", new HelloCommand());
-      commandMap.put("/calc", new CalculatorCommand());
-
-      // 커맨드 객체만 모아 놓은 상자를 context 맵이라는 큰 상자에 담는다.
-      context.put("commandMap", commandMap);
 
     } catch (Exception e) {
       System.out.println("서비스 객체를 준비하는 중에 오류 발생!");
       e.printStackTrace();
     }
+  }
+
+  private Map<String,Object> createCommands(File packagePath, String packageName) {
+    HashMap<String,Object> commandMap = new HashMap<>();
+
+    File[] files = packagePath.listFiles((dir, name) -> name.endsWith(".class"));
+
+    for (File f : files) {
+      // 파일 정보를 가지고 클래스 이름을 알아낸다.
+      String className = String.format("%s.%s",
+          packageName,
+          f.getName().replace(".class", ""));
+      try {
+        // 클래스 이름(패키지명 포함)을 사용하여 .class 파일을 로딩한다.
+        Class<?> clazz = Class.forName(className);
+
+        // 패키지에서 찾은 클래스가 Command 인터페이스를 구현한 클래스가 아니라면,
+        // 생성자를 찾지 말고 다음 클래스로 이동한다.
+        Class<?>[] interfaces = clazz.getInterfaces();
+        boolean isCommand = false;
+        for (Class<?> c : interfaces) {
+          if (c == Command.class) {
+            isCommand = true;
+            break;
+          }
+        }
+
+        if (!isCommand) continue; // 이 클래스는 Command 구현체가 아니다.
+
+        // 커맨드 클래스에 붙여 놓은 @CommandAnno 애노테이션을 정보를 가져온다.
+        CommandAnno commandAnno = clazz.getAnnotation(CommandAnno.class);
+
+        // @CommandAnno 애노테이션이 클래스에 붙어 있지 않다면,
+        // 해당 커맨드를 저장할 수 없기 때문에 객체를 생성하지 않는다.
+        if (commandAnno == null) continue;
+
+        // 클래스의 생성자 정보를 알아낸다.
+        Constructor<?> constructor = clazz.getConstructors()[0];
+
+        // 생성자의 파라미터 정보를 알아낸다.
+        Parameter[] params = constructor.getParameters();
+
+        // 생성자를 호출할 때 넘겨 줄 파라미터 값을 담을 배열을 준비한다.
+        Object[] args = new Object[params.length];
+
+        int i = 0;
+        for (Parameter param : params) {
+          args[i++] = findDependency(param.getType());
+        }
+
+        Object command = constructor.newInstance(args);
+        System.out.println(command.getClass().getName() + " 객체 생성 성공!");
+
+        // @CommandAnno 애노테이션에 지정한 커맨드 객체의 이름을 가져와서,
+        // 커맨드 객체를 저장할 때 key 로 사용한다.
+        commandMap.put(commandAnno.value(), command);
+
+      } catch (Exception e) {
+        System.out.println(className + " 로딩 중 오류 발생!");
+      }
+    }
+    return commandMap;
+  }
+
+  private Object findDependency(Class<?> type) {
+    // context 맵에서 해당 타입의 객체를 찾는다.
+
+    // 1) context 맵에 보관된 모든 객체를 꺼낸다.
+    Collection<?> objs = context.values();
+
+    // 2) 각 객체가 파라미터로 받은 타입의 인스턴스인지 확인한다.
+    for (Object obj : objs) {
+      if (type.isInstance(obj)) return obj;
+    }
+    return null;
   }
 
   @Override
