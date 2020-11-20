@@ -8,7 +8,6 @@ import com.eomcs.util.Prompt;
 
 public class ClientApp {
 
-  static String sessionId = "";
   static String host;
   static int port;
 
@@ -45,8 +44,6 @@ public class ClientApp {
         PrintWriter out = new PrintWriter(socket.getOutputStream());
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-      // 첫 번째 줄은 항상 세션 아이디를 보낸다.
-      out.printf("SessionID=%s\n", sessionId);
       out.println(message);
       out.flush();
 
@@ -71,10 +68,6 @@ public class ClientApp {
   }
 
   private static void receiveResponse(PrintWriter out, BufferedReader in) throws Exception {
-    // 서버가 응답한 첫 번째 줄은 항상 세션 아이디다.
-    // 서버가 보낸 세션 아이디를 스태틱 필드에 보관해 둔다.
-    sessionId = in.readLine().split("=")[1];
-
     while (true) {
       String response = in.readLine();
       if (response.length() == 0) {

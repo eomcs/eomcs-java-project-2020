@@ -9,20 +9,16 @@ public class Request {
   Map<String,Object> context;
   PrintWriter out;
   BufferedReader in;
-  String sessionId;
 
   public Request(
       String commandPath,
       Map<String,Object> context,
       PrintWriter out,
-      BufferedReader in,
-      String sessionId) {
-
+      BufferedReader in) {
     this.commandPath = commandPath;
     this.context = context;
     this.out = out;
     this.in = in;
-    this.sessionId = sessionId;
   }
 
   public String getCommandPath() {
@@ -39,11 +35,6 @@ public class Request {
 
   public BufferedReader getReader() {
     return in;
-  }
-
-  @SuppressWarnings("unchecked")
-  public Map<String,Object> getSession() {
-    return (Map<String,Object>) context.get(sessionId);
   }
 }
 
