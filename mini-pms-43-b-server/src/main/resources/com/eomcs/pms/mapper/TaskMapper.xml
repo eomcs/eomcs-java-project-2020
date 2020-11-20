@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="TaskDao">
+   
+  <resultMap type="task" id="TaskMap">
+    <id column="no"                 property="no"/>
+    <result column="content"        property="content"/>
+    <result column="deadline"       property="deadline"/>
+    <result column="status"         property="status"/>
+    <result column="project_no"     property="projectNo"/>
+    <result column="project_title"  property="projectTitle"/>
+    
+    <association property="owner" javaType="member">
+      <id column="owner_no"         property="no"/>
+      <result column="owner_name"   property="name"/>
+    </association>
+  </resultMap>
+  
+  <select id="findAll" resultMap="TaskMap" parameterType="map">
+    select 
+      t.no, 
+      t.content,
+      t.deadline, 
+      t.status, 
+      m.no owner_no, 
+      m.name owner_name
+    from 
+      pms_task t 
+      inner join pms_member m on t.owner=m.no
+    <where>
+      <if test="projectNo != null">
+        t.project_no = #{projectNo}
+      </if>
+    </where>
+    order by t.deadline asc
+  </select>
+  
+  <select id="findByNo" parameterType="int" resultMap="TaskMap">
+    select
+      t.no,
+      t.content,
+      t.deadline,
+      t.status,
+      m.no owner_no,
+      m.name owner_name,
+      p.no project_no,
+      p.title project_title
+    from 
+      pms_task t
+      inner join pms_member m on t.owner=m.no
+      inner join pms_project p on t.project_no=p.no
+    where t.no = #{taskNo}
+  </select>
+
+  <insert id="insert" parameterType="task">
+    insert into pms_task(content,deadline,owner,project_no,status)
+    values(#{content},#{deadline},#{owner.no},#{projectNo},#{status})
+  </insert>
+  
+  <update id="update" parameterType="task">
+    update pms_task set
+      content = #{content},
+      deadline = #{deadline},
+      owner = #{owner.no},
+      project_no = #{projectNo},
+      status = #{status}
+    where no = #{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from pms_task
+    where no=#{taskNo}
+  </delete>
+  
+  <delete id="deleteByProjectNo" parameterType="int">
+    delete from pms_task
+    where project_no=#{projectNo}
+  </delete>
+</mapper>
+
+
+
+
+
+

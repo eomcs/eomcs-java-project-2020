@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="BoardDao">
+  
+  <resultMap type="board" id="BoardMap">
+    <id column="no"           property="no"/>
+    <result column="title"    property="title"/>
+    <result column="content"  property="content"/>
+    <result column="cdt"      property="registeredDate"/>
+    <result column="vw_cnt"   property="viewCount"/>
+    
+    <association property="writer" javaType="member">
+      <id column="writer_no"    property="no"/>
+      <result column="name"     property="name"/>
+    </association>
+  </resultMap>
+
+  <select id="findAll" resultMap="BoardMap" parameterType="string">
+    select 
+      b.no, 
+      b.title, 
+      b.cdt, 
+      b.vw_cnt, 
+      m.no writer_no, 
+      m.name
+    from 
+      pms_board b 
+      inner join pms_member m on b.writer=m.no
+    <if test="keyword != null">
+    <bind name="pattern" value="'%' + _parameter + '%'" />
+    where 
+      b.title like #{pattern}
+      or b.content like #{pattern}
+      or m.name like #{pattern} 
+    </if>
+    order by 
+      b.no desc
+  </select>
+  
+  <insert id="insert" parameterType="board">
+    insert into pms_board(title,content,writer) 
+    values(#{title}, #{content}, #{writer.no})
+  </insert>
+  
+  <select id="findByNo" 
+    parameterType="int" 
+    resultMap="BoardMap">
+    select
+	    b.no,
+	    b.title,
+	    b.content,
+	    b.cdt,
+	    b.vw_cnt,
+	    m.no writer_no,
+	    m.name
+    from 
+      pms_board b inner join pms_member m on b.writer=m.no
+    where b.no = #{no}
+  </select>
+  
+  <update id="updateViewCount" parameterType="int">
+    update pms_board set 
+      vw_cnt = vw_cnt + 1
+    where no = #{no}
+  </update>
+
+  <update id="update" parameterType="board">
+    update pms_board set 
+      title = #{title}, 
+      content = #{content} 
+    where no = #{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from pms_board 
+    where no=#{no}
+  </delete>
+</mapper>
+
+
+
+
+
+
