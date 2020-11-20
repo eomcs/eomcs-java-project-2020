@@ -75,6 +75,18 @@
 
 화이팅!  
 
+### 9단계 - 필터 추가한다.
+
+- `mini-pms-42-client/src/main/com/eomcs/pms/filter` 패키지에서 관련 코드를 가져온다.
+- com.eomcs.pms.listener.AppInitListener 클래스 변경
+  - `mini-pms-42-client/src/main/com/eomcs/pms/App.java` 클래스에서 관련 코드를 가져온다.
+  - `CommandFilterManager` 객체를 준비한다.
+- com.eomcs.pms.App 클래스 변경
+  - context 맵에 보관된 필터 체인을 사용하여 클라이언트 요청을 처리한다.
+- com.eomcs.pms.handler.Request 클래스 변경
+  - 커맨드 객체가 클라이언트의 데이터를 읽고 쓸 때 사용할 스트림 객체를 보관한다.
+
+
 ## 실습 결과
-- src/main/java/com/eomcs/util/concurrent/ThreadPool.java 삭제
+
 - src/main/java/com/eomcs/pms/ServerApp.java 변경

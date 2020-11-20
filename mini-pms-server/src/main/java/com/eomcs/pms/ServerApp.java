@@ -14,7 +14,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import com.eomcs.context.ApplicationContextListener;
-import com.eomcs.pms.handler.Command;
+import com.eomcs.pms.filter.FilterChain;
+import com.eomcs.pms.handler.Request;
 import com.eomcs.pms.listener.AppInitListener;
 import com.eomcs.pms.listener.DataHandlerListener;
 import com.eomcs.pms.listener.RequestMappingListener;
@@ -128,9 +129,9 @@ public class ServerApp {
         PrintWriter out = new PrintWriter(socket.getOutputStream())) {
 
       // 클라이언트가 보낸 요청을 읽는다.
-      String request = in.readLine();
+      String requestLine = in.readLine();
 
-      if (request.equalsIgnoreCase("stop")) {
+      if (requestLine.equalsIgnoreCase("stop")) {
         stop = true; // 서버의 상태를 멈추라는 의미로 true로 설정한다.
         out.println("서버를 종료하는 중입니다!");
         out.println();
@@ -138,13 +139,17 @@ public class ServerApp {
         return;
       }
 
-      Command command = (Command) context.get(request);
-      if (command != null) {
-        // 클라이언트 요청 처리 객체 간에 값을 공유하기 위해
-        // context 맵 보관소를 파라미터로 넘겨준다.
-        command.execute(out, in, context);
-      } else {
-        out.println("해당 명령을 처리할 수 없습니다!");
+      // 커맨드나 필터가 사용할 객체를 준비한다.
+      Request request = new Request(requestLine, context, out, in);
+
+      // context 맵에 보관된 필터 체인을 꺼낸다.
+      FilterChain filterChain = (FilterChain) context.get("filterChain");
+
+      // 필터들의 체인을 실행한다.
+      // => 필터 체인을 따라가면서 중간에 삽입된 필터가 있다면 실행할 것이다.
+      // => 마지막 필터에서는 클라이언트가 요청한 명령을 처리할 것이다.
+      if (filterChain != null) {
+        filterChain.doFilter(request);
       }
 
       // 응답의 끝을 알리는 빈 문자열을 보낸다.
@@ -153,6 +158,7 @@ public class ServerApp {
 
     } catch (Exception e) {
       System.out.println("클라이언트와의 통신 오류!");
+      e.printStackTrace();
     }
 
     System.out.printf("클라이언트(%s)와의 연결을 끊었습니다.\n",
