@@ -1,9 +1,11 @@
 package com.eomcs.pms.listener;
 
-import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import com.eomcs.context.ApplicationContextListener;
 import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.dao.ProjectDao;
@@ -22,11 +24,11 @@ import com.eomcs.pms.service.ProjectService;
 import com.eomcs.pms.service.TaskService;
 import com.eomcs.util.SqlSessionFactoryProxy;
 
-// 게시물, 회원, 프로젝트, 작업 데이터를 파일에서 로딩하고 파일로 저장하는 일을 한다.
-public class DataHandlerListener implements ApplicationContextListener {
+@WebListener
+public class DataHandlerListener implements ServletContextListener {
 
   @Override
-  public void contextInitialized(Map<String,Object> context) {
+  public void contextInitialized(ServletContextEvent sce) {
     // 시스템에서 사용할 객체를 준비한다.
     try {
       // Mybatis 객체 준비
@@ -47,10 +49,12 @@ public class DataHandlerListener implements ApplicationContextListener {
       TaskService taskService = new DefaultTaskService(taskDao);
 
       // 다른 객체가 사용할 수 있도록 context 맵 보관소에 저장해둔다.
-      context.put("boardService", boardService);
-      context.put("memberService", memberService);
-      context.put("projectService", projectService);
-      context.put("taskService", taskService);
+      ServletContext ctx = sce.getServletContext();
+
+      ctx.setAttribute("boardService", boardService);
+      ctx.setAttribute("memberService", memberService);
+      ctx.setAttribute("projectService", projectService);
+      ctx.setAttribute("taskService", taskService);
 
     } catch (Exception e) {
       System.out.println("Mybatis 및 DAO, 서비스 객체 준비 중 오류 발생!");
@@ -58,7 +62,4 @@ public class DataHandlerListener implements ApplicationContextListener {
     }
   }
 
-  @Override
-  public void contextDestroyed(Map<String,Object> context) {
-  }
 }

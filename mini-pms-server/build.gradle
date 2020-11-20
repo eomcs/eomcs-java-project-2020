@@ -1,7 +1,8 @@
 plugins {
     id 'java'
     id 'application'
-    id 'eclipse'
+    id 'eclipse-wtp'
+    id 'war'
 }
 
 repositories {
@@ -9,6 +10,9 @@ repositories {
 }
 
 dependencies {
+    // servlet-api 라이브러리 
+    compile 'javax.servlet:javax.servlet-api:4.0.1'
+    
     // Mybatis 퍼시스턴스 프레임워크
     implementation 'org.mybatis:mybatis:3.5.6'
 
