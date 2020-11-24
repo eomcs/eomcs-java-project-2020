@@ -200,3 +200,11 @@ gradle-app.setting
 **/build/
 
 # End of https://www.gitignore.io/api/java,linux,macos,gradle,windows,eclipse,java-web,visualstudiocode
+
+
+*.exe
+node_modules/
+temp/
+Debug/
+Release/
+html-exam/
