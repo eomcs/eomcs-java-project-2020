@@ -1,7 +1,7 @@
 package com.eomcs.pms.filter;
 
 import java.util.Map;
-import com.eomcs.pms.handler.Request;
+import com.eomcs.pms.web.Request;
 
 // 역할:
 // - CommandFilter 구현체를 관리하고 실행시킨다.

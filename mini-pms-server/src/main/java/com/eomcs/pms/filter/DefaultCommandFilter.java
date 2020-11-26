@@ -2,8 +2,8 @@ package com.eomcs.pms.filter;
 
 import java.io.PrintWriter;
 import java.util.Map;
-import com.eomcs.pms.handler.Command;
-import com.eomcs.pms.handler.Request;
+import com.eomcs.pms.web.Command;
+import com.eomcs.pms.web.Request;
 
 // 필터 역할:
 // - Command 객체를 찾아 실행한다.

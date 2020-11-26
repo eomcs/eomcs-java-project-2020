@@ -3,7 +3,7 @@ package com.eomcs.pms.filter;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Map;
-import com.eomcs.pms.handler.Request;
+import com.eomcs.pms.web.Request;
 
 public class LogCommandFilter implements CommandFilter {
   PrintWriter logOut;
