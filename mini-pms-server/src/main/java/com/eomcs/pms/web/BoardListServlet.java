@@ -35,6 +35,8 @@ public class BoardListServlet extends HttpServlet {
     try {
       out.println("<h1>게시물 목록</h1>");
 
+      out.println("<a href='form.html'>새 글</a><br>");
+
       List<Board> list = boardService.list();
       out.println("<table border='1'>");
       out.println("<thead><tr>" // table row
@@ -49,12 +51,11 @@ public class BoardListServlet extends HttpServlet {
       for (Board board : list) {
         out.printf("<tr>"
             + "<td>%d</td>"
-            + "<td><a href='detail?no=%d'>%s</a></td>"
+            + "<td><a href='detail?no=%1$d'>%s</a></td>"
             + "<td>%s</td>"
             + "<td>%s</td>"
             + "<td>%d</td>"
             + "</tr>\n",
-            board.getNo(),
             board.getNo(),
             board.getTitle(),
             board.getWriter().getName(),
