@@ -9,19 +9,30 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.eomcs.pms.service.BoardService;
+import com.eomcs.pms.domain.Member;
+import com.eomcs.pms.service.MemberService;
 
-@WebServlet("/board/delete")
-public class BoardDeleteServlet extends HttpServlet {
+@WebServlet("/member/add")
+public class MemberAddServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
     ServletContext ctx = request.getServletContext();
-    BoardService boardService =
-        (BoardService) ctx.getAttribute("boardService");
+    MemberService memberService =
+        (MemberService) ctx.getAttribute("memberService");
+
+    // 클라이언트가 POST 요청할 때 보낸 데이터를 읽는다.
+    request.setCharacterEncoding("UTF-8");
+
+    Member member = new Member();
+    member.setName(request.getParameter("name"));
+    member.setEmail(request.getParameter("email"));
+    member.setPassword(request.getParameter("password"));
+    member.setTel(request.getParameter("tel"));
+    member.setPhoto(request.getParameter("photo"));
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -30,18 +41,13 @@ public class BoardDeleteServlet extends HttpServlet {
     out.println("<html>");
     out.println("<head>");
     //out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-    out.println("<title>게시글삭제</title></head>");
+    out.println("<title>회원등록</title></head>");
     out.println("<body>");
     try {
-      out.println("<h1>게시물 삭제</h1>");
+      out.println("<h1>회원 등록</h1>");
+      memberService.add(member);
 
-      int no = Integer.parseInt(request.getParameter("no"));
-      if (boardService.delete(no) == 0) {
-        out.println("<p>해당 번호의 게시글이 없습니다.</p>");
-
-      } else {
-        out.println("<p>게시글을 삭제하였습니다.</p>");
-      }
+      out.println("<p>회원을 등록하였습니다.</p>");
 
     } catch (Exception e) {
       out.println("<h2>작업 처리 중 오류 발생!</h2>");
