@@ -20,6 +20,8 @@ public class BoardUpdateServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
+    request.setCharacterEncoding("UTF-8");
+
     ServletContext ctx = request.getServletContext();
     BoardService boardService =
         (BoardService) ctx.getAttribute("boardService");
@@ -29,12 +31,15 @@ public class BoardUpdateServlet extends HttpServlet {
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");
-    out.println("<head><title>게시글변경</title></head>");
+    out.println("<head>");
+    out.println("<meta http-equiv='Refresh' content='1;url=list'>");
+    out.println("<title>게시글변경</title></head>");
     out.println("<body>");
     try {
       out.println("<h1>게시물 변경</h1>");
 
       Board board = new Board();
+      board.setNo(Integer.parseInt(request.getParameter("no")));
       board.setTitle(request.getParameter("title"));
       board.setContent(request.getParameter("content"));
       int count = boardService.update(board);
