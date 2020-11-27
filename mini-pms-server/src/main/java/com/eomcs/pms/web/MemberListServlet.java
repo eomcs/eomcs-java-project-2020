@@ -53,7 +53,7 @@ public class MemberListServlet extends HttpServlet {
       for (Member member : list) {
         out.printf("<tr>"
             + "<td>%d</td>"
-            + "<td><a href='detail?no=%1$d'><img src='%s' alt='[%2$s]'>%s</a></td>"
+            + "<td><a href='detail?no=%1$d'><img src='../upload/%s' alt='[%2$s]' height='30px'>%s</a></td>"
             + "<td>%s</td>"
             + "<td>%s</td>"
             + "<td>%s</td>"
