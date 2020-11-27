@@ -48,9 +48,7 @@ public class BoardAddServlet extends HttpServlet {
     try {
       out.println("<h1>게시물 등록</h1>");
 
-      //Member loginUser = (Member) session.getAttribute("loginUser");
-      Member loginUser = new Member();
-      loginUser.setNo(1);
+      Member loginUser = (Member) session.getAttribute("loginUser");
 
       board.setWriter(loginUser);
 
