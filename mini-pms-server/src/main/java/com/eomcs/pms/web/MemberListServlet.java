@@ -10,11 +10,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.eomcs.pms.domain.Board;
-import com.eomcs.pms.service.BoardService;
+import com.eomcs.pms.domain.Member;
+import com.eomcs.pms.service.MemberService;
 
-@WebServlet("/board/list")
-public class BoardListServlet extends HttpServlet {
+@WebServlet("/member/list")
+public class MemberListServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -22,47 +22,48 @@ public class BoardListServlet extends HttpServlet {
       throws ServletException, IOException {
 
     ServletContext ctx = request.getServletContext();
-    BoardService boardService =
-        (BoardService) ctx.getAttribute("boardService");
+    MemberService memberService =
+        (MemberService) ctx.getAttribute("memberService");
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
     out.println("<!DOCTYPE html>");
     out.println("<html>");
-    out.println("<head><title>게시글목록</title></head>");
+    out.println("<head><title>회원목록</title></head>");
     out.println("<body>");
     try {
-      out.println("<h1>게시물 목록</h1>");
+      out.println("<h1>회원 목록</h1>");
 
-      out.println("<a href='form.html'>새 글</a><br>");
+      out.println("<a href='form.html'>새 회원</a><br>");
 
-      List<Board> list = boardService.list();
+      List<Member> list = memberService.list();
 
       out.println("<table border='1'>");
       out.println("<thead><tr>" // table row
           + "<th>번호</th>" // table header
-          + "<th>제목</th>"
-          + "<th>작성자</th>"
+          + "<th>이름</th>"
+          + "<th>이메일</th>"
+          + "<th>전화</th>"
           + "<th>등록일</th>"
-          + "<th>조회수</th>"
           + "</tr></thead>");
 
       out.println("<tbody>");
 
-      for (Board board : list) {
+      for (Member member : list) {
         out.printf("<tr>"
             + "<td>%d</td>"
-            + "<td><a href='detail?no=%1$d'>%s</a></td>"
+            + "<td><a href='detail?no=%1$d'><img src='%s' alt='[%2$s]'>%s</a></td>"
             + "<td>%s</td>"
             + "<td>%s</td>"
-            + "<td>%d</td>"
+            + "<td>%s</td>"
             + "</tr>\n",
-            board.getNo(),
-            board.getTitle(),
-            board.getWriter().getName(),
-            board.getRegisteredDate(),
-            board.getViewCount());
+            member.getNo(),
+            member.getPhoto(),
+            member.getName(),
+            member.getEmail(),
+            member.getTel(),
+            member.getRegisteredDate());
       }
       out.println("</tbody>");
       out.println("</table>");
@@ -80,5 +81,4 @@ public class BoardListServlet extends HttpServlet {
     out.println("</body>");
     out.println("</html>");
   }
-
 }
