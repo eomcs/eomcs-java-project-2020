@@ -57,13 +57,15 @@ public class BoardAddServlet extends HttpServlet {
       out.println("게시글을 등록하였습니다.");
 
     } catch (Exception e) {
-      out.printf("<p>작업 처리 중 오류 발생! - %s</p>\n", e.getMessage());
+      out.println("<h2>작업 처리 중 오류 발생!</h2>");
+      out.printf("<pre>%s</pre>\n", e.getMessage());
 
       StringWriter errOut = new StringWriter();
       e.printStackTrace(new PrintWriter(errOut));
-
+      out.println("<h3>상세 오류 내용</h3>");
       out.printf("<pre>%s</pre>\n", errOut.toString());
     }
+
     out.println("</body>");
     out.println("</html>");
   }
