@@ -20,8 +20,8 @@ import net.coobird.thumbnailator.geometry.Positions;
 import net.coobird.thumbnailator.name.Rename;
 
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10)
-@WebServlet("/member/add")
-public class MemberAddServlet extends HttpServlet {
+@WebServlet("/member/updatePhoto")
+public class MemberUpdatePhotoServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -32,32 +32,20 @@ public class MemberAddServlet extends HttpServlet {
     MemberService memberService =
         (MemberService) ctx.getAttribute("memberService");
 
-    // 클라이언트가 POST 요청할 때 보낸 데이터를 읽는다.
-    //request.setCharacterEncoding("UTF-8");
-
     Member member = new Member();
-    member.setName(request.getParameter("name"));
-    member.setEmail(request.getParameter("email"));
-    member.setPassword(request.getParameter("password"));
-    member.setTel(request.getParameter("tel"));
+    member.setNo(Integer.parseInt(request.getParameter("no")));
 
-    // <input type="file"...> 입력 값 꺼내기
+    // 회원 사진 파일 저장
     Part photoPart = request.getPart("photo");
+    if (photoPart.getSize() > 0) {
+      String filename = UUID.randomUUID().toString();
+      String saveFilePath = ctx.getRealPath("/upload/" + filename);
+      photoPart.write(saveFilePath);
+      member.setPhoto(filename);
 
-    // 회원 사진을 저장할 위치를 알아낸다.
-    // => 컨텍스트루트/upload/파일
-    // => 파일을 저장할 때 사용할 파일명을 준비한다.
-    String filename = UUID.randomUUID().toString();
-    String saveFilePath = ctx.getRealPath("/upload/" + filename);
-
-    // 해당 위치에 업로드된 사진 파일을 저장한다.
-    photoPart.write(saveFilePath);
-
-    // DB에 사진 파일 이름을 저장하기 위해 객체에 보관한다.
-    member.setPhoto(filename);
-
-    // 회원 사진의 썸네일 이미지 파일 생성하기
-    generatePhotoThumbnail(saveFilePath);
+      // 회원 사진의 썸네일 이미지 파일 생성하기
+      generatePhotoThumbnail(saveFilePath);
+    }
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -65,18 +53,23 @@ public class MemberAddServlet extends HttpServlet {
     out.println("<!DOCTYPE html>");
     out.println("<html>");
     out.println("<head>");
-    out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-    out.println("<title>회원등록</title></head>");
+    out.printf("<meta http-equiv='Refresh' content='1;url=detail?no=%d'>",
+        member.getNo());
+    out.println("<title>회원사진수정</title></head>");
     out.println("<body>");
 
     try {
-      out.println("<h1>회원 등록</h1>");
+      out.println("<h1>회원 사진 수정</h1>");
 
-      memberService.add(member);
-
-      out.println("<p>회원을 등록하였습니다.</p>");
+      if (member.getPhoto() != null) {
+        memberService.update(member);
+        out.println("<p>회원 사진을 수정하였습니다.</p>");
+      } else {
+        out.println("<p>사진을 선택하지 않았습니다.</p>");
+      }
 
     } catch (Exception e) {
+      e.printStackTrace();
       out.println("<h2>작업 처리 중 오류 발생!</h2>");
       out.printf("<pre>%s</pre>\n", e.getMessage());
 

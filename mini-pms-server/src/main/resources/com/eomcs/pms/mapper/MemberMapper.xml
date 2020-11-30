@@ -92,11 +92,11 @@
   <update id="update" parameterType="member">
     update pms_member
     <set>
-      <if test="name != ''">name = #{name},</if>
-      <if test="email != ''">email = #{email},</if>
-      <if test="password != ''">password = password(#{password}),</if>
-      <if test="photo != ''">photo = #{photo},</if>
-      <if test="tel != ''">tel = #{tel}</if>
+      <if test="name != null">name = #{name},</if>
+      <if test="email != null">email = #{email},</if>
+      <if test="password != null">password = password(#{password}),</if>
+      <if test="photo != null">photo = #{photo},</if>
+      <if test="tel != null">tel = #{tel}</if>
     </set>
     where no = #{no}
   </update>

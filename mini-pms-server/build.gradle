@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'application'
     id 'eclipse-wtp'
     id 'war'
 }
@@ -10,6 +9,9 @@ repositories {
 }
 
 dependencies {
+    // Thumbnailator 썸네일 생성 라이브러리
+    implementation 'net.coobird:thumbnailator:0.4.13'
+  
     // servlet-api 라이브러리
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
