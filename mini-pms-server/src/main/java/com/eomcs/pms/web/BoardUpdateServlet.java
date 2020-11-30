@@ -20,7 +20,7 @@ public class BoardUpdateServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
-    request.setCharacterEncoding("UTF-8");
+    //request.setCharacterEncoding("UTF-8");
 
     ServletContext ctx = request.getServletContext();
     BoardService boardService =

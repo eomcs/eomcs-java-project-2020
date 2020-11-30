@@ -29,7 +29,7 @@ public class MemberAddServlet extends HttpServlet {
         (MemberService) ctx.getAttribute("memberService");
 
     // 클라이언트가 POST 요청할 때 보낸 데이터를 읽는다.
-    request.setCharacterEncoding("UTF-8");
+    //request.setCharacterEncoding("UTF-8");
 
     Member member = new Member();
     member.setName(request.getParameter("name"));
