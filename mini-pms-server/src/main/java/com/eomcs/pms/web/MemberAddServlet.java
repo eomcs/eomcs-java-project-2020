@@ -61,8 +61,10 @@ public class MemberAddServlet extends HttpServlet {
     out.println("<meta http-equiv='Refresh' content='1;url=list'>");
     out.println("<title>회원등록</title></head>");
     out.println("<body>");
+
     try {
       out.println("<h1>회원 등록</h1>");
+
       memberService.add(member);
 
       out.println("<p>회원을 등록하였습니다.</p>");
