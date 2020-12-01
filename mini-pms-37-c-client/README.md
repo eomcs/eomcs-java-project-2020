@@ -88,7 +88,8 @@ alter table pms_task
 /* 프로젝트와 멤버의 다대다 관계를 저장할 테이블을 정의한다.*/
 create table pms_member_project(
   member_no int not null,
-  project_no int not null
+  project_no int not null,
+  state int default 1
 );
 
 /* 다대다 관계를 저장할 컬럼의 대해 FK를 설정한다. */

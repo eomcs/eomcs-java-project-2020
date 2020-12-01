@@ -46,7 +46,7 @@ public class MemberDetailServlet extends HttpServlet {
       out.println("<form action='updatePhoto' method='post' enctype='multipart/form-data'>");
       out.printf("<input type='hidden' name='no' value='%d'><br>\n",
           member.getNo());
-      out.printf("<a href='../upload/%s'><img src='../upload/%1$s_120x120.jpg'></a><br>\n",
+      out.printf("<a href='../upload/%s'>\n<img src='../upload/%1$s_120x120.jpg'></a><br>\n",
           member.getPhoto());
       out.println("<input type='file' name='photo'>");
       out.println("<button>변경</button>");
@@ -58,14 +58,14 @@ public class MemberDetailServlet extends HttpServlet {
           member.getNo());
       out.printf("이름: <input type='text' name='name' value='%s'><br>\n",
           member.getName());
-      out.printf("이메일: <input type='email' name='email' value='%s'><br>",
+      out.printf("이메일: <input type='email' name='email' value='%s'><br>\n",
           member.getEmail());
       out.println("암호: <input type='password' name='password'><br>");
-      out.printf("전화: <input type='tel' name='tel' value='%s'><br>",
+      out.printf("전화: <input type='tel' name='tel' value='%s'><br>\n",
           member.getTel());
       out.printf("등록일: %s<br>\n", member.getRegisteredDate());
       out.println("<button>변경</button>");
-      out.printf("<a href='delete?no=%d'>[삭제]</a> ",
+      out.printf("<a href='delete?no=%d'>[삭제]</a>\n ",
           member.getNo());
       out.println("<a href='list'>[목록]</a> ");
       out.println("</form>");

@@ -1,9 +1,11 @@
 package com.eomcs.pms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
+import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.util.SqlSessionFactoryProxy;
 
@@ -105,7 +107,59 @@ public class DefaultProjectService implements ProjectService {
 
   @Override
   public int update(Project project) throws Exception {
-    return projectDao.update(project);
+    // 프로젝트 정보를 변경한다.
+    int count = projectDao.update(project);
+
+    // 프로젝트 멤버를 변경한다.
+    // 1) 기존 멤버를 비활성화시킨다.
+    //    삭제하지 않고 왜?
+    //    - 삭제하면 그 회원이 했던 작업도 모두 삭제되기 때문이다.
+    //    - 그러면 프로젝트에서 수행한 작업 기록이 사라진다.
+    //
+    // 이전 프로젝트 정보(멤버 목록 포함)를 가져온다.
+    Project oldProject = projectDao.findByNo(project.getNo());
+
+    // 삭제할 목록을 만든다.
+    List<Member> deleteMembers = minusMembers(
+        oldProject.getMembers(),
+        project.getMembers());
+
+    // 삭제할 멤버를 비활성화시킨다.
+    if (deleteMembers.size() > 0) {
+      // 이전 프로젝트 정보에 삭제할 멤버 정보를 담는다.
+      oldProject.setMembers(deleteMembers);
+
+      projectDao.updateInactiveMembers(oldProject);
+    }
+
+    // 2) 새 멤버를 추가한다.
+    List<Member> addMembers = minusMembers(
+        project.getMembers(),
+        oldProject.getMembers());
+
+    if (addMembers.size() > 0) {
+      // 새로 추가할 멤버를 프로젝트 정보에 설정한다.
+      project.setMembers(addMembers);
+
+      // 프로젝트에 새 멤버를 추가한다.
+      projectDao.insertMembers(project);
+    }
+
+    return count;
+  }
+
+  private List<Member> minusMembers(List<Member> g1, List<Member> g2) {
+    ArrayList<Member> result = new ArrayList<>();
+    outerLoop:
+      for (Member m : g1) {
+        for (Member m2 : g2) {
+          if (m.getNo() == m2.getNo()) {
+            continue outerLoop;
+          }
+        }
+        result.add(m);
+      }
+    return result;
   }
 }
 

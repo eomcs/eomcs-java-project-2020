@@ -10,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
+import com.eomcs.pms.service.MemberService;
 import com.eomcs.pms.service.ProjectService;
 import com.eomcs.pms.service.TaskService;
 
@@ -26,6 +28,7 @@ public class ProjectDetailServlet extends HttpServlet {
     ServletContext ctx = request.getServletContext();
     ProjectService projectService = (ProjectService) ctx.getAttribute("projectService");
     TaskService taskService = (TaskService) ctx.getAttribute("taskService");
+    MemberService memberService = (MemberService) ctx.getAttribute("memberService");
 
     response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
@@ -47,6 +50,9 @@ public class ProjectDetailServlet extends HttpServlet {
         out.println("<p>해당 번호의 프로젝트가 없습니다.</p>");
 
       } else {
+        out.println("<form action='update' method='post'>");
+        out.printf("<input type='hidden' name='no' value='%d'>\n",
+            project.getNo());
         out.printf("프로젝트명: <input type='text' name='title' value='%s'><br>\n",
             project.getTitle());
         out.printf("내용: <textarea rows='10' cols='70'>%s</textarea><br>\n",
@@ -56,10 +62,21 @@ public class ProjectDetailServlet extends HttpServlet {
             project.getStartDate(),
             project.getEndDate());
         out.printf("관리자: %s<br>\n", project.getOwner().getName());
-        out.print("팀원: ");
-        project.getMembers().forEach(
-            member -> out.print(member.getName() + " "));
+        out.println("팀원: <br>");
+
+        List<Member> members = project.getMembers();
+
+        for (Member m : memberService.list()) {
+          out.printf("<input type='checkbox' name='members' value='%d' %s>%s, \n",
+              m.getNo(),
+              checkMember(members, m),
+              m.getName());
+        }
         out.println("<br>");
+        out.println("<button>변경</button>");
+        out.printf("<a href='delete?no=%d'>[삭제]</a>\n", project.getNo());
+        out.println("<a href='list'>[목록]</a>");
+        out.println("</form>");
         out.println("<hr>");
 
         out.println("작업:<br>");
@@ -118,5 +135,14 @@ public class ProjectDetailServlet extends HttpServlet {
 
     out.println("</body>");
     out.println("</html>");
+  }
+
+  private String checkMember(List<Member> members, Member member) {
+    for (Member m : members) {
+      if (member.getNo() == m.getNo()) {
+        return "checked";
+      }
+    }
+    return "";
   }
 }
