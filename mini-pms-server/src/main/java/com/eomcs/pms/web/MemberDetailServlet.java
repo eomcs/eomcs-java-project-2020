@@ -46,7 +46,7 @@ public class MemberDetailServlet extends HttpServlet {
       out.println("<form action='updatePhoto' method='post' enctype='multipart/form-data'>");
       out.printf("<input type='hidden' name='no' value='%d'><br>\n",
           member.getNo());
-      out.printf("<img src='../upload/%s_120x120.jpg'><br>\n",
+      out.printf("<a href='../upload/%s'><img src='../upload/%1$s_120x120.jpg'></a><br>\n",
           member.getPhoto());
       out.println("<input type='file' name='photo'>");
       out.println("<button>변경</button>");
