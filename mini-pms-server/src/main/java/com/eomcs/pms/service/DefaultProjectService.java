@@ -116,33 +116,33 @@ public class DefaultProjectService implements ProjectService {
     //    - 삭제하면 그 회원이 했던 작업도 모두 삭제되기 때문이다.
     //    - 그러면 프로젝트에서 수행한 작업 기록이 사라진다.
     //
-    // 이전 프로젝트 정보(멤버 목록 포함)를 가져온다.
+    //    - 이전 프로젝트 정보(멤버 목록 포함)를 가져온다.
     Project oldProject = projectDao.findByNo(project.getNo());
 
-    // 삭제할 목록을 만든다.
-    List<Member> deleteMembers = minusMembers(
-        oldProject.getMembers(),
-        project.getMembers());
-
-    // 삭제할 멤버를 비활성화시킨다.
-    if (deleteMembers.size() > 0) {
-      // 이전 프로젝트 정보에 삭제할 멤버 정보를 담는다.
-      oldProject.setMembers(deleteMembers);
-
+    //    - 이전 프로젝트의 전체 멤버를 비활성 상태로 만든다.
+    if (oldProject.getMembers().size() > 0) {
       projectDao.updateInactiveMembers(oldProject);
     }
 
-    // 2) 새 멤버를 추가한다.
+    // 2) 변경한 프로젝트의 멤버를 활성 상태로 만든다.
+    if (project.getMembers().size() > 0) {
+      projectDao.updateActiveMembers(project);
+    }
+
+    // 3) 프로젝트에 추가한 멤버를 등록한다.
     List<Member> addMembers = minusMembers(
         project.getMembers(),
         oldProject.getMembers());
 
     if (addMembers.size() > 0) {
-      // 새로 추가할 멤버를 프로젝트 정보에 설정한다.
-      project.setMembers(addMembers);
+      // 파라미터로 받은 프로젝트 객체를 변경하지 않기 위해
+      // 새 프로젝트 객체를 만들어 사용한다.
+      // => 파라미터 값은 가능한 변경하지 말라!
+      Project updateMembersProject = new Project();
+      updateMembersProject.setNo(project.getNo());
+      updateMembersProject.setMembers(addMembers);
 
-      // 프로젝트에 새 멤버를 추가한다.
-      projectDao.insertMembers(project);
+      projectDao.insertMembers(updateMembersProject);
     }
 
     return count;
