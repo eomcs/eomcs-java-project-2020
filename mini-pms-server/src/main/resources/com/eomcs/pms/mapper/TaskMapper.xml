@@ -65,7 +65,6 @@
       content = #{content},
       deadline = #{deadline},
       owner = #{owner.no},
-      project_no = #{projectNo},
       status = #{status}
     where no = #{no}
   </update>

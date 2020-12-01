@@ -48,6 +48,8 @@ public class TaskDetailServlet extends HttpServlet {
 
       } else {
         out.println("<form action='update' method='post'>");
+        out.printf("<input type='hidden' name='projectNo' value='%d'>\n",
+            task.getProjectNo());
         out.printf("<input type='hidden' name='no' value='%d'>\n",
             task.getNo());
         out.printf("작업내용: <textarea name='content' rows='10' cols='70'>%s</textarea><br>\n",
