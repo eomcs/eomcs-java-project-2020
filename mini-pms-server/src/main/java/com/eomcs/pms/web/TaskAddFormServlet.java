@@ -3,7 +3,6 @@ package com.eomcs.pms.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
-import com.eomcs.pms.service.MemberService;
 import com.eomcs.pms.service.ProjectService;
 
 @WebServlet("/task/addForm")
@@ -24,8 +22,6 @@ public class TaskAddFormServlet extends HttpServlet {
       throws ServletException, IOException {
 
     ServletContext ctx = request.getServletContext();
-    MemberService memberService =
-        (MemberService) ctx.getAttribute("memberService");
     ProjectService projectService =
         (ProjectService) ctx.getAttribute("projectService");
 
@@ -54,13 +50,21 @@ public class TaskAddFormServlet extends HttpServlet {
       out.println("담당자: <br>");
       out.println("<p>");
 
-      List<Member> members = memberService.list();
-      for (Member m : members) {
+      for (Member m : project.getMembers()) {
+        if (m.getState() == 0) continue;
+
         out.printf("<input type='radio' name='owner' value='%d'>%s, \n",
             m.getNo(),
             m.getName());
       }
       out.println("</p>");
+
+      out.println("작업상태: ");
+      out.println("<select name='status'>");
+      out.println("  <option value='0'>준비</option>");
+      out.println("  <option value='1'>진행중</option>");
+      out.println("  <option value='2'>완료</option>");
+      out.println("</select><br>");
 
       out.println("<button>등록</button>");
       out.println("</form>");
