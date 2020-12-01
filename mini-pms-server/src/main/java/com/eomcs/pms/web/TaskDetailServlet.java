@@ -82,7 +82,9 @@ public class TaskDetailServlet extends HttpServlet {
         }
         out.println("</select><br>");
         out.println("<button>변경</button>");
-        out.printf("<a href='delete?no=%d'>[삭제]</a>\n", task.getNo());
+        out.printf("<a href='delete?no=%d&projectNo=%d'>[삭제]</a>\n",
+            task.getNo(),
+            project.getNo());
         out.printf("<a href='../project/detail?no=%d'>[목록]</a>\n", project.getNo());
         out.println("</form>");
       }
