@@ -37,7 +37,9 @@ public class BoardListServlet extends HttpServlet {
 
       out.println("<a href='form.html'>새 글</a><br>");
 
-      List<Board> list = boardService.list();
+      String keyword = request.getParameter("keyword");
+
+      List<Board> list = boardService.list(keyword);
 
       out.println("<table border='1'>");
       out.println("<thead><tr>" // table row
@@ -66,6 +68,14 @@ public class BoardListServlet extends HttpServlet {
       }
       out.println("</tbody>");
       out.println("</table>");
+
+      out.println("<p>");
+      out.println("<form action='list' method='get'>");
+      out.printf("검색어: <input type='text' name='keyword' value='%s'>\n",
+          keyword != null ? keyword : "");
+      out.println("<button>검색</button>");
+      out.println("</form>");
+      out.println("</p>");
 
     } catch (Exception e) {
       out.println("<h2>작업 처리 중 오류 발생!</h2>");
