@@ -62,15 +62,16 @@ public class ProjectDetailServlet extends HttpServlet {
             project.getStartDate(),
             project.getEndDate());
         out.printf("관리자: %s<br>\n", project.getOwner().getName());
-        out.println("팀원: <br>");
+        out.println("팀원: * 는 비활성 상태의 멤버<br>");
 
         List<Member> members = project.getMembers();
 
         for (Member m : memberService.list()) {
-          out.printf("<input type='checkbox' name='members' value='%d' %s>%s, \n",
+          out.printf("<input type='checkbox' name='members' value='%d' %s>%s%s, \n",
               m.getNo(),
               checkMember(members, m),
-              m.getName());
+              m.getName(),
+              inactiveMember(members, m));
         }
         out.println("<br>");
         out.println("<button>변경</button>");
@@ -137,10 +138,19 @@ public class ProjectDetailServlet extends HttpServlet {
     out.println("</html>");
   }
 
-  private String checkMember(List<Member> members, Member member) {
-    for (Member m : members) {
-      if (member.getNo() == m.getNo()) {
+  private String checkMember(List<Member> projectMembers, Member member) {
+    for (Member projectMember : projectMembers) {
+      if (member.getNo() == projectMember.getNo() && projectMember.getState() == 1) {
         return "checked";
+      }
+    }
+    return "";
+  }
+
+  private String inactiveMember(List<Member> projectMembers, Member member) {
+    for (Member projectMember : projectMembers) {
+      if (member.getNo() == projectMember.getNo() && projectMember.getState() == 0) {
+        return "*";
       }
     }
     return "";

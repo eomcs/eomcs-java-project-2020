@@ -10,6 +10,7 @@ public class Member {
   private String photo;
   private String tel;
   private Date registeredDate;
+  private int state;
 
   public int getNo() {
     return no;
@@ -59,6 +60,12 @@ public class Member {
   public Member setRegisteredDate(Date registeredDate) {
     this.registeredDate = registeredDate;
     return this;
+  }
+  public int getState() {
+    return state;
+  }
+  public void setState(int state) {
+    this.state = state;
   }
 
   public static void main(String[] args) {

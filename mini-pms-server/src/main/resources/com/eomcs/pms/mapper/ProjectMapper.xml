@@ -20,6 +20,7 @@
     <collection property="members" ofType="member">
       <id column="member_no"          property="no"/>
       <result column="member_name"    property="name"/>
+      <result column="member_state"   property="state"/>
     </collection>
   </resultMap>
   
@@ -114,7 +115,8 @@
       m.no owner_no, 
       m.name owner_name,
       mp.member_no,
-      m2.name member_name
+      m2.name member_name,
+      mp.state member_state
     from 
       pms_project p 
       inner join pms_member m on p.owner=m.no
@@ -122,7 +124,6 @@
       left outer join pms_member m2 on mp.member_no=m2.no
     where 
       p.no = #{no} 
-      and mp.state = 1
   </select>
   
   <update id="update" parameterType="project">
