@@ -6,11 +6,11 @@ import com.eomcs.pms.service.ProjectService;
 import com.eomcs.util.Prompt;
 
 @CommandAnno("/project/delete")
-public class ProjectDeleteCommand implements Command {
+public class ProjectDeleteServlet implements Command {
 
   ProjectService projectService;
 
-  public ProjectDeleteCommand(ProjectService projectService) {
+  public ProjectDeleteServlet(ProjectService projectService) {
     this.projectService = projectService;
   }
 
