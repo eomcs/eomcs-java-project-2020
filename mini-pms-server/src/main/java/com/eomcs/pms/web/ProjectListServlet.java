@@ -63,11 +63,6 @@ public class ProjectListServlet extends HttpServlet {
         list = projectService.list();
       }
 
-
-
-
-
-
       out.println("<table border='1'>");
       out.println("<thead><tr>"
           + "<th>번호</th>"
@@ -80,6 +75,8 @@ public class ProjectListServlet extends HttpServlet {
       out.println("<tbody>");
 
       for (Project project : list) {
+        if (project.getState() == 0) continue;
+
         StringBuilder members = new StringBuilder();
         for (Member member : project.getMembers()) {
           if (members.length() > 0) {

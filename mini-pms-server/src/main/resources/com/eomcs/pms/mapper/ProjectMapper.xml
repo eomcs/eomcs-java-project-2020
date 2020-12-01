@@ -11,6 +11,7 @@
     <result column="content"  property="content"/>
     <result column="sdt"      property="startDate"/>
     <result column="edt"      property="endDate"/>
+    <result column="state"    property="state"/>
     
     <association property="owner" javaType="member">
 	    <id column="owner_no"          property="no"/>
@@ -32,6 +33,7 @@
       p.title, 
       p.sdt, 
       p.edt, 
+      p.state,
       m.no owner_no, 
       m.name owner_name,
       mp.member_no,
