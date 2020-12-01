@@ -152,6 +152,12 @@
     where no=#{no}
   </delete>
 
+  <update id="inactive" parameterType="int">
+    update pms_project set
+      state = 0
+    where no=#{no}
+  </update>
+  
 </mapper>
 
 

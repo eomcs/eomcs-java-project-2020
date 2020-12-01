@@ -32,10 +32,12 @@ create table pms_project(
   content text not null,
   sdt date not null,
   edt date not null,
-  owner int not null      /* pms_member 테이블의 'no' PK 컬럼 값을 저장해야 한다. */
+  owner int not null,      /* pms_member 테이블의 'no' PK 컬럼 값을 저장해야 한다. */
 
   /* 다대다 관계를 표현하는 컬럼을 제거한다.*/
   /*   members varchar(255) not null */
+
+  state int default 1
 );
 
 alter table pms_project

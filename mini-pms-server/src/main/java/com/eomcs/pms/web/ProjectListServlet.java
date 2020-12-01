@@ -3,6 +3,7 @@ package com.eomcs.pms.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -40,7 +41,32 @@ public class ProjectListServlet extends HttpServlet {
 
       out.println("<a href='form'>새 프로젝트</a><br>");
 
-      List<Project> list = projectService.list();
+      List<Project> list = null;
+
+      String keyword = request.getParameter("keyword");
+      String keywordTitle = request.getParameter("keywordTitle");
+      String keywordOwner = request.getParameter("keywordOwner");
+      String keywordMember = request.getParameter("keywordMember");
+
+      if (keyword != null) {
+        list = projectService.list(keyword);
+
+      } else if (keywordTitle != null) {
+        HashMap<String,Object> keywordMap = new HashMap<>();
+        keywordMap.put("title", keywordTitle);
+        keywordMap.put("owner", keywordOwner);
+        keywordMap.put("member", keywordMember);
+
+        list = projectService.list(keywordMap);
+
+      } else {
+        list = projectService.list();
+      }
+
+
+
+
+
 
       out.println("<table border='1'>");
       out.println("<thead><tr>"
@@ -79,6 +105,28 @@ public class ProjectListServlet extends HttpServlet {
 
       out.println("</tbody>");
       out.println("</table>");
+
+      out.println("<p>");
+      out.println("<form action='list' method='get'>");
+      out.printf("검색어: <input type='text' name='keyword' value='%s'>\n",
+          keyword != null ? keyword : "");
+      out.println("<button>검색</button>");
+      out.println("</form>");
+      out.println("</p>");
+
+      out.println("<hr>");
+      out.println("<h2>상세 검색</h2>");
+      out.println("<p>");
+      out.println("<form action='list' method='get'>");
+      out.printf("프로젝트명: <input type='text' name='keywordTitle' value='%s'><br>\n",
+          keywordTitle != null ? keywordTitle : "");
+      out.printf("관리자: <input type='text' name='keywordOwner' value='%s'><br>\n",
+          keywordOwner != null ? keywordOwner : "");
+      out.printf("멤버: <input type='text' name='keywordMember' value='%s'><br>\n",
+          keywordMember != null ? keywordMember : "");
+      out.println("<button>검색</button>");
+      out.println("</form>");
+      out.println("</p>");
 
     } catch (Exception e) {
       out.println("<h2>작업 처리 중 오류 발생!</h2>");

@@ -28,22 +28,24 @@ public class DefaultProjectService implements ProjectService {
   @Override
   public int delete(int no) throws Exception {
     try {
+      /*
       factoryProxy.startTransaction();
-
       taskDao.deleteByProjectNo(no);
       projectDao.deleteMembers(no);
       //if (100 == 100) throw new Exception("일부러 예외 발생!");
       int count = projectDao.delete(no);
 
       factoryProxy.commit();
-      return count;
+       */
+
+      return projectDao.inactive(no);
 
     } catch (Exception e) {
-      factoryProxy.rollback();
+      //factoryProxy.rollback();
       throw e; // 서비스 객체에서 발생한 예외는 호출자에게 전달한다.
 
     } finally {
-      factoryProxy.endTransaction();
+      //factoryProxy.endTransaction();
     }
   }
 

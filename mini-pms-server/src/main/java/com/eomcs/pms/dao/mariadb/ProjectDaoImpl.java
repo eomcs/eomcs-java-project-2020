@@ -29,6 +29,13 @@ public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
   }
 
   @Override
+  public int inactive(int no) throws Exception {
+    try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+      return sqlSession.delete("ProjectDao.inactive", no);
+    }
+  }
+
+  @Override
   public Project findByNo(int no) throws Exception {
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
       return sqlSession.selectOne("ProjectDao.findByNo", no);
