@@ -93,6 +93,7 @@ public class ProjectDetailServlet extends HttpServlet {
             + "<th>마감일</th>"
             + "<th>작업자</th>"
             + "<th>상태</th>"
+            + "<th></th>"
             + "</tr></thead>");
 
         out.println("<tbody>");
@@ -115,12 +116,14 @@ public class ProjectDetailServlet extends HttpServlet {
               + "<td>%s</td>"
               + "<td>%s</td>"
               + "<td>%s</td>"
+              + "<td><a href='../task/delete?no=%1$d&projectNo=%d'>[삭제]</a></td>"
               + "</tr>\n",
               task.getNo(),
               task.getContent(),
               task.getDeadline(),
               task.getOwner().getName(),
-              stateLabel);
+              stateLabel,
+              project.getNo());
         }
         out.println("</tbody>");
         out.println("</table>");
