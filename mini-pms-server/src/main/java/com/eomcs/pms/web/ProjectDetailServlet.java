@@ -82,7 +82,7 @@ public class ProjectDetailServlet extends HttpServlet {
 
         out.println("작업:<br>");
 
-        out.printf("<a href='../task/addForm?projectNo=%d'>새 작업</a><br>\n",
+        out.printf("<a href='../task/add?projectNo=%d'>새 작업</a><br>\n",
             project.getNo());
 
         List<Task> tasks = taskService.listByProject(no);
