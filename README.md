@@ -183,8 +183,9 @@
 ### 43-b. 애플리케이션 서버 아키텍처로 전환하기 : 세션 다루기
 ### 43-c. 애플리케이션 서버 아키텍처로 전환하기 : 커맨드 객체 생성 자동화
 
-### 44. 웹 애플리케이션 서버(Web Application Server: WAS) 아키텍처로 전환하기 : Servlet 기술 도입
- 
+### 44-a. 웹 애플리케이션 서버(Web Application Server: WAS) 아키텍처로 전환하기 : Servlet 기술 도입
+### 44-b. 웹 애플리케이션 서버(Web Application Server: WAS) 아키텍처로 전환하기 : forward/include, refresh/redirect 활용하기
+
 
 ### 43. DAO 구현체를 자동으로 만들기
 

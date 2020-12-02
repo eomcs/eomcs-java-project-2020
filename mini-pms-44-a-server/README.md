@@ -1,4 +1,4 @@
-# 44-b. 웹 애플리케이션 서버(Web Application Server: WAS) 아키텍처로 전환하기 : forward/include, refresh/redirect 활용하기
+# 44-a. 웹 애플리케이션 서버(Web Application Server: WAS) 아키텍처로 전환하기 : Servlet 기술 도입
 
 이번 훈련에서는,
 -

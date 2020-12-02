@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <!-- 설정 파일에서 사용할 .properties 파일 정보 -->
+  <properties resource="com/eomcs/pms/conf/jdbc.properties"></properties>
+
+  <settings>
+    <setting name="cacheEnabled" value="true"/>
+  </settings>
+
+  <typeAliases>
+    <package name="com.eomcs.pms.domain"/>
+<!--  
+    <typeAlias type="com.eomcs.pms.domain.Board" alias="board"/>
+    <typeAlias type="com.eomcs.pms.domain.Member" alias="member"/>
+    <typeAlias type="com.eomcs.pms.domain.Project" alias="project"/>
+    <typeAlias type="com.eomcs.pms.domain.Task" alias="task"/>
+-->
+  </typeAliases>
+
+  <!-- DBMS 접속 정보들 -->
+  <environments default="development">
+  
+    <!-- 한 개의 DBMS 접속 정보 -->
+    <environment id="development">
+    
+      <!-- mybatis 가 트랜잭션을 다룰 때 사용할 방법을 지정 => JDBC API 사용 -->
+      <transactionManager type="JDBC"/>
+      
+      <!-- 데이터베이스의 연결 정보 => jdbc.properties 파일에 설정된 key-value -->
+      <dataSource type="POOLED">
+        <property name="driver" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  <!-- SQL 문이 들어 있는 파일들 -->
+  <mappers>
+    <mapper resource="com/eomcs/pms/mapper/BoardMapper.xml"/>
+    <mapper resource="com/eomcs/pms/mapper/MemberMapper.xml"/>
+    <mapper resource="com/eomcs/pms/mapper/ProjectMapper.xml"/>
+    <mapper resource="com/eomcs/pms/mapper/TaskMapper.xml"/>
+  </mappers>
+
+</configuration>
+
+
+
+
+
