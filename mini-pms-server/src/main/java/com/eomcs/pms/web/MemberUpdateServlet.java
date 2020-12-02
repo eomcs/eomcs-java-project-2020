@@ -1,8 +1,6 @@
 package com.eomcs.pms.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,34 +29,14 @@ public class MemberUpdateServlet extends HttpServlet {
     member.setPassword(request.getParameter("password"));
     member.setTel(request.getParameter("tel"));
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-    out.println("<title>회원수정</title></head>");
-    out.println("<body>");
-
     try {
-      out.println("<h1>회원 수정</h1>");
-
       memberService.update(member);
-
-      out.println("<p>회원을 수정하였습니다.</p>");
+      response.sendRedirect("list");
 
     } catch (Exception e) {
-      out.println("<h2>작업 처리 중 오류 발생!</h2>");
-      out.printf("<pre>%s</pre>\n", e.getMessage());
-
-      StringWriter errOut = new StringWriter();
-      e.printStackTrace(new PrintWriter(errOut));
-      out.println("<h3>상세 오류 내용</h3>");
-      out.printf("<pre>%s</pre>\n", errOut.toString());
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
+      return;
     }
-
-    out.println("</body>");
-    out.println("</html>");
   }
 }

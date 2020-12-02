@@ -1,8 +1,6 @@
 package com.eomcs.pms.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,19 +27,7 @@ public class ProjectAddServlet extends HttpServlet {
     ProjectService projectService =
         (ProjectService) ctx.getAttribute("projectService");
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<meta http-equiv='Refresh' content='1;url=list'>");
-    out.println("<title>프로젝트생성</title></head>");
-    out.println("<body>");
-
     try {
-      out.println("<h1>프로젝트 생성</h1>");
-
       Project project = new Project();
       project.setTitle(request.getParameter("title"));
       project.setContent(request.getParameter("content"));
@@ -66,20 +52,12 @@ public class ProjectAddServlet extends HttpServlet {
       project.setMembers(members);
 
       projectService.add(project);
-
-      out.println("<p>프로젝트가 등록되었습니다!</p>");
+      response.sendRedirect("list");
 
     } catch (Exception e) {
-      out.println("<h2>작업 처리 중 오류 발생!</h2>");
-      out.printf("<pre>%s</pre>\n", e.getMessage());
-
-      StringWriter errOut = new StringWriter();
-      e.printStackTrace(new PrintWriter(errOut));
-      out.println("<h3>상세 오류 내용</h3>");
-      out.printf("<pre>%s</pre>\n", errOut.toString());
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
+      return;
     }
-
-    out.println("</body>");
-    out.println("</html>");
   }
 }

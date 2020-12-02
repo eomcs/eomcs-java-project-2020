@@ -1,8 +1,6 @@
 package com.eomcs.pms.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.UUID;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -47,40 +45,18 @@ public class MemberUpdatePhotoServlet extends HttpServlet {
       generatePhotoThumbnail(saveFilePath);
     }
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.printf("<meta http-equiv='Refresh' content='1;url=detail?no=%d'>",
-        member.getNo());
-    out.println("<title>회원사진수정</title></head>");
-    out.println("<body>");
-
     try {
-      out.println("<h1>회원 사진 수정</h1>");
-
-      if (member.getPhoto() != null) {
-        memberService.update(member);
-        out.println("<p>회원 사진을 수정하였습니다.</p>");
-      } else {
-        out.println("<p>사진을 선택하지 않았습니다.</p>");
+      if (member.getPhoto() == null) {
+        throw new Exception("사진을 선택하지 않았습니다.");
       }
+      memberService.update(member);
+      response.sendRedirect("detail?no=" + member.getNo());
 
     } catch (Exception e) {
-      e.printStackTrace();
-      out.println("<h2>작업 처리 중 오류 발생!</h2>");
-      out.printf("<pre>%s</pre>\n", e.getMessage());
-
-      StringWriter errOut = new StringWriter();
-      e.printStackTrace(new PrintWriter(errOut));
-      out.println("<h3>상세 오류 내용</h3>");
-      out.printf("<pre>%s</pre>\n", errOut.toString());
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
+      return;
     }
-
-    out.println("</body>");
-    out.println("</html>");
   }
 
   private void generatePhotoThumbnail(String saveFilePath) {

@@ -93,18 +93,7 @@ public class TaskAddServlet extends HttpServlet {
     ServletContext ctx = request.getServletContext();
     TaskService taskService = (TaskService) ctx.getAttribute("taskService");
 
-    response.setContentType("text/html;charset=UTF-8");
-    PrintWriter out = response.getWriter();
-
-    out.println("<!DOCTYPE html>");
-    out.println("<html>");
-    out.println("<head>");
-    out.println("<title>작업등록</title></head>");
-    out.println("<body>");
-
     try {
-      out.println("<h1>작업 등록</h1>");
-
       Task task = new Task();
       task.setProjectNo(Integer.parseInt(request.getParameter("projectNo")));
       task.setContent(request.getParameter("content"));
@@ -117,23 +106,13 @@ public class TaskAddServlet extends HttpServlet {
 
       taskService.add(task);
 
-      out.println("<p>작업을 등록했습니다.</p>");
-
-      // 응답 헤더에 refresh 정보를 등록한다.
-      response.setHeader("Refresh",
-          "1;url=../project/detail?no=" + request.getParameter("projectNo"));
+      response.sendRedirect("../project/detail?no=" +
+          request.getParameter("projectNo"));
 
     } catch (Exception e) {
-      out.println("<h2>작업 처리 중 오류 발생!</h2>");
-      out.printf("<pre>%s</pre>\n", e.getMessage());
-
-      StringWriter errOut = new StringWriter();
-      e.printStackTrace(new PrintWriter(errOut));
-      out.println("<h3>상세 오류 내용</h3>");
-      out.printf("<pre>%s</pre>\n", errOut.toString());
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
+      return;
     }
-
-    out.println("</body>");
-    out.println("</html>");
   }
 }
