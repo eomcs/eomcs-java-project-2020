@@ -2,7 +2,6 @@ package com.eomcs.pms.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -53,24 +52,33 @@ public class LoginServlet extends HttpServlet {
           out.println("<p>사용자 정보가 맞지 않습니다.</p>");
 
         } else {
-          // 로그인이 성공했으면 회원 정보를
-          // 각 클라이언트의 전용 보관소인 session에 저장한다.
           session.setAttribute("loginUser", member);
-          out.printf("<p>%s 님 반갑습니다.</p>\n", member.getName());
+
+          // 로그인이 성공했으면 메인화면으로 이동한다.
+          // => forward?
+          //    - 로그인의 결과가 메인 화면인가?
+          //    - 아니다. 이런 경우에는 forward가 맞지 않다.
+          //    - refresh 나 redirect를 써야 한다.
+          //request.getRequestDispatcher("/index.html").forward(request, response);
+          //return;
+
+          // 실행 목적이 다를 때는 refresh나 redirect를 통해
+          // 새 요청을 하도록 만들어야 한다.
+          response.sendRedirect("../index.html");
+          return;
         }
       }
 
     } catch (Exception e) {
-      out.println("<h2>작업 처리 중 오류 발생!</h2>");
-      out.printf("<pre>%s</pre>\n", e.getMessage());
-
-      StringWriter errOut = new StringWriter();
-      e.printStackTrace(new PrintWriter(errOut));
-      out.println("<h3>상세 오류 내용</h3>");
-      out.printf("<pre>%s</pre>\n", errOut.toString());
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error").forward(request, response);
+      return;
     }
 
     out.println("</body>");
     out.println("</html>");
+
+    response.setHeader("Refresh", "1;url=../index.html");
+
   }
 }
