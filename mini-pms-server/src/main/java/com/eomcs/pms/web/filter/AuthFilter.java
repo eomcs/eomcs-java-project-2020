@@ -40,7 +40,7 @@ public class AuthFilter implements Filter {
     } else {
       ServletContext servletContext = request.getServletContext();
       String contextRootPath = servletContext.getContextPath();
-      httpResponse.sendRedirect(contextRootPath + "/auth/login.html");
+      httpResponse.sendRedirect(contextRootPath + "/auth/login");
     }
   }
 
