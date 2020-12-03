@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
+    System.out.println("LoginServlet 실행!");
     // 웹브라우저가 쿠키로 이메일을 보냈으면 꺼낸다.
     String email = "";
 
@@ -96,34 +96,30 @@ public class LoginServlet extends HttpServlet {
       // 응답헤더에 email 쿠키를 포함시킨다.
       response.addCookie(emailCookie);
 
-      if (session.getAttribute("loginUser") != null) {
-        out.println("<p>로그인 된 상태입니다.</p>");
+
+      // 서블릿이 로그인 작업에 사용할 도구를 준비한다.
+      ServletContext ctx = request.getServletContext();
+      MemberService memberService = (MemberService) ctx.getAttribute("memberService");
+
+      Member member = memberService.get(email, password);
+      if (member == null) {
+        out.println("<p>사용자 정보가 맞지 않습니다.</p>");
 
       } else {
-        // 서블릿이 로그인 작업에 사용할 도구를 준비한다.
-        ServletContext ctx = request.getServletContext();
-        MemberService memberService = (MemberService) ctx.getAttribute("memberService");
+        session.setAttribute("loginUser", member);
 
-        Member member = memberService.get(email, password);
-        if (member == null) {
-          out.println("<p>사용자 정보가 맞지 않습니다.</p>");
+        // 로그인이 성공했으면 메인화면으로 이동한다.
+        // => forward?
+        //    - 로그인의 결과가 메인 화면인가?
+        //    - 아니다. 이런 경우에는 forward가 맞지 않다.
+        //    - refresh 나 redirect를 써야 한다.
+        //request.getRequestDispatcher("/index.html").forward(request, response);
+        //return;
 
-        } else {
-          session.setAttribute("loginUser", member);
-
-          // 로그인이 성공했으면 메인화면으로 이동한다.
-          // => forward?
-          //    - 로그인의 결과가 메인 화면인가?
-          //    - 아니다. 이런 경우에는 forward가 맞지 않다.
-          //    - refresh 나 redirect를 써야 한다.
-          //request.getRequestDispatcher("/index.html").forward(request, response);
-          //return;
-
-          // 실행 목적이 다를 때는 refresh나 redirect를 통해
-          // 새 요청을 하도록 만들어야 한다.
-          response.sendRedirect("../index.html");
-          return;
-        }
+        // 실행 목적이 다를 때는 refresh나 redirect를 통해
+        // 새 요청을 하도록 만들어야 한다.
+        response.sendRedirect("../index.html");
+        return;
       }
 
     } catch (Exception e) {
