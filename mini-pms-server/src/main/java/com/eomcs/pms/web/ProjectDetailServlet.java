@@ -35,6 +35,8 @@ public class ProjectDetailServlet extends HttpServlet {
     out.println("<title>프로젝트정보</title></head>");
     out.println("<body>");
 
+    request.getRequestDispatcher("/header").include(request, response);
+
     try {
       out.println("<h1>프로젝트 정보</h1>");
 

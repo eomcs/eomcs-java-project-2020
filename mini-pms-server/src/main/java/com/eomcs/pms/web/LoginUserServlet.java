@@ -29,6 +29,8 @@ public class LoginUserServlet extends HttpServlet {
     out.println("<head><title>로그인사용자</title></head>");
     out.println("<body>");
 
+    request.getRequestDispatcher("/header").include(request, response);
+
     out.println("<h1>로그인 사용자</h1>");
 
     Member member = (Member) session.getAttribute("loginUser");

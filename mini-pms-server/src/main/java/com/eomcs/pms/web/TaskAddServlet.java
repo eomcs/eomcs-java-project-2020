@@ -37,6 +37,8 @@ public class TaskAddServlet extends HttpServlet {
     out.println("<title>작업등록</title></head>");
     out.println("<body>");
 
+    request.getRequestDispatcher("/header").include(request, response);
+
     try {
       out.println("<h1>작업 등록</h1>");
 

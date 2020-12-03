@@ -31,6 +31,9 @@ public class MemberListServlet extends HttpServlet {
     out.println("<html>");
     out.println("<head><title>회원목록</title></head>");
     out.println("<body>");
+
+    request.getRequestDispatcher("/header").include(request, response);
+
     try {
       out.println("<h1>회원 목록</h1>");
 

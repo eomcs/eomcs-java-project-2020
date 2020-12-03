@@ -35,6 +35,8 @@ public class ProjectListServlet extends HttpServlet {
     out.println("<title>프로젝트목록</title></head>");
     out.println("<body>");
 
+    request.getRequestDispatcher("/header").include(request, response);
+
     try {
       out.println("<h1>프로젝트 목록</h1>");
 

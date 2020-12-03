@@ -33,6 +33,8 @@ public class ProjectAddFormServlet extends HttpServlet {
     out.println("<title>프로젝트생성</title></head>");
     out.println("<body>");
 
+    request.getRequestDispatcher("/header").include(request, response);
+
     try {
       out.println("<h1>프로젝트 생성</h1>");
 

@@ -35,6 +35,8 @@ public class TaskDetailServlet extends HttpServlet {
     out.println("<title>작업정보</title></head>");
     out.println("<body>");
 
+    request.getRequestDispatcher("/header").include(request, response);
+
     try {
       out.println("<h1>작업 정보</h1>");
 
