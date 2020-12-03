@@ -26,7 +26,7 @@ public class TaskListServlet extends HttpServlet {
     PrintWriter out = response.getWriter();
 
     try {
-      int projectNo = Integer.parseInt(request.getParameter("projectNo"));
+      int projectNo = Integer.parseInt(request.getParameter("no"));
 
       List<Task> tasks = taskService.listByProject(projectNo);
 

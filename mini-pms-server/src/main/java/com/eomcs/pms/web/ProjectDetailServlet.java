@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
-import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.MemberService;
 import com.eomcs.pms.service.ProjectService;
-import com.eomcs.pms.service.TaskService;
 
 @WebServlet("/project/detail")
 public class ProjectDetailServlet extends HttpServlet {
@@ -26,7 +24,6 @@ public class ProjectDetailServlet extends HttpServlet {
 
     ServletContext ctx = request.getServletContext();
     ProjectService projectService = (ProjectService) ctx.getAttribute("projectService");
-    TaskService taskService = (TaskService) ctx.getAttribute("taskService");
     MemberService memberService = (MemberService) ctx.getAttribute("memberService");
 
     response.setContentType("text/html;charset=UTF-8");
@@ -81,51 +78,8 @@ public class ProjectDetailServlet extends HttpServlet {
 
       out.println("작업:<br>");
 
-      out.printf("<a href='../task/add?projectNo=%d'>새 작업</a><br>\n",
-          project.getNo());
-
-      List<Task> tasks = taskService.listByProject(no);
-      out.println("<table border='1'>");
-      out.println("<thead><tr>"
-          + "<th>번호</th>"
-          + "<th>작업</th>"
-          + "<th>마감일</th>"
-          + "<th>작업자</th>"
-          + "<th>상태</th>"
-          + "<th></th>"
-          + "</tr></thead>");
-
-      out.println("<tbody>");
-
-      for (Task task : tasks) {
-        String stateLabel = null;
-        switch (task.getStatus()) {
-          case 1:
-            stateLabel = "진행중";
-            break;
-          case 2:
-            stateLabel = "완료";
-            break;
-          default:
-            stateLabel = "신규";
-        }
-        out.printf("<tr>"
-            + "<td>%d</td>"
-            + "<td><a href='../task/detail?no=%1$d'>%s</a></td>"
-            + "<td>%s</td>"
-            + "<td>%s</td>"
-            + "<td>%s</td>"
-            + "<td><a href='../task/delete?no=%1$d&projectNo=%d'>[삭제]</a></td>"
-            + "</tr>\n",
-            task.getNo(),
-            task.getContent(),
-            task.getDeadline(),
-            task.getOwner().getName(),
-            stateLabel,
-            project.getNo());
-      }
-      out.println("</tbody>");
-      out.println("</table>");
+      // 프로젝트의 작업 목록을 출력하는 서블릿을 include 한다.
+      request.getRequestDispatcher("/task/list").include(request, response);
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
