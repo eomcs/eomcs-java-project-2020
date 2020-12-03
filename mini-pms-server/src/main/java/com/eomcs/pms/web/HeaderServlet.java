@@ -41,7 +41,7 @@ public class HeaderServlet extends HttpServlet {
     out.printf("  <a href='%s/board/list'>게시글</a>\n", contextPath);
     out.printf("  <a href='%s/member/list'>회원</a>\n", contextPath);
     out.printf("  <a href='%s/project/list'>프로젝트</a>\n", contextPath);
-    out.printf("  <a href='%s/auth/login.html'>로그인</a>\n", contextPath);
+    out.printf("  <a href='%s/auth/login'>로그인</a>\n", contextPath);
     out.printf("  <a href='%s/auth/logout'>로그아웃</a>\n", contextPath);
     out.println("</div>");
   }
