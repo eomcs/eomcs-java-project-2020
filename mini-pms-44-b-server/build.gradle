@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'eclipse-wtp'
+    id 'war'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // Thumbnailator 썸네일 생성 라이브러리
+    implementation 'net.coobird:thumbnailator:0.4.13'
+  
+    // servlet-api 라이브러리
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+
+    // Mybatis 퍼시스턴스 프레임워크
+    implementation 'org.mybatis:mybatis:3.5.6'
+
+    // MariaDB JDBC 드라이버
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.0'
+
+    // JSON 라이브러리
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'com.google.guava:guava:29.0-jre'
+    testImplementation 'junit:junit:4.13'
+}

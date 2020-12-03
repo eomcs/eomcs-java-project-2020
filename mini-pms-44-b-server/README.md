@@ -1,4 +1,4 @@
-# 45-a. MVC 아키텍처로 전환하기 : JSP를 활용하여 view 컴포넌트 분리하기
+# 44-b. 웹 애플리케이션 서버(Web Application Server: WAS) 아키텍처로 전환하기 : forward/include, refresh/redirect 활용하기
 
 이번 훈련에서는,
 -
