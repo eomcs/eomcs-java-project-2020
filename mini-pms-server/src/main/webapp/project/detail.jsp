@@ -44,7 +44,8 @@ List<Member> projectMembers = project.getMembers();
 for (Member m : members) {
 %>
 <input type='checkbox' name='members' 
-       value='<%=m.getNo()%>' <%=getMemberState(projectMembers, m) == 1 ? "checked" : ""%>>
+       value='<%=m.getNo()%>' 
+       <%=getMemberState(projectMembers, m) == 1 ? "checked" : ""%>>
 <%=m.getName()%><%=getMemberState(projectMembers, m) == 0 ? "*" : ""%>, 
 <%} %>
 <br>

@@ -3,6 +3,18 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%!
+private String getMembersString(List<Member> list) {
+  StringBuilder members = new StringBuilder();
+  for (Member member : list) {
+    if (members.length() > 0) {
+      members.append(",");
+    }
+    members.append(member.getName());
+  }
+  return members.toString();
+}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,23 +31,24 @@ List<Project> list = (List<Project>) request.getAttribute("list");
 %>
 
 <table border='1'>
-<thead><tr><th>번호</th><th>프로젝트명</th><th>시작일 ~ 종료일</th><th>관리자</th><th>팀원</th></tr></thead>
+<thead>
+<tr>
+  <th>번호</th>
+  <th>프로젝트명</th>
+  <th>시작일 ~ 종료일</th>
+  <th>관리자</th>
+  <th>팀원</th>
+</tr>
+</thead>
+
 <tbody>
-<%for (Project p : list) {
-  StringBuilder members = new StringBuilder();
-  for (Member member : p.getMembers()) {
-    if (members.length() > 0) {
-      members.append(",");
-    }
-    members.append(member.getName());
-  }
-%>
+<%for (Project p : list) {%>
 <tr>
   <td><%=p.getNo()%></td>
   <td><a href='detail?no=<%=p.getNo()%>'><%=p.getTitle()%></a></td>
   <td><%=p.getStartDate()%> ~ <%=p.getEndDate()%></td>
   <td><%=p.getOwner().getName()%></td>
-  <td><%=members.toString()%></td>
+  <td>[<%=getMembersString(p.getMembers())%>]</td>
 </tr>
 <%} %>
 </tbody>
