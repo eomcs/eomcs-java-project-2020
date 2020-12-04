@@ -32,8 +32,7 @@ public class BoardDeleteServlet extends HttpServlet {
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error").forward(request, response);
-      return;
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }
