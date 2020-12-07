@@ -15,6 +15,9 @@ dependencies {
     // servlet-api 라이브러리
     providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
 
+    // JSTL 라이브러리
+    implementation 'jstl:jstl:1.2'
+
     // Mybatis 퍼시스턴스 프레임워크
     implementation 'org.mybatis:mybatis:3.5.6'
 

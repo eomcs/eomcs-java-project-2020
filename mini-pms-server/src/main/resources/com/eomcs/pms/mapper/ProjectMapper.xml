@@ -37,7 +37,8 @@
       m.no owner_no, 
       m.name owner_name,
       mp.member_no,
-      m2.name member_name
+      m2.name member_name,
+      mp.state member_state
     from 
       pms_project p 
       inner join pms_member m on p.owner=m.no

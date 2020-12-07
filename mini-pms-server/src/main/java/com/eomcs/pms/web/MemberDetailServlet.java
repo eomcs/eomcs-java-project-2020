@@ -26,6 +26,9 @@ public class MemberDetailServlet extends HttpServlet {
     try {
       int no = Integer.parseInt(request.getParameter("no"));
       Member member = memberService.get(no);
+      if (member == null) {
+        throw new Exception("해당 회원이 없습니다!");
+      }
       request.setAttribute("member", member);
       request.getRequestDispatcher("/member/detail.jsp").include(request, response);
 

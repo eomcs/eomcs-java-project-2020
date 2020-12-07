@@ -187,6 +187,7 @@
 ### 44-b. 웹 애플리케이션 서버(Web Application Server: WAS) 아키텍처로 전환하기 : forward/include, refresh/redirect, Cookie 활용하기
 
 ### 45-a. MVC 아키텍처로 전환하기 : JSP를 활용하여 view 컴포넌트 분리하기
+### 45-a. MVC 아키텍처로 전환하기 : EL 및 JSTL 활용하기
 
 ### 43. DAO 구현체를 자동으로 만들기
 

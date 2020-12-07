@@ -27,6 +27,9 @@ public class BoardDetailServlet extends HttpServlet {
     try {
       int no = Integer.parseInt(request.getParameter("no"));
       Board board = boardService.get(no);
+      if (board == null) {
+        throw new Exception("해당 번호의 게시글이 없습니다!");
+      }
       request.setAttribute("board", board);
       request.getRequestDispatcher("/board/detail.jsp").include(request, response);
 
