@@ -1,7 +1,6 @@
-<%@page import="com.eomcs.pms.domain.Member"%>
-<%@page import="com.eomcs.pms.domain.Project"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,21 +10,19 @@
 <jsp:include page="/header.jsp"></jsp:include>
 
 <h1>작업 등록(JSP)</h1>
-<%
-Project project = (Project) request.getAttribute("project");
-%>
+
 <form action='add' method='post'>
-<input type='hidden' name='projectNo' value='<%=project.getNo()%>'>
-프로젝트명: <%=project.getTitle()%><br>
+<input type='hidden' name='projectNo' value='${project.no}'>
+프로젝트명: ${project.title}<br>
 작업내용: <textarea name='content' rows='10' cols='60'></textarea><br>
 마감일: <input type='date' name='deadline'><br>
 담당자: <br>
 <p>
-<%for (Member m : project.getMembers()) {
-  if (m.getState() == 0) continue;
-%>
-  <input type='radio' name='owner' value='<%=m.getNo()%>'><%=m.getName()%>, 
-<%} %> 
+<c:forEach items="${project.members}" var="m">
+  <c:if test="${m.state == 1}">
+    <input type='radio' name='owner' value='${m.no}'>${m.name},
+  </c:if> 
+</c:forEach>
 </p>
 작업상태: 
 <select name='status'>
