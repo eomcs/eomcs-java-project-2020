@@ -35,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 
     response.setContentType("text/html;charset=UTF-8");
     request.setAttribute("email", email);
-    request.getRequestDispatcher("/auth/form.jsp").include(request, response);
+    request.setAttribute("viewName", "/auth/form.jsp");
   }
 
   @Override
@@ -77,18 +77,15 @@ public class LoginServlet extends HttpServlet {
 
       Member member = memberService.get(email, password);
       if (member == null) {
-        request.getRequestDispatcher("/auth/loginError.jsp").include(request, response);
-        return;
-      } else {
-        session.setAttribute("loginUser", member);
-        response.sendRedirect("../index.html");
+        request.setAttribute("viewName", "/auth/loginError.jsp");
         return;
       }
 
+      session.setAttribute("loginUser", member);
+      request.setAttribute("redirect", "../index.html");
+
     } catch (Exception e) {
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
-      return;
     }
   }
 }

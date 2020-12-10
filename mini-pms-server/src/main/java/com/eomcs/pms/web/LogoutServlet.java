@@ -28,7 +28,7 @@ public class LogoutServlet extends HttpServlet {
 
     response.setContentType("text/html;charset=UTF-8");
     request.setAttribute("loginUser", loginUser);
-    request.getRequestDispatcher("/auth/logout.jsp").include(request, response);
+    request.setAttribute("viewName", "/auth/logout.jsp");
 
   }
 }

@@ -16,6 +16,6 @@ public class LoginUserServlet extends HttpServlet {
       throws ServletException, IOException {
 
     response.setContentType("text/html;charset=UTF-8");
-    request.getRequestDispatcher("/auth/loginUser.jsp").include(request, response);
+    request.setAttribute("viewName", "/auth/loginUser.jsp");
   }
 }
