@@ -45,6 +45,10 @@ public class DispatcherServlet extends HttpServlet {
     // => 요청을 처리할 페이지 컨트롤러를 찾았으면 규칙에 따라 메서드를 호출한다.
     try {
       String viewName = controller.execute(request, response);
+      if (viewName.startsWith("redirect:")) {
+        response.sendRedirect(viewName.substring(9));
+        return;
+      }
       request.getRequestDispatcher(viewName).forward(request, response);
 
     } catch (Exception e) {
