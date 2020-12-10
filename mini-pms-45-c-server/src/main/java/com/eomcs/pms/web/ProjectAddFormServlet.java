@@ -1,16 +1,18 @@
 package com.eomcs.pms.web;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.eomcs.pms.service.TaskService;
+import com.eomcs.pms.domain.Member;
+import com.eomcs.pms.service.MemberService;
 
-@WebServlet("/task/list")
-public class TaskListServlet extends HttpServlet {
+@WebServlet("/project/form")
+public class ProjectAddFormServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
@@ -18,15 +20,17 @@ public class TaskListServlet extends HttpServlet {
       throws ServletException, IOException {
 
     ServletContext ctx = request.getServletContext();
-    TaskService taskService = (TaskService) ctx.getAttribute("taskService");
+    MemberService memberService =
+        (MemberService) ctx.getAttribute("memberService");
 
+    response.setContentType("text/html;charset=UTF-8");
     try {
-      int projectNo = Integer.parseInt(request.getParameter("no"));
-      request.setAttribute("tasks", taskService.listByProject(projectNo));
+      List<Member> members = memberService.list();
+      request.setAttribute("members", members);
+      request.setAttribute("viewName", "/project/form.jsp");
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
     }
-    request.getRequestDispatcher("/task/list.jsp").include(request, response);
   }
 }

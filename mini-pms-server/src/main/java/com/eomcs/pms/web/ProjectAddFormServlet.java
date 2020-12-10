@@ -27,11 +27,10 @@ public class ProjectAddFormServlet extends HttpServlet {
     try {
       List<Member> members = memberService.list();
       request.setAttribute("members", members);
-      request.getRequestDispatcher("/project/form.jsp").include(request, response);
+      request.setAttribute("viewName", "/project/form.jsp");
 
     } catch (Exception e) {
       request.setAttribute("exception", e);
-      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
   }
 }
