@@ -11,7 +11,7 @@ import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 
 @WebServlet("/board/detail")
-public class BoardDetailServlet extends HttpServlet {
+public class BoardDetailController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override

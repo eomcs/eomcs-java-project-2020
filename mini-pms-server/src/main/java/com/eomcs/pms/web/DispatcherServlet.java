@@ -37,7 +37,6 @@ public class DispatcherServlet extends HttpServlet {
     // => 페이지 컨트롤러 맵에서 클라이언트의 요청을 처리할 객체를 꺼낸다.
     Controller controller = controllerMap.get(controllerPath);
     if (controller == null) {
-      System.out.println(controllerPath);
       request.setAttribute("exception", new Exception("요청을 처리할 수 없습니다."));
       request.getRequestDispatcher("/error.jsp").forward(request, response);
       return;
