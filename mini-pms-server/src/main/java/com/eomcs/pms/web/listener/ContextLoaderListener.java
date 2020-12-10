@@ -94,6 +94,10 @@ public class ContextLoaderListener implements ServletContextListener {
       // ServletContext 보관소에 담는다.
       ctx.setAttribute("controllerMap", controllerMap);
 
+      // 웹 컴포넌트(필터,리스너,서블릿/JSP)가 서비스 객체를 직접 사용할 수 있도록
+      // ServletContext 보관소에 beanContainer를 저장해 둔다.
+      ctx.setAttribute("beanContainer", beanContainer);
+
     } catch (Exception e) {
       System.out.println("Mybatis 및 DAO, 서비스 객체, 컨트롤러 준비 중 오류 발생!");
       e.printStackTrace();
@@ -153,11 +157,14 @@ public class ContextLoaderListener implements ServletContextListener {
         }
 
         Controller controller = constructor.newInstance(args);
-        System.out.println(controller.getClass().getName() + " 객체 생성 성공!");
 
         // @RequestMapping 애노테이션에 지정된 이름을 가져와서,
         // 페이지 컨트롤러 객체를 저장할 때 key 로 사용한다.
         controllerMap.put(requestMapping.value(), controller);
+
+        System.out.printf("%s => %s 객체 생성\n",
+            requestMapping.value(),
+            controller.getClass().getName());
 
       } catch (Exception e) {
         System.out.println(className + " 로딩 중 오류 발생!");

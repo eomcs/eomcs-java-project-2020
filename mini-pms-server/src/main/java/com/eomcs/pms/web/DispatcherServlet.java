@@ -14,6 +14,18 @@ import javax.servlet.http.HttpServletResponse;
 public class DispatcherServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
+  Map<String,Controller> controllerMap;
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public void init() throws ServletException {
+    // 서블릿 객체가 생성될 때 미리
+    // ContextLoaderListener 가 준비한 controller map 을
+    // ServletContext 에서 꺼낸다.
+    controllerMap = (Map<String,Controller>) this.getServletContext().getAttribute(
+        "controllerMap");
+  }
+
   @Override
   protected void service(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
@@ -22,14 +34,10 @@ public class DispatcherServlet extends HttpServlet {
     String controllerPath = request.getPathInfo(); // => /board/list
 
     // 페이지 컨트롤러에게 위임한다.
-    // => ServletContext 보관소에 저장되어 있는 컨트롤러 맵을 꺼낸다.
-    @SuppressWarnings("unchecked")
-    Map<String,Controller> controllerMap =
-    (Map<String,Controller>) this.getServletContext().getAttribute("controllerMap");
-
     // => 페이지 컨트롤러 맵에서 클라이언트의 요청을 처리할 객체를 꺼낸다.
     Controller controller = controllerMap.get(controllerPath);
     if (controller == null) {
+      System.out.println(controllerPath);
       request.setAttribute("exception", new Exception("요청을 처리할 수 없습니다."));
       request.getRequestDispatcher("/error.jsp").forward(request, response);
       return;
