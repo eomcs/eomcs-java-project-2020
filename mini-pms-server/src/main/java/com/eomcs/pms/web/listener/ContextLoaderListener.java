@@ -87,24 +87,21 @@ public class ContextLoaderListener implements ServletContextListener {
       System.out.println(controllerPackagePath.getCanonicalPath());
 
       // 해당 패키지에 들어 있는 페이지 컨트롤러 클래스를 찾아 인스턴스를 생성한다.
-      Map<String,Object> controllerMap =
+      Map<String,Controller> controllerMap =
           createControllers(controllerPackagePath, "com.eomcs.pms.web");
 
-      // 커맨드 객체만 모아 놓은 상자를 context 맵이라는 큰 상자에 담는다.
-      ctx.put("controllerMap", controllerMap);
-
-      // 테스트 용 로그인 사용자 정보 가져오기
-      //Member member = memberService.get("aaa@test.com", "1111");
-      //context.put("loginUser", member);
+      // 페이지 컨트롤러 객체만 모아 놓은 상자를
+      // ServletContext 보관소에 담는다.
+      ctx.setAttribute("controllerMap", controllerMap);
 
     } catch (Exception e) {
-      System.out.println("Mybatis 및 DAO, 서비스 객체 준비 중 오류 발생!");
+      System.out.println("Mybatis 및 DAO, 서비스 객체, 컨트롤러 준비 중 오류 발생!");
       e.printStackTrace();
     }
   }
 
-  private Map<String,Object> createController(File packagePath, String packageName) {
-    HashMap<String,Object> controllerMap = new HashMap<>();
+  private Map<String,Controller> createControllers(File packagePath, String packageName) {
+    HashMap<String,Controller> controllerMap = new HashMap<>();
 
     File[] files = packagePath.listFiles((dir, name) -> name.endsWith(".class"));
 
@@ -140,7 +137,9 @@ public class ContextLoaderListener implements ServletContextListener {
         if (requestMapping == null) continue;
 
         // 클래스의 생성자 정보를 알아낸다.
-        Constructor<?> constructor = clazz.getConstructors()[0];
+        @SuppressWarnings("unchecked")
+        Constructor<Controller> constructor =
+        (Constructor<Controller>) clazz.getConstructors()[0];
 
         // 생성자의 파라미터 정보를 알아낸다.
         Parameter[] params = constructor.getParameters();
@@ -153,7 +152,7 @@ public class ContextLoaderListener implements ServletContextListener {
           args[i++] = findDependency(param.getType());
         }
 
-        Object controller = constructor.newInstance(args);
+        Controller controller = constructor.newInstance(args);
         System.out.println(controller.getClass().getName() + " 객체 생성 성공!");
 
         // @RequestMapping 애노테이션에 지정된 이름을 가져와서,
@@ -164,7 +163,7 @@ public class ContextLoaderListener implements ServletContextListener {
         System.out.println(className + " 로딩 중 오류 발생!");
       }
     }
-    return commandMap;
+    return controllerMap;
   }
 
   private Object findDependency(Class<?> type) {

@@ -1,7 +1,7 @@
 package com.eomcs.pms.web;
 
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -22,26 +22,27 @@ public class DispatcherServlet extends HttpServlet {
     String controllerPath = request.getPathInfo(); // => /board/list
 
     // 페이지 컨트롤러에게 위임한다.
-    RequestDispatcher rd = request.getRequestDispatcher(controllerPath);
-    rd.include(request, response);
+    // => ServletContext 보관소에 저장되어 있는 컨트롤러 맵을 꺼낸다.
+    @SuppressWarnings("unchecked")
+    Map<String,Controller> controllerMap =
+    (Map<String,Controller>) this.getServletContext().getAttribute("controllerMap");
 
-    Exception exception = (Exception) request.getAttribute("exception");
-    if (exception != null) {
+    // => 페이지 컨트롤러 맵에서 클라이언트의 요청을 처리할 객체를 꺼낸다.
+    Controller controller = controllerMap.get(controllerPath);
+    if (controller == null) {
+      request.setAttribute("exception", new Exception("요청을 처리할 수 없습니다."));
       request.getRequestDispatcher("/error.jsp").forward(request, response);
       return;
     }
 
-    String viewName = (String) request.getAttribute("viewName");
-    if (viewName != null) {
+    // => 요청을 처리할 페이지 컨트롤러를 찾았으면 규칙에 따라 메서드를 호출한다.
+    try {
+      String viewName = controller.execute(request, response);
       request.getRequestDispatcher(viewName).forward(request, response);
-      return;
-    }
 
-    String redirect = (String) request.getAttribute("redirect");
-    if (redirect != null) {
-      response.sendRedirect(redirect);
-      return;
+    } catch (Exception e) {
+      request.setAttribute("exception", e);
+      request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
-
   }
 }
