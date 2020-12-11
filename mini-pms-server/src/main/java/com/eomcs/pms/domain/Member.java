@@ -67,17 +67,6 @@ public class Member {
   public void setState(int state) {
     this.state = state;
   }
-
-  public static void main(String[] args) {
-    //    Member m1 = new Member();
-    //    Member m2 = new Member(100);
-    //    Member m3 = new Member("홍길동");
-    //    Member m4 = new Member(100, "홍길동");
-
-    Member m5 = new Member().setNo(100).setName("홍길동");
-    System.out.println(m5.getNo());
-    System.out.println(m5.getName());
-  }
 }
 
 
