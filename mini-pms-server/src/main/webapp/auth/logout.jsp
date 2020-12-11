@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta http-equiv="Refresh" content="2;url=../index.html">
+  <meta http-equiv="Refresh" content="2;url=../../index.html">
   <title>로그아웃</title>
 </head>
 <body>

@@ -46,7 +46,7 @@ public class DispatcherServlet extends HttpServlet {
       System.out.println(controllerPackagePath.getCanonicalPath());
 
       // 해당 패키지에 들어 있는 페이지 컨트롤러 클래스를 찾아 인스턴스를 생성한다.
-      controllerMap = createControllers(controllerPackagePath, "com.eomcs.pms.web2");
+      controllerMap = createControllers(controllerPackagePath, "com.eomcs.pms.web");
 
     } catch (Exception e) {
       System.out.println("DispatcherServlet 에서 페이지 컨트롤러를 준비하는 중 오류 발생!");
