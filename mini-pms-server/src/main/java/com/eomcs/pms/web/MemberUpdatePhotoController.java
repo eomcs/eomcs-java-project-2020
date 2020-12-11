@@ -1,12 +1,6 @@
 package com.eomcs.pms.web;
 
-import java.io.IOException;
 import java.util.UUID;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -17,18 +11,17 @@ import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import net.coobird.thumbnailator.name.Rename;
 
-@MultipartConfig(maxFileSize = 1024 * 1024 * 10)
-@WebServlet("/member/updatePhoto")
-public class MemberUpdatePhotoServlet extends HttpServlet {
-  private static final long serialVersionUID = 1L;
+@RequestMapping("/member/updatePhoto")
+public class MemberUpdatePhotoController implements Controller {
+
+  MemberService memberService;
+
+  public MemberUpdatePhotoController(MemberService memberService) {
+    this.memberService = memberService;
+  }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
-    ServletContext ctx = request.getServletContext();
-    MemberService memberService =
-        (MemberService) ctx.getAttribute("memberService");
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     Member member = new Member();
     member.setNo(Integer.parseInt(request.getParameter("no")));
@@ -37,7 +30,7 @@ public class MemberUpdatePhotoServlet extends HttpServlet {
     Part photoPart = request.getPart("photo");
     if (photoPart.getSize() > 0) {
       String filename = UUID.randomUUID().toString();
-      String saveFilePath = ctx.getRealPath("/upload/" + filename);
+      String saveFilePath = request.getServletContext().getRealPath("/upload/" + filename);
       photoPart.write(saveFilePath);
       member.setPhoto(filename);
 
@@ -45,16 +38,12 @@ public class MemberUpdatePhotoServlet extends HttpServlet {
       generatePhotoThumbnail(saveFilePath);
     }
 
-    try {
-      if (member.getPhoto() == null) {
-        throw new Exception("사진을 선택하지 않았습니다.");
-      }
-      memberService.update(member);
-      request.setAttribute("redirect", "detail?no=" + member.getNo());
-
-    } catch (Exception e) {
-      request.setAttribute("exception", e);
+    if (member.getPhoto() == null) {
+      throw new Exception("사진을 선택하지 않았습니다.");
     }
+
+    memberService.update(member);
+    return "redirect:detail?no=" + member.getNo();
   }
 
   private void generatePhotoThumbnail(String saveFilePath) {

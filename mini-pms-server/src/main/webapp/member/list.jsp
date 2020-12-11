@@ -9,7 +9,7 @@
 <jsp:include page="/header.jsp"></jsp:include>
 
 <h1>회원 목록(JSP+EL+JSTL)</h1>
-<a href='form.html'>새 회원</a><br>
+<a href='../../member/form.html'>새 회원</a><br>
 
 <table border='1'>
 <thead><tr><th>번호</th><th>이름</th><th>이메일</th><th>전화</th><th>등록일</th></tr></thead>
@@ -17,7 +17,7 @@
 <c:forEach items="${list}" var="m">
 <tr>
   <td>${m.no}</td>
-  <td><a href='detail?no=${m.no}'><img src='../upload/${m.photo}_30x30.jpg' alt='사진'>${m.name}</a></td>
+  <td><a href='detail?no=${m.no}'><img src='../../upload/${m.photo}_30x30.jpg' alt='사진'>${m.name}</a></td>
   <td>${m.email}></td>
   <td>${m.tel}</td>
   <td>${m.registeredDate}</td>

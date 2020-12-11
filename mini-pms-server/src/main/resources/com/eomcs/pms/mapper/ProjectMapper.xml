@@ -49,20 +49,23 @@
   <select id="findAll" resultMap="ProjectMap" parameterType="string">
     <!-- 별도로 분리된 SQL 코드를 가져오고 싶다면, 다음과 같이 하라. -->
     <include refid="sql1"/>
-    <if test="keyword != null">
-    where 
-      p.title like concat('%', #{keyword}, '%')
-      or m.name like concat('%', #{keyword}, '%')
-      or m2.name like concat('%', #{keyword}, '%')
-    </if>
+    <where>
+      p.state = 1
+	    <if test="keyword != null">
+	      or p.title like concat('%', #{keyword}, '%')
+	      or m.name like concat('%', #{keyword}, '%')
+	      or m2.name like concat('%', #{keyword}, '%')
+	    </if>
+    </where>
     order by p.no desc
   </select>
   
   <select id="findByDetailKeyword" resultMap="ProjectMap" parameterType="map">
     <include refid="sql1"/>
     <where>
+      p.state = 1
 	    <if test="title != null">
-	      p.title like concat('%', #{title}, '%')
+	      and p.title like concat('%', #{title}, '%')
 	    </if>
 	    <if test="owner != null">
 	      and m.name like concat('%', #{owner}, '%')
