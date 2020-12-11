@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd">
+
+  <!-- 
+       프론트 컨트롤러는 이 패키지의 모든 클래스를 찾아서 
+       스프링의 특별한 애노테이션이 붙은 클래스에 대해
+       객체를 생성하고 관리할 것이다.
+   -->
+  <context:component-scan base-package="com.eomcs"/>
+
+</beans>
