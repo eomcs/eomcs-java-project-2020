@@ -2,10 +2,12 @@ package com.eomcs.pms.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import com.eomcs.pms.service.BoardService;
 
-@RequestMapping("/board/delete")
-public class BoardDeleteController implements Controller {
+@Controller
+public class BoardDeleteController {
 
   BoardService boardService;
 
@@ -13,7 +15,7 @@ public class BoardDeleteController implements Controller {
     this.boardService = boardService;
   }
 
-  @Override
+  @RequestMapping("/board/delete")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     int no = Integer.parseInt(request.getParameter("no"));
     if (boardService.delete(no) == 0) {

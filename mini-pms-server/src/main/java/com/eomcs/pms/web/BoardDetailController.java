@@ -2,11 +2,13 @@ package com.eomcs.pms.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 
-@RequestMapping("/board/detail")
-public class BoardDetailController implements Controller {
+@Controller
+public class BoardDetailController {
 
   BoardService boardService;
 
@@ -14,7 +16,7 @@ public class BoardDetailController implements Controller {
     this.boardService = boardService;
   }
 
-  @Override
+  @RequestMapping("/board/detail")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     response.setContentType("text/html;charset=UTF-8");

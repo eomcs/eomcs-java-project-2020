@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
 
-@RequestMapping("/project/update")
-public class ProjectUpdateController implements Controller {
+@Controller
+public class ProjectUpdateController {
 
   ProjectService projectService;
 
@@ -18,7 +20,7 @@ public class ProjectUpdateController implements Controller {
     this.projectService = projectService;
   }
 
-  @Override
+  @RequestMapping("/project/update")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     Project project = new Project();

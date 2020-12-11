@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.ProjectService;
 
-@RequestMapping("/project/list")
-public class ProjectListController implements Controller {
+@Controller
+public class ProjectListController {
 
   ProjectService projectService;
 
@@ -16,7 +18,7 @@ public class ProjectListController implements Controller {
     this.projectService = projectService;
   }
 
-  @Override
+  @RequestMapping("/project/list")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     response.setContentType("text/html;charset=UTF-8");

@@ -3,12 +3,14 @@ package com.eomcs.pms.dao.mariadb;
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Repository;
 import com.eomcs.pms.domain.Board;
 
 // Mybatis 적용
 // => SqlSessionFactory를 자체적으로 생성하지 않고
 //    생성자를 통해 외부에서 주입 받는다.(Dependency Injection: DI)
 //
+@Repository
 public class BoardDaoImpl implements com.eomcs.pms.dao.BoardDao{
 
   SqlSessionFactory sqlSessionFactory;

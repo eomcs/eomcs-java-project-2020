@@ -3,14 +3,16 @@ package com.eomcs.pms.web;
 import java.sql.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.domain.Task;
 import com.eomcs.pms.service.ProjectService;
 import com.eomcs.pms.service.TaskService;
 
-@RequestMapping("/task/add")
-public class TaskAddController implements Controller {
+@Controller
+public class TaskAddController {
 
   ProjectService projectService;
   TaskService taskService;
@@ -22,7 +24,7 @@ public class TaskAddController implements Controller {
     this.taskService = taskService;
   }
 
-  @Override
+  @RequestMapping("/task/add")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     response.setContentType("text/html;charset=UTF-8");

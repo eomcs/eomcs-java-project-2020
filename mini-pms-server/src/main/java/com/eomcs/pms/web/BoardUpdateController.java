@@ -2,11 +2,13 @@ package com.eomcs.pms.web;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 
-@RequestMapping("/board/update")
-public class BoardUpdateController implements Controller {
+@Controller
+public class BoardUpdateController {
 
   BoardService boardService;
 
@@ -14,7 +16,7 @@ public class BoardUpdateController implements Controller {
     this.boardService = boardService;
   }
 
-  @Override
+  @RequestMapping("/board/update")
   public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     Board board = new Board();

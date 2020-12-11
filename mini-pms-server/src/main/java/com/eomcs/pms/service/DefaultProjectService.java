@@ -3,12 +3,14 @@ package com.eomcs.pms.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Service;
 import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.util.SqlSessionFactoryProxy;
 
+@Service
 public class DefaultProjectService implements ProjectService {
 
   TaskDao taskDao;

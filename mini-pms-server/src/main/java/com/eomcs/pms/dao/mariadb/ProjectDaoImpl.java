@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Repository;
 import com.eomcs.pms.domain.Project;
 
+@Repository
 public class ProjectDaoImpl implements com.eomcs.pms.dao.ProjectDao {
 
   SqlSessionFactory sqlSessionFactory;
