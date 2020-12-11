@@ -20,7 +20,7 @@
 관리자: ${project.owner.name}<br>
 팀원: * 는 비활성 상태의 멤버<br>
 <c:forEach items="${members}" var="m">
-	<input type='checkbox' name='members' value='${m.no}'
+	<input type='checkbox' name='memberNo' value='${m.no}'
 	  <c:forEach items="${project.members}" var="projectMember">
 	    <c:if test="${projectMember.no == m.no && projectMember.state == 1}">
 	      checked

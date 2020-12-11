@@ -18,7 +18,7 @@
 팀원: <br>
 <ul>
 <c:forEach items="${members}" var="m">
-  <li><input type='checkbox' name='members' value='${m.no}'>${m.name}</li>
+  <li><input type='checkbox' name='memberNo' value='${m.no}'>${m.name}</li>
 </c:forEach>
 </ul><br>
 <button>생성</button>

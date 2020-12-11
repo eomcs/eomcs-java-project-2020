@@ -17,7 +17,7 @@
 작업내용: <textarea name='content' rows='10' cols='70'>${task.content}</textarea><br>
 마감일: <input type='date' name='deadline' value='${task.deadline}'><br>
 담당자: 
-<select name='owner'>
+<select name='ownerNo'>
 <c:forEach items="${project.members}" var="m">
   <option value='${m.no}' 
   <c:if test="${m.state == 1 && m.no == task.owner.no}">selected</c:if>

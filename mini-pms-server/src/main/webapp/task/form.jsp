@@ -20,7 +20,7 @@
 <p>
 <c:forEach items="${project.members}" var="m">
   <c:if test="${m.state == 1}">
-    <input type='radio' name='owner' value='${m.no}'>${m.name},
+    <input type='radio' name='ownerNo' value='${m.no}'>${m.name},
   </c:if> 
 </c:forEach>
 </p>
