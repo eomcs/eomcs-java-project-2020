@@ -192,7 +192,8 @@
 ### 45-d. MVC 아키텍처로 전환하기 : 페이지 컨트롤러를 POJO로 전환하기
 
 ### 46-a. Spring WebMVC 프레임워크 도입하기 : DispatcherServlet 프론트 컨트롤러 적용
-### 46-b. Spring WebMVC 프레임워크 도입하기 : 페이지 컨트롤러에서 요청 파라미터 다루기 
+### 46-b. Spring WebMVC 프레임워크 도입하기 : 페이지 컨트롤러에서 요청 파라미터 다루기
+### 46-c. Spring WebMVC 프레임워크 도입하기 : Mybatis와 Spring을 연동하기
 
 ### 43. DAO 구현체를 자동으로 만들기
 
