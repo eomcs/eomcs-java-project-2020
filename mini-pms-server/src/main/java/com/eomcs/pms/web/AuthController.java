@@ -18,7 +18,7 @@ public class AuthController {
 
   @Autowired MemberService memberService;
 
-  @RequestMapping(value="login", method = RequestMethod.GET)
+  @RequestMapping(value = "login", method = RequestMethod.GET)
   public ModelAndView loginForm(HttpServletRequest request) throws Exception {
 
     String email = "";
@@ -62,5 +62,24 @@ public class AuthController {
     }
     session.setAttribute("loginUser", member);
     return "redirect:../../index.html";
+  }
+
+  @RequestMapping("loginUser")
+  public String loginUser() throws Exception {
+    return "/auth/loginUser.jsp";
+  }
+
+  @RequestMapping("logout")
+  public ModelAndView logout(HttpSession session, HttpServletResponse response) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser != null) {
+      session.invalidate();
+    }
+
+    ModelAndView mv = new ModelAndView();
+    mv.addObject("loginUser", loginUser);
+    mv.setViewName("/auth/logout.jsp");
+    return mv;
   }
 }

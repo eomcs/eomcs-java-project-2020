@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-<mapper namespace="BoardDao">
+<mapper namespace="com.eomcs.pms.dao.BoardDao">
   
   <resultMap type="board" id="BoardMap">
     <id column="no"           property="no"/>
@@ -45,9 +45,7 @@
     values(#{title}, #{content}, #{writer.no})
   </insert>
   
-  <select id="findByNo" 
-    parameterType="int" 
-    resultMap="BoardMap">
+  <select id="findByNo" parameterType="int" resultMap="BoardMap">
     select
 	    b.no,
 	    b.title,

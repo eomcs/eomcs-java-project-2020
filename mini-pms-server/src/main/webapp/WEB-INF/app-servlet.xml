@@ -3,11 +3,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:p="http://www.springframework.org/schema/p"
     xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
     xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        https://www.springframework.org/schema/context/spring-context.xsd">
+        https://www.springframework.org/schema/context/spring-context.xsd
+        http://mybatis.org/schema/mybatis-spring
+        http://mybatis.org/schema/mybatis-spring.xsd">
 
   <!-- 
        프론트 컨트롤러는 이 패키지의 모든 클래스를 찾아서 
@@ -16,4 +19,30 @@
    -->
   <context:component-scan base-package="com.eomcs"/>
 
+  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        
+    <property name="dataSource" ref="dataSource" />
+    
+    <property name="mapperLocations" 
+              value="classpath*:com/eomcs/pms/mapper/*Mapper.xml" />  
+    
+    <property name="typeAliasesPackage" 
+              value="com.eomcs.pms.domain"/>
+  </bean>
+
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${jdbc.driver}"/>
+    <property name="url" value="${jdbc.url}"/>
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+  </bean>
+
+  <context:property-placeholder location="classpath:com/eomcs/pms/conf/jdbc.properties"/>  
+
+  <mybatis:scan base-package="com.eomcs.pms.dao" />
+  
 </beans>
+
+
+
+
