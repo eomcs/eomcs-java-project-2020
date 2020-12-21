@@ -20,7 +20,7 @@ public class DispatcherServlet extends HttpServlet {
     // 예) 요청 URL => /app/board/list
     //String servletPath = request.getServletPath(); // => /app
     String controllerPath = request.getPathInfo(); // => /board/list
-
+    System.out.println("===> " + controllerPath);
     // 페이지 컨트롤러에게 위임한다.
     RequestDispatcher rd = request.getRequestDispatcher(controllerPath);
     rd.include(request, response);
