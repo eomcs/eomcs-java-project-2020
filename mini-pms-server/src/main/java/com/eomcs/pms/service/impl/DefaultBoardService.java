@@ -1,9 +1,10 @@
-package com.eomcs.pms.service;
+package com.eomcs.pms.service.impl;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.domain.Board;
+import com.eomcs.pms.service.BoardService;
 
 @Service
 public class DefaultBoardService implements BoardService {

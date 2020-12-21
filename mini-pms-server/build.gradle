@@ -9,6 +9,9 @@ repositories {
 }
 
 dependencies {
+    // 파일 업로드 처리
+    implementation 'commons-fileupload:commons-fileupload:1.4'
+    
     // Spring WebMVC 프레임워크 
     implementation 'org.springframework:spring-webmvc:5.3.2'
     
@@ -36,6 +39,8 @@ dependencies {
   
     // JSON 라이브러리
     implementation 'com.google.code.gson:gson:2.8.6'
+    
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.0'
 
     implementation 'com.google.guava:guava:29.0-jre'
     testImplementation 'junit:junit:4.13'

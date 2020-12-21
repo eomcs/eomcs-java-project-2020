@@ -3,8 +3,8 @@ package com.eomcs.pms.web;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.BoardService;
@@ -32,27 +32,17 @@ public class BoardController {
   }
 
   @RequestMapping("detail")
-  public ModelAndView detail(int no) throws Exception {
+  public void detail(int no, Model model) throws Exception {
     Board board = boardService.get(no);
     if (board == null) {
       throw new Exception("해당 번호의 게시글이 없습니다!");
     }
-
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("board", board);
-    mv.setViewName("/board/detail.jsp");
-
-    return mv;
+    model.addAttribute("board", board);
   }
 
   @RequestMapping("list")
-  public ModelAndView list(String keyword) throws Exception {
-
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("list", boardService.list(keyword));
-    mv.setViewName("/board/list.jsp");
-
-    return mv;
+  public void list(String keyword, Model model) throws Exception {
+    model.addAttribute("list", boardService.list(keyword));
   }
 
   @RequestMapping("update")

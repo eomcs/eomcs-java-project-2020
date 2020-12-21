@@ -1,4 +1,4 @@
-package com.eomcs.pms.service;
+package com.eomcs.pms.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import com.eomcs.pms.dao.ProjectDao;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
+import com.eomcs.pms.service.ProjectService;
 
 @Service
 public class DefaultProjectService implements ProjectService {

@@ -1,10 +1,11 @@
-package com.eomcs.pms.service;
+package com.eomcs.pms.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.eomcs.pms.dao.MemberDao;
 import com.eomcs.pms.domain.Member;
+import com.eomcs.pms.service.MemberService;
 
 @Service
 public class DefaultMemberService implements MemberService {

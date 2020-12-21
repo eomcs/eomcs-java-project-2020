@@ -1,10 +1,11 @@
-package com.eomcs.pms.service;
+package com.eomcs.pms.service.impl;
 
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.eomcs.pms.dao.TaskDao;
 import com.eomcs.pms.domain.Task;
+import com.eomcs.pms.service.TaskService;
 
 @Service
 public class DefaultTaskService implements TaskService {
