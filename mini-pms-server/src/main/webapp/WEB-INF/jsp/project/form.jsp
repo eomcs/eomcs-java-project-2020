@@ -7,7 +7,7 @@
 <title>프로젝트생성</title></head>
 <body>
 
-<jsp:include page="/header.jsp"></jsp:include>
+<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>프로젝트 생성(JSP+EL+JSP)</h1>
 <form action='add' method='post'>

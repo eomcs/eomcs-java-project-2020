@@ -1,12 +1,16 @@
 package com.eomcs.pms.web;
 
+import java.io.File;
 import java.util.UUID;
 import javax.servlet.ServletContext;
-import javax.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.multipart.MultipartFile;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.MemberService;
 import net.coobird.thumbnailator.ThumbnailParameter;
@@ -21,13 +25,17 @@ public class MemberController {
   @Autowired ServletContext servletContext; // 메서드의 파라미터로 못 받는다.
   @Autowired MemberService memberService;
 
+  @GetMapping("form")
+  public void form() {
+  }
+
   @RequestMapping("add")
   public String add(
       String name,
       String email,
       String password,
       String tel,
-      Part photoFile) throws Exception {
+      MultipartFile photoFile) throws Exception {
 
     Member member = new Member();
     member.setName(name);
@@ -38,52 +46,47 @@ public class MemberController {
     String filename = UUID.randomUUID().toString();
     String saveFilePath = servletContext.getRealPath("/upload/" + filename);
 
-    photoFile.write(saveFilePath);
+    photoFile.transferTo(new File(saveFilePath));
     member.setPhoto(filename);
 
     generatePhotoThumbnail(saveFilePath);
 
     memberService.add(member);
-    return "redirect:list";
+    return "redirect:.";
   }
 
-  @RequestMapping("delete")
+  @GetMapping("delete")
   public String delete(int no) throws Exception {
     if (memberService.delete(no) == 0) {
       throw new Exception("해당 번호의 회원이 없습니다.");
     }
-    return "redirect:list";
+    return "redirect:.";
   }
 
-  @RequestMapping("detail")
-  public ModelAndView detail(int no) throws Exception {
+  @GetMapping("{no}")
+  public String detail(@PathVariable int no, Model model) throws Exception {
     Member member = memberService.get(no);
     if (member == null) {
       throw new Exception("해당 회원이 없습니다!");
     }
-
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("member", member);
-    mv.setViewName("/member/detail.jsp");
-    return mv;
+    model.addAttribute("member", member);
+    return "member/detail";
   }
 
-  @RequestMapping("list")
-  public ModelAndView list() throws Exception {
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("list", memberService.list());
-    mv.setViewName("/member/list.jsp");
-    return mv;
+  @GetMapping
+  public String list(Model model) throws Exception {
+    model.addAttribute("list", memberService.list());
+    return "member/list"; // => /WEB-INF/jsp/member/list.jsp
   }
 
-  @RequestMapping("update")
+  @PostMapping("update")
   public String update(Member member) throws Exception {
     memberService.update(member);
-    return "redirect:list";
+    return "redirect:.";
   }
 
   @RequestMapping("updatePhoto")
-  public String updatePhoto(int no, Part photoFile) throws Exception {
+  public String updatePhoto(int no, MultipartFile photoFile) throws Exception {
 
     Member member = new Member();
     member.setNo(no);
@@ -92,7 +95,7 @@ public class MemberController {
     if (photoFile.getSize() > 0) {
       String filename = UUID.randomUUID().toString();
       String saveFilePath = servletContext.getRealPath("/upload/" + filename);
-      photoFile.write(saveFilePath);
+      photoFile.transferTo(new File(saveFilePath));
       member.setPhoto(filename);
 
       // 회원 사진의 썸네일 이미지 파일 생성하기
@@ -104,7 +107,7 @@ public class MemberController {
     }
 
     memberService.update(member);
-    return "redirect:detail?no=" + member.getNo();
+    return "redirect:./" + member.getNo();
   }
 
   private void generatePhotoThumbnail(String saveFilePath) {

@@ -7,7 +7,7 @@
 <title>프로젝트정보</title></head>
 <body>
 
-<jsp:include page="/header.jsp"></jsp:include>
+<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>프로젝트 정보(JSP+EL+JSTL)</h1>
 
@@ -41,7 +41,7 @@
 <hr>
 작업:<br>
 
-<jsp:include page="/task/list.jsp"></jsp:include>
+<jsp:include page="../task/list.jsp"></jsp:include>
  
 </body>
 </html>

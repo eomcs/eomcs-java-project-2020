@@ -7,7 +7,7 @@
 <title>작업등록</title></head>
 <body>
 
-<jsp:include page="/header.jsp"></jsp:include>
+<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>작업 등록(JSP)</h1>
 

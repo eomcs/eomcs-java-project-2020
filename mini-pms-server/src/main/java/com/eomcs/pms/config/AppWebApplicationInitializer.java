@@ -10,7 +10,7 @@ extends AbstractAnnotationConfigDispatcherServletInitializer {
   @Override
   protected Class<?>[] getRootConfigClasses() {
     // ContextLoaderListener 가 사용할 java config 클래스를 리턴한다.
-    return new Class<?>[] {RootConfig.class, MybatisConfig.class};
+    return new Class<?>[] {RootConfig.class, DatabaseConfig.class, MybatisConfig.class};
   }
 
   @Override

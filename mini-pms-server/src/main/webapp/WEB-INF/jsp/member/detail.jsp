@@ -6,7 +6,7 @@
 <head><title>회원상세정보</title></head>
 <body>
 
-<jsp:include page="/header.jsp"></jsp:include>
+<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>회원 상세 정보(JSP+EL+JSTL)</h1>
 
@@ -27,7 +27,7 @@
 등록일: 2020-11-27<br>
 <button>변경</button>
 <a href='delete?no=${member.no}'>[삭제]</a>
- <a href='list'>[목록]</a> 
+ <a href='.'>[목록]</a> 
 </form>
 </body>
 </html>
