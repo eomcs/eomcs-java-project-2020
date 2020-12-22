@@ -27,7 +27,7 @@
 등록일: 2020-11-27<br>
 <button>변경</button>
 <a href='delete?no=${member.no}'>[삭제]</a>
- <a href='.'>[목록]</a> 
+ <a href='./'>[목록]</a> 
 </form>
 </body>
 </html>
