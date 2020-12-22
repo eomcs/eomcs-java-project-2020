@@ -1,14 +1,14 @@
 package com.eomcs.pms.web;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.MemberService;
 
@@ -18,28 +18,11 @@ public class AuthController {
 
   @Autowired MemberService memberService;
 
-  @RequestMapping(value = "login", method = RequestMethod.GET)
-  public ModelAndView loginForm(HttpServletRequest request) throws Exception {
-
-    String email = "";
-
-    Cookie[] cookies = request.getCookies();
-    if (cookies != null) {
-      for (Cookie cookie : cookies) {
-        if (cookie.getName().equals("email")) {
-          email = cookie.getValue();
-          break;
-        }
-      }
-    }
-
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("email", email);
-    mv.setViewName("/auth/form.jsp");
-    return mv;
+  @GetMapping("login")
+  public void loginForm() throws Exception {
   }
 
-  @RequestMapping(value="login", method = RequestMethod.POST)
+  @PostMapping("login")
   public String login(
       String email,
       String password,
@@ -64,22 +47,17 @@ public class AuthController {
     return "redirect:../../index.html";
   }
 
-  @RequestMapping("loginUser")
-  public String loginUser() throws Exception {
-    return "/auth/loginUser.jsp";
+  @GetMapping("loginUser")
+  public void loginUser() {
   }
 
-  @RequestMapping("logout")
-  public ModelAndView logout(HttpSession session, HttpServletResponse response) throws Exception {
+  @GetMapping("logout")
+  public void logout(HttpSession session, Model model) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser != null) {
       session.invalidate();
     }
-
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("loginUser", loginUser);
-    mv.setViewName("/auth/logout.jsp");
-    return mv;
+    model.addAttribute("loginUser", loginUser);
   }
 }
