@@ -1,18 +1,20 @@
 package com.eomcs.pms.web;
 
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.service.BoardService;
 
 @Controller
 @RequestMapping("/board")
+@SessionAttributes("loginUser")
 public class BoardController {
 
   @Autowired BoardService boardService;
@@ -29,8 +31,9 @@ public class BoardController {
   }
 
   @PostMapping("add")
-  public String add(Board board, HttpSession session) throws Exception {
-    Member loginUser = (Member) session.getAttribute("loginUser");
+  public String add(
+      Board board,
+      @ModelAttribute("loginUser") Member loginUser) throws Exception {
     board.setWriter(loginUser);
     boardService.add(board);
     return "redirect:list";

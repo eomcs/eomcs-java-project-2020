@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.MemberService;
@@ -19,6 +20,7 @@ import com.eomcs.pms.service.TaskService;
 
 @Controller
 @RequestMapping("/project")
+@SessionAttributes("loginUser")
 public class ProjectController {
 
   @Autowired ProjectService projectService;
@@ -39,9 +41,8 @@ public class ProjectController {
   public String add(
       Project project,
       int[] memberNo,
-      HttpSession session) throws Exception {
+      @ModelAttribute("loginUser") Member loginUser) throws Exception {
 
-    Member loginUser = (Member) session.getAttribute("loginUser");
     project.setOwner(loginUser);
 
     List<Member> memberList = new ArrayList<>();
