@@ -41,32 +41,21 @@
 </c:forEach>
 </tbody>
 </table>
-<p>
-<%
-String keyword = request.getParameter("keyword");
-%>
+
 <form action='list' method='get'>
-검색어: <input type='text' name='keyword' value='<%=keyword != null ? keyword : ""%>'>
+검색어: <input type='text' name='keyword' value='${param.keyword}'>
 <button>검색</button>
 </form>
-</p>
+
 <hr>
 <h2>상세 검색</h2>
-<p>
-<%
-String keywordTitle = request.getParameter("keywordTitle");
-String keywordOwner = request.getParameter("keywordOwner");
-String keywordMember = request.getParameter("keywordMember");
-%>
+
 <form action='list' method='get'>
-프로젝트명: <input type='text' name='keywordTitle' 
-  value='<%=keywordTitle != null ? keywordTitle : ""%>'><br>
-관리자: <input type='text' name='keywordOwner' 
-  value='<%=keywordOwner != null ? keywordOwner : ""%>'><br>
-멤버: <input type='text' name='keywordMember' 
-  value='<%=keywordMember != null ? keywordMember : ""%>'><br>
+프로젝트명: <input type='text' name='keywordTitle' value='${param.keywordTitle}'><br>
+관리자: <input type='text' name='keywordOwner' value='${param.keywordOwner}'><br>
+멤버: <input type='text' name='keywordMember' value='${param.keywordMember}'><br>
 <button>검색</button>
 </form>
-</p>
+
 </body>
 </html>

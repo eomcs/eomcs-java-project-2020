@@ -1,16 +1,16 @@
 package com.eomcs.pms.web;
 
-import java.beans.PropertyEditorSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 import com.eomcs.pms.domain.Member;
 import com.eomcs.pms.domain.Project;
 import com.eomcs.pms.service.MemberService;
@@ -25,15 +25,17 @@ public class ProjectController {
   @Autowired MemberService memberService;
   @Autowired TaskService taskService;
 
-  @RequestMapping("form")
-  public ModelAndView form() throws Exception {
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("members", memberService.list());
-    mv.setViewName("/project/form.jsp");
-    return mv;
+  @GetMapping("form")
+  public Map<String,Object> form() throws Exception {
+    Map<String,Object> map = new HashMap<>();
+    map.put("members", memberService.list());
+    // 페이지 컨트롤러의 요청 핸들러가 Map 객체를 리턴하면,
+    // 프런트 컨트롤러는 Map 객체에 들어 있는 값을
+    // ServletRequest 보관소로 옮긴다.
+    return map;
   }
 
-  @RequestMapping("add")
+  @PostMapping("add")
   public String add(
       Project project,
       int[] memberNo,
@@ -54,7 +56,7 @@ public class ProjectController {
     return "redirect:list";
   }
 
-  @RequestMapping("delete")
+  @GetMapping("delete")
   public String delete(int no) throws Exception {
 
     if (projectService.delete(no) == 0) {
@@ -63,34 +65,29 @@ public class ProjectController {
     return "redirect:list";
   }
 
-  @RequestMapping("detail")
-  public ModelAndView detail(int no) throws Exception {
+  @GetMapping("detail")
+  public void detail(int no, Model model) throws Exception {
 
     Project project = projectService.get(no);
     if (project == null) {
       throw new Exception("해당 프로젝트가 없습니다!");
     }
 
-    ModelAndView mv = new ModelAndView();
-    mv.addObject("project", project);
-    mv.addObject("members", memberService.list());
-    mv.addObject("tasks", taskService.listByProject(no));
-    mv.setViewName("/project/detail.jsp");
-
-    return mv;
+    model.addAttribute("project", project);
+    model.addAttribute("members", memberService.list());
+    model.addAttribute("tasks", taskService.listByProject(no));
   }
 
-  @RequestMapping("list")
-  public ModelAndView list(
+  @GetMapping("list")
+  public void list(
       String keyword,
       String keywordTitle,
       String keywordOwner,
-      String keywordMember) throws Exception {
-
-    ModelAndView mv = new ModelAndView();
+      String keywordMember,
+      Model model) throws Exception {
 
     if (keyword != null) {
-      mv.addObject("list", projectService.list(keyword));
+      model.addAttribute("list", projectService.list(keyword));
 
     } else if (keywordTitle != null) {
       HashMap<String,Object> keywordMap = new HashMap<>();
@@ -98,17 +95,14 @@ public class ProjectController {
       keywordMap.put("owner", keywordOwner);
       keywordMap.put("member", keywordMember);
 
-      mv.addObject("list", projectService.list(keywordMap));
+      model.addAttribute("list", projectService.list(keywordMap));
 
     } else {
-      mv.addObject("list", projectService.list());
+      model.addAttribute("list", projectService.list());
     }
-
-    mv.setViewName("/project/list.jsp");
-    return mv;
   }
 
-  @RequestMapping("update")
+  @PostMapping("update")
   public String update(
       Project project,
       int[] memberNo) throws Exception {
@@ -125,29 +119,5 @@ public class ProjectController {
       throw new Exception("해당 프로젝트가 존재하지 않습니다.");
     }
     return "redirect:list";
-  }
-
-  @InitBinder
-  public void initBinder(WebDataBinder binder) {
-    // String ===> Date 프로퍼티 에디터 준비
-    DatePropertyEditor propEditor = new DatePropertyEditor();
-
-    // WebDataBinder에 프로퍼티 에디터 등록하기
-    binder.registerCustomEditor(
-        java.util.Date.class, // String을 Date 타입으로 바꾸는 에디터임을 지정한다.
-        propEditor // 바꿔주는 일을 하는 프로퍼티 에디터를 등록한다.
-        );
-  }
-
-  class DatePropertyEditor extends PropertyEditorSupport {
-    @Override
-    public void setAsText(String text) throws IllegalArgumentException {
-      try {
-        // 클라이언트가 텍스트로 보낸 날짜 값을 java.sql.Date 객체로 만들어 보관한다.
-        setValue(java.sql.Date.valueOf(text));
-      } catch (Exception e) {
-        throw new IllegalArgumentException(e);
-      }
-    }
   }
 }

@@ -51,10 +51,12 @@
     <include refid="sql1"/>
     <where>
       p.state = 1
-	    <if test="keyword != null">
-	      or p.title like concat('%', #{keyword}, '%')
-	      or m.name like concat('%', #{keyword}, '%')
-	      or m2.name like concat('%', #{keyword}, '%')
+	    <if test="keyword != null and keyword != ''">
+	      and (
+	        p.title like concat('%', #{keyword}, '%')
+	        or m.name like concat('%', #{keyword}, '%')
+	        or m2.name like concat('%', #{keyword}, '%')
+	      )
 	    </if>
     </where>
     order by p.no desc
@@ -64,13 +66,13 @@
     <include refid="sql1"/>
     <where>
       p.state = 1
-	    <if test="title != null">
+	    <if test="title != null and title != ''">
 	      and p.title like concat('%', #{title}, '%')
 	    </if>
-	    <if test="owner != null">
+	    <if test="owner != null and owner != ''">
 	      and m.name like concat('%', #{owner}, '%')
 	    </if>
-	    <if test="member != null">
+	    <if test="member != null and member != ''">
 	      and m2.name like concat('%', #{member}, '%')
 	    </if>
     </where>

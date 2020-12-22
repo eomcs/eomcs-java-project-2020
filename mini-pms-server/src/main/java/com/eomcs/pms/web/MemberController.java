@@ -85,7 +85,7 @@ public class MemberController {
     return "redirect:.";
   }
 
-  @RequestMapping("updatePhoto")
+  @PostMapping("updatePhoto")
   public String updatePhoto(int no, MultipartFile photoFile) throws Exception {
 
     Member member = new Member();
