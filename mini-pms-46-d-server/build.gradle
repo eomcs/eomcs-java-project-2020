@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'eclipse-wtp'
+    id 'war'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // 파일 업로드 처리
+    implementation 'commons-fileupload:commons-fileupload:1.4'
+    
+    // Spring WebMVC 프레임워크 
+    implementation 'org.springframework:spring-webmvc:5.3.2'
+    
+    // Thumbnailator 썸네일 생성 라이브러리
+    implementation 'net.coobird:thumbnailator:0.4.13'
+  
+    // servlet-api 라이브러리
+    providedCompile 'javax.servlet:javax.servlet-api:4.0.1'
+
+    // JSTL 라이브러리
+    implementation 'jstl:jstl:1.2'
+
+    // Mybatis 퍼시스턴스 프레임워크
+    implementation 'org.mybatis:mybatis:3.5.6'
+
+    // MariaDB JDBC 드라이버
+    implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.0'
+
+    // Spring JDBC 보조 라이브러리
+    // - DataSource 구현체가 들어 있다.
+    implementation 'org.springframework:spring-jdbc:5.3.2'
+
+    // Mybastis를 Spring과 연동할 때 사용할 라이브러리
+    implementation 'org.mybatis:mybatis-spring:2.0.6'
+  
+    // JSON 라이브러리
+    implementation 'com.google.code.gson:gson:2.8.6'
+    
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.0'
+
+    implementation 'com.google.guava:guava:29.0-jre'
+    testImplementation 'junit:junit:4.13'
+}
