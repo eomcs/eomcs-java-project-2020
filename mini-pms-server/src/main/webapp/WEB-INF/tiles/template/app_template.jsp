@@ -9,6 +9,10 @@
 <title>PMS</title>
 </head>
 <body>
-<h1>테스트!</h1>
+
+<tiles:insertAttribute name="header"/>
+
+<tiles:insertAttribute name="body"/>
+
 </body>
 </html>
