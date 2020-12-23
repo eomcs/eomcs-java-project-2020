@@ -30,15 +30,27 @@
     color: white;
     text-align: center;
   }
+  
+  #content {
+    border: 1px solid black;
+    width: 600px;
+    margin: 0px auto;
+  }
 </style>
 </head>
 <body>
 
+<div id="content">
+
 <tiles:insertAttribute name="header"/>
 
+<div id="main">
 <tiles:insertAttribute name="body"/>
+</div>
 
 <tiles:insertAttribute name="footer"/>
+
+</div>
 
 </body>
 </html>
