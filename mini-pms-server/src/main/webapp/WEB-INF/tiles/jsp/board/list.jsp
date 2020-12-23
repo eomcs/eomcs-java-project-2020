@@ -3,9 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <h1>게시물 목록(JSP+EL+JSTL)</h1>
 
-<a href='form'>새 글</a><br>
-
-<table border='1'>
+<a href='form' class="btn btn-primary btn-sm">새 글</a><br>
+ 
+<table class="table table-striped table-hover">
 <thead><tr><th>번호</th><th>제목</th><th>작성자</th><th>등록일</th><th>조회수</th></tr></thead>
 <tbody>
 
@@ -21,7 +21,12 @@
 </tbody>
 </table>
 
-<form action='list' method='get'>
-검색어: <input type='text' name='keyword' value=''>
-<button>검색</button>
+<form action='list' method='get' class="row row-cols-lg-auto g-3 align-items-center">
+	<div class="col-12">
+	  <input class="form-control" name='keyword' id="keyword" 
+	  placeholder="검색어 입력" value="${param.keyword}">
+	</div>
+	<div class="col-12">
+    <button class="btn btn-primary">검색</button>
+  </div>
 </form>
