@@ -37,6 +37,9 @@ dependencies {
     // Mybastis를 Spring과 연동할 때 사용할 라이브러리
     implementation 'org.mybatis:mybatis-spring:2.0.6'
   
+    // Tiles 라이브러리
+    implementation 'org.apache.tiles:tiles-jsp:3.0.8'
+  
     // JSON 라이브러리
     implementation 'com.google.code.gson:gson:2.8.6'
     
