@@ -18,6 +18,10 @@ public class DatabaseConfig {
       @Value("${jdbc.url}") String jdbcUrl,
       @Value("${jdbc.username}") String jdbcUsername,
       @Value("${jdbc.password}") String jdbcPassword) {
+    // DB 커넥션풀 객체 생성
+    // => DB 커넥션을 생성한 후 내부 버퍼에 보관해 둔다.
+    // => 요청할 때 빌려주고, 사용 후 반납 받는다.
+    // => 그래서 DB 커넥션을 매번 생성하지 않게 한다.
     DriverManagerDataSource ds = new DriverManagerDataSource();
     ds.setDriverClassName(jdbcDriver);
     ds.setUrl(jdbcUrl);
@@ -29,6 +33,8 @@ public class DatabaseConfig {
   @Bean
   public PlatformTransactionManager transactionManager(
       DataSource dataSource) {
+    // 트랜잭션 관리자 생성
+    // => commit/rollback 을 다룬다.
     return new DataSourceTransactionManager(dataSource);
   }
 }

@@ -3,7 +3,6 @@ package com.eomcs.pms.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -17,14 +16,14 @@ import com.eomcs.pms.service.ProjectService;
 // 트랜잭션 다루기 방법1:
 // => TransactionManager 를 사용하여 코드로 직접 트랜잭션 관리하기
 //
-@Service
-public class DefaultProjectService implements ProjectService {
+//@Service
+public class DefaultProjectService01 implements ProjectService {
 
   TaskDao taskDao;
   ProjectDao projectDao;
   PlatformTransactionManager txManager;
 
-  public DefaultProjectService(
+  public DefaultProjectService01(
       TaskDao taskDao,
       ProjectDao projectDao,
       PlatformTransactionManager txManager) {
