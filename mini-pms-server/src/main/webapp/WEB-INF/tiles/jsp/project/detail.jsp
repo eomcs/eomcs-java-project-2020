@@ -1,20 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
-<!DOCTYPE html>
-<html>
-<head>
-<title>프로젝트정보</title></head>
-<body>
-
-<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>프로젝트 정보(JSP+EL+JSTL)</h1>
 
 <form action='update' method='post'>
 <input type='hidden' name='no' value='${project.no}'>
 프로젝트명: <input type='text' name='title' value='${project.title}'><br>
-내용: <textarea name='content' rows='10' cols='70'>${project.content}</textarea><br>
+내용: <textarea name='content' rows='10' cols='50'>${project.content}</textarea><br>
 기간: <input type='date' name='startDate' value='${project.startDate}'> ~ 
       <input type='date' name='endDate' value='${project.endDate}'><br>
 관리자: ${project.owner.name}<br>
@@ -43,5 +36,3 @@
 
 <jsp:include page="../task/list.jsp"></jsp:include>
  
-</body>
-</html>

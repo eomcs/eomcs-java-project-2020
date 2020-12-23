@@ -1,12 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
-<!DOCTYPE html>
-<html>
-<head><title>회원목록</title></head>
-<body>
-
-<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>회원 목록(JSP+EL+JSTL)</h1>
 
@@ -26,5 +20,3 @@
 </c:forEach>
 </tbody>
 </table>
-</body>
-</html>

@@ -1,12 +1,6 @@
 <%@page import="com.eomcs.pms.domain.Member"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head><title>회원상세정보</title></head>
-<body>
-
-<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>회원 상세 정보(JSP+EL+JSTL)</h1>
 
@@ -29,5 +23,3 @@
 <a href='delete?no=${member.no}'>[삭제]</a>
  <a href='./'>[목록]</a> 
 </form>
-</body>
-</html>
