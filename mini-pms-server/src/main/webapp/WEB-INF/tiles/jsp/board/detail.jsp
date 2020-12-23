@@ -1,11 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head><title>게시글조회</title></head>
-<body>
-
-<jsp:include page="../header.jsp"></jsp:include>
 
 <h1>게시물 조회(JSP+EL+JSTL)</h1>
 
@@ -23,5 +17,3 @@
 </p>
 </form>
 
-</body>
-</html>

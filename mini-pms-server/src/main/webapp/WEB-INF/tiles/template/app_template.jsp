@@ -36,6 +36,21 @@
     width: 600px;
     margin: 0px auto;
   }
+  
+  #sidebar {
+    border: 1px solid black;
+    float: left;
+    width: 130px;
+    min-height: 400px;
+    background-color: yellow;
+  }
+  
+  #main {
+    border: 1px solid black;
+    min-height: 400px;
+    margin-left: 130px;
+    padding: 10px;
+  }
 </style>
 </head>
 <body>
@@ -43,6 +58,8 @@
 <div id="content">
 
 <tiles:insertAttribute name="header"/>
+
+<tiles:insertAttribute name="sidebar"/>
 
 <div id="main">
 <tiles:insertAttribute name="body"/>

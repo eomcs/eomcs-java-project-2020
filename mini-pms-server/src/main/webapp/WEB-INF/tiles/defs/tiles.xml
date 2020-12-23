@@ -20,6 +20,7 @@
   <definition name="*/*.app" template="/WEB-INF/tiles/template/app_template.jsp">
     <put-attribute name="header" value="/WEB-INF/tiles/jsp/header.jsp" />
     <put-attribute name="footer" value="/WEB-INF/tiles/jsp/footer.jsp" />
+    <put-attribute name="sidebar" value="/WEB-INF/tiles/jsp/sidebar.jsp" />
     <put-attribute name="body" value="/WEB-INF/tiles/jsp/{1}/{2}.jsp" />
   </definition>
   
