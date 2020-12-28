@@ -1,6 +1,8 @@
 package com.eomcs.pms.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import com.eomcs.pms.dao.BoardDao;
 import com.eomcs.pms.domain.Board;
@@ -31,8 +33,15 @@ public class DefaultBoardService implements BoardService {
   }
 
   @Override
-  public List<Board> list(String keyword) throws Exception {
-    return boardDao.findAll(keyword);
+  public List<Board> list(String keyword, int pageNo, int pageSize) throws Exception {
+    Map<String,Object> params = new HashMap<>();
+    if (keyword != null) {
+      params.put("keyword", keyword);
+    }
+    params.put("startRowNo", (pageNo - 1) * pageSize);
+    params.put("pageSize", pageSize);
+
+    return boardDao.findAll(params);
   }
 
   @Override
