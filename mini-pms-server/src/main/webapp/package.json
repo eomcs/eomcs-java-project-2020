@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.0.0-beta1",
+    "handlebars": "^4.7.6",
     "sweetalert2": "^10.12.3"
   }
 }

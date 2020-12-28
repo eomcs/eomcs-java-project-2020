@@ -55,6 +55,8 @@
 	    padding: 10px;
 	  }
 	</style>
+	<script src="${appRoot}/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="${appRoot}/node_modules/handlebars/dist/handlebars.min.js"></script>
 </head>
 <body>
 
@@ -71,6 +73,8 @@
 <tiles:insertAttribute name="footer"/>
 
 </div>
+
+
 
 </body>
 </html>
