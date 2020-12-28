@@ -8,6 +8,7 @@ public interface BoardService {
   int add(Board board) throws Exception;
   List<Board> list() throws Exception;
   List<Board> list(String keyword, int pageNo, int pageSize) throws Exception;
+  int size(String keyword) throws Exception;
   Board get(int no) throws Exception;
   int update(Board board) throws Exception;
 }

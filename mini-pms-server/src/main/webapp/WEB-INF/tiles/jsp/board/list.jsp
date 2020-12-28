@@ -21,10 +21,27 @@
 </tbody>
 </table>
 
+<div>
+<c:if test="${prevPageNo == currPageNo}">
+  [이전]
+</c:if>
+<c:if test="${prevPageNo < currPageNo}">
+  <a href="?keyword=${keyword}&pageNo=${prevPageNo}&pageSize=${pageSize}">[이전]</a>
+</c:if>
+<span> ${currPageNo} </span>
+<c:if test="${nextPageNo == currPageNo}">
+  [다음]
+</c:if>
+<c:if test="${nextPageNo > currPageNo}">
+  <a href="?keyword=${keyword}&pageNo=${nextPageNo}&pageSize=${pageSize}">[다음]</a>
+</c:if>
+</div>
+
 <form action='list' method='get' class="row row-cols-lg-auto g-3 align-items-center">
+  <input type="hidden" name="pageSize" value="${pageSize}">
 	<div class="col-12">
 	  <input class="form-control" name='keyword' id="keyword" 
-	  placeholder="검색어 입력" value="${param.keyword}">
+	  placeholder="검색어 입력" value="${keyword}">
 	</div>
 	<div class="col-12">
     <button class="btn btn-primary">검색</button>

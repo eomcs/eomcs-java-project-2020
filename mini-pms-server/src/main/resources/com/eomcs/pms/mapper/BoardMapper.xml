@@ -43,6 +43,21 @@
     </if>
   </select>
   
+  <select id="count" resultType="int" parameterType="string">
+    select 
+      count(*)
+    from 
+      pms_board b 
+      inner join pms_member m on b.writer=m.no
+    <if test="keyword != null">
+    <bind name="pattern" value="'%' + _parameter + '%'" />
+    where 
+      b.title like #{pattern}
+      or b.content like #{pattern}
+      or m.name like #{pattern} 
+    </if>
+  </select>
+  
   <insert id="insert" parameterType="board">
     insert into pms_board(title,content,writer) 
     values(#{title}, #{content}, #{writer.no})

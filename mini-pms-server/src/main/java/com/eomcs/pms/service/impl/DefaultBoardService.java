@@ -45,6 +45,11 @@ public class DefaultBoardService implements BoardService {
   }
 
   @Override
+  public int size(String keyword) throws Exception {
+    return boardDao.count(keyword);
+  }
+
+  @Override
   public Board get(int no) throws Exception {
     Board board = boardDao.findByNo(no);
     if (board != null) {

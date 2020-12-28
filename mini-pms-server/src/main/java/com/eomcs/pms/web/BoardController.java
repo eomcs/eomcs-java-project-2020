@@ -73,6 +73,27 @@ public class BoardController {
     }
 
     model.addAttribute("list", boardService.list(keyword, pageNo, pageSize));
+
+    int size = boardService.size(keyword);
+    int totalPage = size / pageSize;
+    if (size % pageSize > 0) {
+      totalPage++;
+    }
+
+    int prevPageNo = pageNo > 1 ? pageNo - 1 : 1;
+    int nextPageNo = pageNo + 1;
+    if (nextPageNo > totalPage) {
+      nextPageNo = totalPage;
+    }
+
+    model.addAttribute("currPageNo", pageNo);
+    model.addAttribute("prevPageNo", prevPageNo);
+    model.addAttribute("nextPageNo", nextPageNo);
+    model.addAttribute("totalPage", nextPageNo);
+    model.addAttribute("size", size);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("keyword", keyword);
+
     // 최종 JSP URL: /WEB-INF/jsp/ + /board/list + .jsp = /WEB-INF/jsp/board/list.jsp
   }
 
