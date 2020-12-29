@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<h1>게시물 목록(JSP+EL+JSTL)</h1>
+<h1>게시물 목록(JSP+EL+JSTL+Bootstrap)</h1>
 
 <a href='form' class="btn btn-primary btn-sm">새 글</a><br>
  
@@ -12,7 +12,7 @@
 <c:forEach items="${list}" var="b">
 <tr>
   <td>${b.no}</td>
-  <td><a class="board-title" href='detail?no=${b.no}' data-no="${b.no}">${b.title}</a></td>
+  <td><a class="board-title-link" href='#' data-no="${b.no}">${b.title}</a></td>
   <td>${b.writer.name}</td>
   <td>${b.registeredDate}</td>
   <td>${b.viewCount}</td>
@@ -48,53 +48,45 @@
   </div>
 </form>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="boardDetailModal" tabindex="-1" aria-labelledby="boardDetailModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <h5 class="modal-title" id="boardDetailModalLabel">게시글 보기</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- 모달 화면 -->
+        ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary">변경</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-var el = document.querySelectorAll(".board-title");
-var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
-var exampleModal = document.querySelector("#exampleModal");
-var exampleModalBody = exampleModal.querySelector(".modal-body");
-var boardNo;
+var boardDetailModal = document.getElementById('boardDetailModal');
+var modalBodyDiv = boardDetailModal.querySelector(".modal-body");
+var boardTitleLinkList = document.querySelectorAll(".board-title-link");
+var modal = new bootstrap.Modal(document.getElementById('boardDetailModal'));
 
-exampleModal.addEventListener('show.bs.modal', function (event) {
-  console.log("show.bs.modal")
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "../ajax1/board/detail?no=" + boardNo, false);
-  xhr.send();
-  exampleModalBody.innerHTML = xhr.responseText;
-});
-
-exampleModal.addEventListener('shown.bs.modal', function (event) {
-	console.log("shown.bs.modal")
-});
-
-exampleModal.addEventListener('hidden.bs.modal', function (event) {
-	console.log("hidden.bs.modal")
-});
-
-for (var e of el) {
-	e.onclick = function(e) {
+for (var boardTitleLink of boardTitleLinkList) {
+	boardTitleLink.onclick = function(e) {
 		e.preventDefault();
-		boardNo = e.target.getAttribute("data-no");
-		console.log("제목 click");
-		myModal.show();
+		var boardNo = this.getAttribute("data-no");
+	  var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                modalBodyDiv.innerHTML = xhr.responseText;
+                modal.show();
+            }
+        }
+    };
+    xhr.open("GET", "detail?templateType=2&no=" + boardNo, true);
+    xhr.send();
 	};
 }
 

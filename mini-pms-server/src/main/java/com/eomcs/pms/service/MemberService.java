@@ -11,5 +11,6 @@ public interface MemberService {
   List<Member> listForProject(int projectNo) throws Exception;
   Member get(int no) throws Exception;
   Member get(String email, String password) throws Exception;
+  Member get(String email) throws Exception;
   int update(Member member) throws Exception;
 }

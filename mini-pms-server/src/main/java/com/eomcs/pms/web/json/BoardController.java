@@ -1,4 +1,4 @@
-package com.eomcs.pms.web.ajax2;
+package com.eomcs.pms.web.json;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,14 +11,14 @@ import com.eomcs.pms.domain.Board;
 import com.eomcs.pms.service.BoardService;
 import com.google.gson.Gson;
 
-@Controller("ajax2.boardController")
-@RequestMapping("/ajax2/board")
+@Controller("json.boardController")
+@RequestMapping("/json/board")
 @SessionAttributes("loginUser")
 public class BoardController {
 
   @Autowired BoardService boardService;
 
-  @GetMapping(value = "detail", produces = "text/html;charset=UTF-8")
+  @GetMapping(value = "detail", produces = "application/json;charset=UTF-8")
   @ResponseBody
   public String detail(int no, Model model) throws Exception {
     Board board = boardService.get(no);

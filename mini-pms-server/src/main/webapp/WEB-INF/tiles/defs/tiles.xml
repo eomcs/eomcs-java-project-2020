@@ -24,7 +24,7 @@
     <put-attribute name="body" value="/WEB-INF/tiles/jsp/{1}/{2}.jsp" />
   </definition>
   
-  <definition name="ajax1/*/*.app" template="/WEB-INF/tiles/template/ajax1_template.jsp">
+  <definition name="ajax1/*/*.app" template="/WEB-INF/tiles/template/app_template2.jsp">
     <put-attribute name="body" value="/WEB-INF/tiles/jsp/{1}/{2}.jsp" />
   </definition>
   

@@ -89,6 +89,20 @@
       and password = password(#{password})
   </select>
   
+  <select id="findByEmail" parameterType="string" resultMap="MemberMap">
+    select 
+      no, 
+      name, 
+      email, 
+      photo, 
+      tel, 
+      cdt
+    from 
+      pms_member
+    where 
+      email = #{email}
+  </select>
+  
   <update id="update" parameterType="member">
     update pms_member
     <set>

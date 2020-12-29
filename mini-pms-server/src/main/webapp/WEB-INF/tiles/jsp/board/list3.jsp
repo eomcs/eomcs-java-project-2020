@@ -12,7 +12,7 @@
 <c:forEach items="${list}" var="b">
 <tr>
   <td>${b.no}</td>
-  <td><a class="board-title" href='detail?no=${b.no}' data-no="${b.no}">${b.title}</a></td>
+  <td><a class="board-title-link" href='#' data-no="${b.no}">${b.title}</a></td>
   <td>${b.writer.name}</td>
   <td>${b.registeredDate}</td>
   <td>${b.viewCount}</td>
@@ -48,19 +48,19 @@
   </div>
 </form>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="boardDetailModal" tabindex="-1" aria-labelledby="boardDetailModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <h5 class="modal-title" id="boardDetailModalLabel">게시글 보기</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- 모달 화면 -->
+        ...
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        <button type="button" class="btn btn-primary">변경</button>
       </div>
     </div>
   </div>
@@ -85,39 +85,31 @@
 </script>
 
 <script>
-var el = document.querySelectorAll(".board-title");
-var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
-var exampleModal = document.querySelector("#exampleModal");
-var exampleModalBody = exampleModal.querySelector(".modal-body");
+var boardDetailModal = document.getElementById('boardDetailModal');
+var modalBodyDiv = boardDetailModal.querySelector(".modal-body");
+var boardTitleLinkList = document.querySelectorAll(".board-title-link");
+var modal = new bootstrap.Modal(document.getElementById('boardDetailModal'));
+
 var modalTemplateSrc = document.querySelector("#t1").innerHTML;
 var modalHtmlGenerator = Handlebars.compile(modalTemplateSrc);
-var boardNo;
 
-exampleModal.addEventListener('show.bs.modal', function (event) {
-  console.log("show.bs.modal")
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", "../ajax2/board/detail?no=" + boardNo, false);
-  xhr.send();
-  var board = JSON.parse(xhr.responseText);
-  console.log(board);
-  exampleModalBody.innerHTML = modalHtmlGenerator(board);
-});
-
-exampleModal.addEventListener('shown.bs.modal', function (event) {
-	console.log("shown.bs.modal")
-});
-
-exampleModal.addEventListener('hidden.bs.modal', function (event) {
-	console.log("hidden.bs.modal")
-});
-
-for (var e of el) {
-	e.onclick = function(e) {
-		e.preventDefault();
-		boardNo = e.target.getAttribute("data-no");
-		console.log("제목 click");
-		myModal.show();
-	};
+for (var boardTitleLink of boardTitleLinkList) {
+  boardTitleLink.onclick = function(e) {
+    e.preventDefault();
+    var boardNo = this.getAttribute("data-no");
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              var board = JSON.parse(xhr.responseText);
+              modalBodyDiv.innerHTML = modalHtmlGenerator(board);
+              modal.show();
+            }
+        }
+    };
+    xhr.open("GET", "../json/board/detail?no=" + boardNo, true);
+    xhr.send();
+  };
 }
 
 </script>

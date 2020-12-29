@@ -56,6 +56,11 @@ public class DefaultMemberService implements MemberService {
   }
 
   @Override
+  public Member get(String email) throws Exception {
+    return memberDao.findByEmail(email);
+  }
+
+  @Override
   public int update(Member member) throws Exception {
     return memberDao.update(member);
   }

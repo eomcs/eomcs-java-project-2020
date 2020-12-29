@@ -16,4 +16,6 @@
 <a href='list'>[목록]</a>
 </p>
 </form>
-
+<%
+//Thread.sleep(1000);
+%>
