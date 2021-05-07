@@ -22,7 +22,7 @@
 ### 1단계 - 프로젝트에 라이브러리 추가하기   
 
 - build.gradle 변경
-  - MariaDB JDBC 드라이버 추가
+  - MariaDB JDBC 드라이버 추가 
   - Mybatis 라이브러리 추가
   - `$ gradle eclipse` 실행
   - 이클립스에서 프로젝트 갱신
